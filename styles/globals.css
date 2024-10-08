@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.text-gradient {
+    background: linear-gradient(to right, #3b82f6, #1d4ed8); /* Tailwind blue-500 to blue-700 */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+  }
+  .underline-blue {
+    
+    text-decoration: underline;
+    text-decoration-color: #63b3ed; /* Tailwind blue-400 */
+  }
+.brandName {
+  @apply ml-2 text-5xl text-[#4267b2];
+}
+.footerContainer {
+  @apply text-gray-600;
+}
+
+.subTopic {
+  @apply rounded-xl font-bold bg-gradient-to-r from-blue-600 to-blue-900 text-white px-8 py-4 md:px-12 md:py-6 text-4xl md:text-6xl shadow-md hover:shadow-lg transition duration-300 ease-in-out mx-4 md:ml-20 my-8 md:mr-20 border-4 border-blue-700 border-opacity-75;
+}
+.services {
+  @apply font-semibold text-4xl  pt-16 text-[#111111];
+}
+.whyChooseUs {
+  @apply bg-gray-100 p-4 md:p-8 mx-4 md:mx-20 text-xl md:text-2xl font-serif rounded-xl;
+}
+.icons {
+  @apply flex flex-col items-center p-7;
+}
+.iconsContainer {
+  @apply flex flex-wrap text-2xl pb-14;
+}
+.iconsPartition {
+  @apply w-full  sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3 pt-10;
+}
+.smScreenTag {
+  @apply md:hidden font-bold font-sans text-2xl pt-5 ml-5;
+}
+.tag1 {
+  @apply text-2xl pt-10 font-semibold ml-20;
+}
+@keyframes moveLeftToRight {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-move-left-to-right {
+  animation: moveLeftToRight 10s linear infinite;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
