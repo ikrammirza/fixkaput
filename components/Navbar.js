@@ -87,7 +87,7 @@ const Navbar = ({
         <div className="md:pl-2">
           <Image src="/fklogo.png" alt="Logo" width={50} height={44} />
         </div>
-        <div className="brandName font-bold">fixKaput</div>
+        <div className="brandName font-bold">ficKaput</div>
         <div className="md:pl-0">
           {/* Mobile Menu Button */}
           <button
@@ -154,50 +154,47 @@ const Navbar = ({
 
       {/* Mobile Menu - Conditional Rendering */}
       {isMobileMenuOpen && (
-  <div className="fixed inset-0 bg-blue-100 bg-opacity-90 z-50 p-4 transition-transform transform translate-x-0 duration-300 ease-in-out ">
-    <div className="relative bg-blue-50 rounded-lg shadow-lg p-4 h-full ">
-      {/* Close Button */}
-      <button
-        className="absolute top-4 right-4 text-gray-800 text-2xl"
-        onClick={toggleMobileMenu}
-        aria-label="Close menu"
-      >
-        &times;
-      
-      </button>
+        <div className="fixed inset-0 bg-blue-100 bg-opacity-90 z-50 p-4 transition-transform transform translate-x-0 duration-300 ease-in-out ">
+          <div className="relative bg-blue-50 rounded-lg shadow-lg p-4 h-full ">
+            {/* Close Button */}
+            <button
+              className="absolute top-4 right-4 text-gray-800 text-2xl"
+              onClick={toggleMobileMenu}
+              aria-label="Close menu"
+            >
+              &times;
+            </button>
 
-      <nav className="flex flex-col h-full justify-between ">
-        <div>
-          <Link
-            href="/"
-            className="text-2xl block py-3 border-b border-gray-200 font-serif text-gray-800 hover:text-blue-600 transition-colors duration-300"
-            onClick={toggleMobileMenu}
-          >
-            Home
-          </Link>
+            <nav className="flex flex-col h-full justify-between ">
+              <div>
+                <Link
+                  href="/"
+                  className="text-2xl block py-3 border-b border-gray-200 font-serif text-gray-800 hover:text-blue-600 transition-colors duration-300"
+                  onClick={toggleMobileMenu}
+                >
+                  Home
+                </Link>
 
-          <Link
-            href="/about"
-            className="text-2xl block py-3 border-b border-gray-200 font-serif text-gray-800 hover:text-blue-600 transition-colors duration-300"
-            onClick={toggleMobileMenu}
-          >
-            About Us
-          </Link>
+                <Link
+                  href="/about"
+                  className="text-2xl block py-3 border-b border-gray-200 font-serif text-gray-800 hover:text-blue-600 transition-colors duration-300"
+                  onClick={toggleMobileMenu}
+                >
+                  About Us
+                </Link>
 
-          <Link
-            href="/contact"
-            className="text-2xl block py-3 border-b border-gray-200 font-serif text-gray-800 hover:text-blue-600 transition-colors duration-300"
-            onClick={toggleMobileMenu}
-          >
-            Contact Us
-          </Link>
+                <Link
+                  href="/contact"
+                  className="text-2xl block py-3 border-b border-gray-200 font-serif text-gray-800 hover:text-blue-600 transition-colors duration-300"
+                  onClick={toggleMobileMenu}
+                >
+                  Contact Us
+                </Link>
+              </div>
+            </nav>
+          </div>
         </div>
-
-        
-      </nav>
-    </div>
-  </div>
-)}
+      )}
       {/*account*/}
       <div className="flex items-center">
         {/* Account */}
