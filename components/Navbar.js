@@ -87,7 +87,7 @@ const Navbar = ({
         <div className="md:pl-2">
           <Image src="/fklogo.png" alt="Logo" width={50} height={44} />
         </div>
-        <div className="brandName font-bold">ficKaput</div>
+        <div className="brandName font-bold">fixKaput</div>
         <div className="md:pl-0">
           {/* Mobile Menu Button */}
           <button
