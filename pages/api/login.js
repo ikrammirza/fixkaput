@@ -7,7 +7,7 @@ import Cors from 'cors';
 // Initialize the CORS middleware
 const cors = Cors({
   methods: ['POST', 'GET', 'OPTIONS'],
-  origin: 'https://fixkaput.com', // Allow requests from this origin
+  origin: 'https://fixkaput.in', // Allow requests from this origin
 });
 
 // Helper function to run CORS middleware
