@@ -1,13 +1,9 @@
 module.exports = {
   reactStrictMode: true,
-
+  
+  // If you need to extend Webpack's configuration, do it here
   webpack(config, { isServer }) {
-    if (!isServer) {
-      config.devServer = {
-        hot: true, // Enable hot module replacement
-        // Other devServer options can be configured here if needed
-      };
-    }
+    // Add custom webpack configurations here only if necessary
 
     return config;
   },
