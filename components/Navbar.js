@@ -22,15 +22,20 @@ const Navbar = ({
   clearCart,
   subTotal,
   logout,
+  isSearchVisible,
 }) => {
+  
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCartSidebarOpen, setCartSidebarOpen] = useState(false);
   const [isMediumScreen, setIsMediumScreen] = useState(false);
   const [dropdown, setdropdown] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
   const toggleDropdownn = () => {
     setdropdown(!dropdown);
   };
+
   useEffect(() => {
     const handleResize = () => {
       setIsMediumScreen(window.innerWidth >= 768 && window.innerWidth < 1024);
@@ -48,6 +53,17 @@ const Navbar = ({
     };
   }, []);
 
+  // Toggle search bar visibility
+  const toggleSearchBar = () => {
+    setisSearchVisible(!isSearchVisible);
+  };
+  console.log("isSearchVisible in Navbar:", isSearchVisible);
+  // Handle search submission
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    const searchQuery = e.target.search.value;
+    router.push(`/search?query=${searchQuery}`); // Redirect with search query
+  };
   const toggleDropdown = () => {
     setDropdownVisible(!isDropdownVisible);
   };
@@ -88,6 +104,28 @@ const Navbar = ({
           <Image src="/fklogo.png" alt="Logo" width={50} height={44} />
         </div>
         <div className="brandName font-bold">fixKaput</div>
+
+        {/* Search bar (hidden by default on mobile) */}
+        {/* Search bar (hidden by default on mobile) */}
+        {isSearchVisible && (
+          <form
+            onSubmit={handleSearchSubmit}
+            className="w-full md:w-auto mt-2 md:mt-0"
+          >
+            <input
+              type="text"
+              name="search"
+              placeholder="Search for services..."
+              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-80"
+            />
+            <button
+              type="submit"
+              className="hidden md:inline-block ml-2 bg-blue-600 text-white px-4 py-2 rounded-lg"
+            >
+              Search
+            </button>
+          </form>
+        )}
         <div className="md:pl-0">
           {/* Mobile Menu Button */}
           <button
@@ -124,6 +162,25 @@ const Navbar = ({
         pauseOnHover
         theme="light"
       />
+      {/* Search Bar - Desktop */}
+      <form
+        onSubmit={handleSearchSubmit}
+        className="hidden md:flex items-center mx-4"
+      >
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search services..."
+          className="px-4 py-2 border border-gray-300 rounded-l-lg"
+        />
+        <button
+          type="submit"
+          className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-r-lg"
+        >
+          Search
+        </button>
+      </form>
       {/* Navigation Links - Desktop */}
       <nav className="hidden md:flex text-xl md:ml-auto pb-2 md:mr-auto">
         <Link
@@ -166,6 +223,8 @@ const Navbar = ({
             </button>
 
             <nav className="flex flex-col h-full justify-between ">
+              {/* Mobile Search Bar */}
+
               <div>
                 <Link
                   href="/"
@@ -173,6 +232,14 @@ const Navbar = ({
                   onClick={toggleMobileMenu}
                 >
                   Home
+                </Link>
+
+                <Link
+                  href="/services"
+                  className="text-2xl block py-3 border-b border-gray-200 font-serif text-gray-800 hover:text-blue-600 transition-colors duration-300"
+                  onClick={toggleMobileMenu}
+                >
+                  Services
                 </Link>
 
                 <Link

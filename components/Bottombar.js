@@ -9,6 +9,7 @@ const Bottombar = ({
   removeFromCart,
   clearCart,
   subTotal,
+  toggleSearchBar,
 }) => {
   const [isCartSidebarOpen, setCartSidebarOpen] = useState(false);
 
@@ -25,10 +26,10 @@ const Bottombar = ({
       </Link>
 
       {/* Search */}
-      <Link href="/search" className="flex flex-col items-center">
+      <button onClick={toggleSearchBar} className="flex flex-col items-center">
         <FaSearch className="text-blue-600 text-2xl" />
         <span className="text-xs">Search</span>
-      </Link>
+      </button>
 
       {/* Cart */}
       <button

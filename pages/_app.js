@@ -1,10 +1,8 @@
 import "../styles/globals.css";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import { useState, useEffect } from "react";
 import LoadingBar from "react-top-loading-bar";
 import { useRouter } from "next/router";
-import Bottombar from "../components/Bottombar";
+import Layout from "../components/Layout"; // Layout should include Navbar, Footer, and Bottombar
 
 function MyApp({ Component, pageProps }) {
   const [cart, setCart] = useState({});
@@ -43,6 +41,7 @@ function MyApp({ Component, pageProps }) {
     setkey(Math.random());
     router.push("/");
   };
+
   const saveCart = (myCart) => {
     localStorage.setItem("cart", JSON.stringify(myCart));
     let subt = 0;
@@ -64,12 +63,12 @@ function MyApp({ Component, pageProps }) {
     saveCart(newCart);
   };
 
-  const removeFromCart = (itemCode, qty, price, name) => {
+  const removeFromCart = (itemCode, qty) => {
     let newCart = cart;
     if (itemCode in cart) {
       newCart[itemCode].qty = cart[itemCode].qty - qty;
     }
-    if (newCart[itemCode]["qty"] <= 0) {
+    if (newCart[itemCode].qty <= 0) {
       delete newCart[itemCode];
     }
     setCart(newCart);
@@ -80,6 +79,7 @@ function MyApp({ Component, pageProps }) {
     setCart({});
     saveCart({});
   };
+
   return (
     <>
       <LoadingBar
@@ -89,27 +89,25 @@ function MyApp({ Component, pageProps }) {
         onLoaderFinished={() => setProgress(0)}
       />
       {key && (
-        <Navbar
+        <Layout
           logout={logout}
           user={user}
-          key={key}
           cart={cart}
           addToCart={addToCart}
           removeFromCart={removeFromCart}
           clearCart={clearCart}
           subTotal={subTotal}
-        />
+        >
+          <Component
+            cart={cart}
+            addToCart={addToCart}
+            removeFromCart={removeFromCart}
+            clearCart={clearCart}
+            subTotal={subTotal}
+            {...pageProps}
+          />
+        </Layout>
       )}
-      <Component
-        cart={cart}
-        addToCart={addToCart}
-        removeFromCart={removeFromCart}
-        clearCart={clearCart}
-        subTotal={subTotal}
-        {...pageProps}
-      />
-      <Footer />
-      <Bottombar />
     </>
   );
 }
