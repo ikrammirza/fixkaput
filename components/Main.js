@@ -156,10 +156,10 @@ const Main = () => {
       </div>
 
       <div className="mt-16 md:mt-28">
-        <div className="subTopic">Hot Fixes</div>
+        <div className="subTopic">Hott Fixes</div>
 
         <section className="text-gray-600 body-font">
-          <div className="container px-2 md:py-10  mb-10 mx-auto">
+          <div className="container px-2 md:py-10 mb-10 mx-auto">
             <div className="flex flex-nowrap md:flex-wrap -m-4 overflow-x-scroll md:overflow-x-visible whitespace-nowrap md:whitespace-normal">
               <div className="p-4 md:w-1/4 flex-shrink-0">
                 <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden transform transition-transform duration-300 ease-in-out md:hover:scale-105">
