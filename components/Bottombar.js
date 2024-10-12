@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa";
 import { TiHome } from "react-icons/ti";
-import { useState } from "react"; // Corrected import of useState
+import { useState } from "react"; 
 
 const Bottombar = ({
   cart = {},
@@ -56,7 +56,7 @@ const Bottombar = ({
               onClick={toggleCartSidebar}
             >
               <span className="sr-only">Close</span>{" "}
-              {/* Accessibility improvement */}
+              
               &#x2715; {/* Close icon */}
             </button>
           </div>

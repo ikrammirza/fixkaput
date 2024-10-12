@@ -11,41 +11,41 @@ const Main = () => {
       name: "AC service & repair",
       description:
         "Comprehensive repair and maintenance of air conditioning systems.",
-      image: "/Acservice.jpg", // Replace with your actual image path
+      image: "/Acservice.jpg",
     },
     {
       id: 2,
       name: "Geyser service & repair",
       description:
         "Expert servicing and repair solutions for all types of geysers.",
-      image: "/GeyserService.jpg", // Replace with your actual image path
+      image: "/GeyserService.jpg",
     },
     {
       id: 3,
       name: "Carpenter service",
       description:
         "Professional carpentry services from experienced carpenters.",
-      image: "/CarpenterService.jpg", // Replace with your actual image path
+      image: "/CarpenterService.jpg",
     },
     {
       id: 4,
       name: "Plumbing service",
       description:
         "Reliable and affordable plumbing services for all your needs.",
-      image: "/PlumbingService.jpg", // Replace with your actual image path
+      image: "/PlumbingService.jpg",
     },
     {
       id: 5,
       name: "Scrap collection service",
       description: "Efficient scrap collection and recycling services.",
-      image: "/ScrapCollection.jpg", // Replace with your actual image path
+      image: "/ScrapCollection.jpg",
     },
     {
       id: 6,
       name: "CCTV service & repair",
       description:
         "Secure your property with our CCTV repair and installation services.",
-      image: "/CCTVService.jpg", // Replace with your actual image path
+      image: "/CCTVService.jpg",
     },
   ];
   const carouselImages = [
@@ -79,9 +79,9 @@ const Main = () => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true, // Automatic sliding
+    autoplay: true,
     autoplaySpeed: 1500,
-    pauseOnHover: false, // Disable pause on hover
+    pauseOnHover: false,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
   };
@@ -238,7 +238,7 @@ const Main = () => {
       </div>
 
       <div className="mt-16 md:mt-28">
-        <div className="subTopic">Hot Fixes</div>
+        <div className="subTopic">High Demand Services</div>
 
         <section className="text-gray-600 body-font">
           <div className="container px-2 md:py-10 mb-10 mx-auto">
