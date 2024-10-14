@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa";
 import { TiHome } from "react-icons/ti";
-import { useState } from "react"; 
+import { useState } from "react";
 
 const Bottombar = ({
-  cart = {},
+  cart,
   addToCart,
   removeFromCart,
   clearCart,
@@ -55,9 +55,7 @@ const Bottombar = ({
               className="text-2xl text-gray-500 hover:text-gray-800 transition-colors"
               onClick={toggleCartSidebar}
             >
-              <span className="sr-only">Close</span>{" "}
-              
-              &#x2715; {/* Close icon */}
+              <span className="sr-only">Close</span> &#x2715; {/* Close icon */}
             </button>
           </div>
 
@@ -158,7 +156,7 @@ const Bottombar = ({
       </div>
 
       {/* Account */}
-      <Link href="/myaccountmobile" className="flex flex-col items-center">
+      <Link href="/checkout" className="flex flex-col items-center">
         <FaUser className="text-blue-600 text-2xl" />
         <span className="text-xs">Account</span>
       </Link>

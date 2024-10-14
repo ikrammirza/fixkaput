@@ -3,7 +3,9 @@ import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 import Head from "next/head";
 import Script from "next/script";
 import Link from "next/link";
+import axios from "axios";
 import classNames from "classnames";
+import { ToastContainer, toast } from "react-toastify";
 
 const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
   const [name, setName] = useState("");
@@ -51,52 +53,52 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
     setDisabled(!allFieldsFilled);
   }, [name, email, phone, address, pincode]);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
-  const fetchData = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("No token found");
-      return;
-    }
+  // const fetchData = async () => {
+  //   const token = localStorage.getItem("token");
+  //   if (!token) {
+  //     console.error("No token found");
+  //     return;
+  //   }
 
-    const data = { token };
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_HOST}/api/getuser`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+  //   const data = { token };
+  //   try {
+  //     const response = await fetch(
+  //       `${process.env.NEXT_PUBLIC_HOST}/api/getuser`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(data),
+  //       }
+  //     );
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.status}`);
+  //     }
 
-      const res = await response.json();
+  //     const res = await response.json();
 
-      if (res.success) {
-        setName(res.name);
-        setPhone(res.phone);
-        setAddress(res.address);
-        setPincode(res.pincode);
-        setEmail(res.email);
-      } else {
-        console.error(
-          "Failed to fetch user data:",
-          res.error || "Unknown error"
-        );
-      }
-    } catch (error) {
-      console.error("Error fetching user data:", error.message);
-    }
-  };
+  //     if (res.success) {
+  //       setName(res.name);
+  //       setPhone(res.phone);
+  //       setAddress(res.address);
+  //       setPincode(res.pincode);
+  //       setEmail(res.email);
+  //     } else {
+  //       console.error(
+  //         "Failed to fetch user data:",
+  //         res.error || "Unknown error"
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching user data:", error.message);
+  //   }
+  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const totalAmount = subTotal + subTotal * 0.1;
@@ -112,112 +114,49 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
       amount: totalAmount,
       cart,
     };
-
     try {
-      const response = await fetch("/api/pretransaction", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(orderData),
-      });
+      const response = await axios.post("/api/bookService", orderData);
 
-      if (response.ok) {
-        const data = await response.json();
-        clearCart();
-        // Optionally, you can redirect the user or show a success message here
+      if (response.status === 200) {
+        toast.success("Booking successful!", {
+          position: "bottom-center",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          color: "blue",
+        });
       } else {
-        console.error("Failed to save order:", response.statusText);
+        toast.error("Booking failed. Please try again.", {
+          position: "bottom-center",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          color: "blue",
+        });
       }
     } catch (error) {
-      console.error("Error saving order:", error);
+      toast.error("An error occurred. Please try again.", {
+        position: "bottom-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        color: "blue",
+      });
+      console.error("Error during booking:", error);
     }
   };
-  // const [paytmLoaded, setPaytmLoaded] = useState(false);
-  {
-    /*
-   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const checkPaytmAvailability = () => {
-        if (window.Paytm && window.Paytm.CheckoutJs) {
-          setPaytmLoaded(true);
-          console.log("Paytm CheckoutJs is available");
-        } else {
-          console.error("Paytm CheckoutJs is not available");
-        }
-      };
-
-      
-      checkPaytmAvailability();
-
-      const interval = setInterval(() => {
-        if (window.Paytm && window.Paytm.CheckoutJs) {
-          setPaytmLoaded(true);
-          clearInterval(interval);
-          console.log("Paytm CheckoutJs is available");
-        }
-      }, 1000);
-
-      return () => clearInterval(interval);
-    }
-  }, []);
-
-  const initiatePayment = async () => {
-    if (!paytmLoaded || !window.Paytm || !window.Paytm.CheckoutJs) {
-      console.error("Paytm CheckoutJs is not available");
-      return;
-    }
-
-    let oid = Math.floor(Math.random() * Date.now());
-    const data = { cart, subTotal, oid, email: "email" };
-
-    try {
-      let response = await fetch(
-        `${process.env.NEXT_PUBLIC_HOST}/api/pretransaction`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
-
-      let txnToken = await response.json();
-      console.log("Transaction Token:", txnToken);
-
-      var config = {
-        root: "",
-        flow: "DEFAULT",
-        data: {
-          orderId: oid,
-          token: txnToken,
-          tokenType: "TXN_TOKEN",
-          amount: subTotal,
-        },
-        handler: {
-          notifyMerchant: function (eventName, data) {
-            console.log("notifyMerchant handler function called");
-            console.log("eventName=>", eventName);
-            console.log("data=>", data);
-          },
-        },
-      };
-
-      window.Paytm.CheckoutJs.init(config)
-        .then(() => {
-          console.log("Paytm CheckoutJs initialized successfully");
-          window.Paytm.CheckoutJs.invoke();
-        })
-        .catch((error) => {
-          console.error("Error in Paytm CheckoutJs initialization:", error);
-        });
-    } catch (error) {
-      console.error("Error during payment initiation:", error);
-    }
-  };
-  */
-  }
 
   return (
     <>
@@ -428,17 +367,18 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-sm font-medium text-gray-900">Taxes</p>
                     <p className="font-semibold text-gray-900">
-                      {(subTotal * 0.01).toFixed(2)}
+                      {(subTotal * 0.05).toFixed(2)}
                     </p>
                   </div>
                 </div>
                 <div className="mt-6 flex items-center justify-between">
                   <p className="text-sm font-medium text-gray-900">Total</p>
                   <p className="text-2xl font-semibold text-gray-900">
-                    {(subTotal + subTotal * 0.1).toFixed(2)}
+                    {(subTotal + subTotal*0.05 ).toFixed(2)}
                   </p>
                 </div>
               </div>
+
               <div>
                 <button
                   type="submit"
@@ -464,24 +404,3 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
 };
 
 export default Checkout;
-
-{
-  /*
-      <Script
-        src={`https://securegw.paytm.in/merchantpgpui/checkoutjs/merchants/abcdef1234567890abc.js`}
-        onLoad={() => {
-          console.log("Paytm script loaded successfully");
-          if (window.Paytm && window.Paytm.CheckoutJs) {
-            setPaytmLoaded(true);
-          } else {
-            console.error(
-              "Paytm CheckoutJs is not available after script load"
-            );
-          }
-        }}
-        onError={(e) => {
-          console.error("Failed to load Paytm script", e);
-        }}
-        strategy="beforeInteractive"
-      />*/
-}
