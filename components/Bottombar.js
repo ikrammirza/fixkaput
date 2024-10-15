@@ -4,7 +4,7 @@ import { TiHome } from "react-icons/ti";
 import { useState } from "react";
 
 const Bottombar = ({
-  cart,
+  cart = {},
   addToCart,
   removeFromCart,
   clearCart,
