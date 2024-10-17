@@ -156,7 +156,7 @@ const Main = () => {
       </div>
 
       <div className="mt-16 md:mt-28">
-        <div className="subTopic">Hott Fixes</div>
+        <div className="subTopic">Hot Fixes</div>
 
         <section className="text-gray-600 body-font">
           <div className="container px-2 md:py-10 mb-10 mx-auto">

@@ -209,7 +209,7 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
             </div>
             <div className="mt-8">
               <span className="font-bold text-white bg-gradient-to-r from-blue-500 to-blue-600 border-0 py-3 px-6 focus:outline-none hover:from-blue-600 hover:to-blue-700 rounded text-base block text-center">
-                Subtotal: ${subTotal.toFixed(2)}
+                Subtotal: ₹{subTotal.toFixed(2)}
               </span>
             </div>
           </div>
@@ -361,20 +361,20 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
                       Subtotal
                     </p>
                     <p className="font-semibold text-gray-900">
-                      {subTotal.toFixed(2)}
+                    ₹{subTotal.toFixed(2)}
                     </p>
                   </div>
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-sm font-medium text-gray-900">Taxes</p>
                     <p className="font-semibold text-gray-900">
-                      {(subTotal * 0.05).toFixed(2)}
+                    ₹{(subTotal * 0.05).toFixed(2)}
                     </p>
                   </div>
                 </div>
                 <div className="mt-6 flex items-center justify-between">
                   <p className="text-sm font-medium text-gray-900">Total</p>
                   <p className="text-2xl font-semibold text-gray-900">
-                    {(subTotal + subTotal*0.05 ).toFixed(2)}
+                  ₹{(subTotal + subTotal*0.05 ).toFixed(2)}
                   </p>
                 </div>
               </div>
@@ -386,7 +386,7 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
                   className={classNames(
                     "mt-8 w-full rounded-lg px-6 py-3 font-medium text-white",
                     {
-                      "bg-pink-500  cursor-not-allowed": disabled,
+                      "bg-blue-300  cursor-not-allowed": disabled,
                       "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700":
                         !disabled,
                     }

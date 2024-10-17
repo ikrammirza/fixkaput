@@ -4,19 +4,19 @@ import Image from 'next/legacy/image';
 
 const Footer = () => {
     return (
-        <footer className="bg-[#f5f5f5] text-gray-800 py-14 mt-20">
+        <footer className="bg-[#f5f5f5] text-gray-800 py-8 mt-20">
             <div className="container mx-auto px-6 flex flex-col lg:flex-row lg:justify-between">
                 {/* Brand Section */}
             
-                    <a className=" text-gray-800 hover:text-[#2b6cb0] ">
+                    <a className=" text-gray-800 hover:text-[#2b6cb0]  ">
                         <Image src="/fklogo.png" alt="Logo" width={50} height={50} />
-                        <span className="brandName  font-bold text-lg">fixKaput</span>
+                        <span className="brandName  font-bold text-lg ">fixKaput</span>
                     </a>
                 
 
                 {/* Navigation Links */}
-                <div className="flex flex-wrap lg:w-2/3 mb-8 lg:mb-0">
-                    <div className="w-full lg:w-1/4 px-4 mb-6 lg:mb-0">
+                <div className="flex flex-wrap lg:w-2/3 mb-8  lg:mb-0">
+                    <div className="w-full lg:w-1/4 px-4 mb-6 mt-7 md:mt-0 lg:mb-0">
                         <h2 className="text-xl font-semibold mb-4 text-[#2b6cb0]">Company</h2>
                         <ul className="space-y-2">
                             <li><a href="#" className="hover:text-[#2b6cb0] transition duration-300">About Us</a></li>

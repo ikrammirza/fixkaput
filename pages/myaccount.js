@@ -209,187 +209,187 @@ const MyAccount = () => {
 
   return (
     <>
-    <Head>
-      <title>My account - fixkaput.com</title>
-      <meta
-        name="viewport"
-        content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0"
-      />
-    </Head>
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <ToastContainer
-        toastStyle={{ backgroundColor: "#1e88e5" }}
-        position="bottom-center"
-        autoClose={1000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-      <h1 className="text-3xl text-center font-bold mb-6">
-        Update Your Account
-      </h1>
-      <form className="space-y-8">
-        {/* Delivery Details Section */}
-        <section>
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-            Delivery Details
-          </h2>
+      <Head>
+        <title>My account - fixkaput.com</title>
+        <meta
+          name="viewport"
+          content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0"
+        />
+      </Head>
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <ToastContainer
+          toastStyle={{ backgroundColor: "#1e88e5" }}
+          position="bottom-center"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+        <h1 className="text-3xl text-center font-bold mb-6">
+          Update Your Account
+        </h1>
+        <form className="space-y-8">
+          {/* Delivery Details Section */}
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              Delivery Details
+            </h2>
 
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
-            Name
-          </label>
-          <div className="relative mb-4">
-            <input
-              onChange={handleChange}
-              value={name}
-              type="text"
-              id="name"
-              name="name"
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm shadow-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              placeholder="Your name here"
-            />
-          </div>
-
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
-            Email (cannot be updated)
-          </label>
-          <div className="relative mb-4">
-            <input
-              value={email}
-              type="email"
-              id="email"
-              name="email"
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm shadow-sm outline-none bg-gray-100 cursor-not-allowed"
-              placeholder="Your email here"
-              readOnly
-            />
-          </div>
-
-          <label
-            htmlFor="phone"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
-            Phone
-          </label>
-          <div className="relative mb-4">
-            <input
-              onChange={handleChange}
-              value={phone}
-              type="text"
-              id="phone"
-              name="phone"
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm shadow-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              placeholder="Your number here"
-            />
-          </div>
-
-          <label
-            htmlFor="address"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
-            Address
-          </label>
-          <div className="flex flex-col sm:flex-row gap-4 mb-4">
-            <div className="flex-1">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Name
+            </label>
+            <div className="relative mb-4">
               <input
                 onChange={handleChange}
-                value={address}
+                value={name}
                 type="text"
-                id="address"
-                name="address"
+                id="name"
+                name="name"
                 className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm shadow-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                placeholder="Street Address"
+                placeholder="Your name here"
               />
             </div>
-            <div className="flex-shrink-0">
+
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Email (cannot be updated)
+            </label>
+            <div className="relative mb-4">
+              <input
+                value={email}
+                type="email"
+                id="email"
+                name="email"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm shadow-sm outline-none bg-gray-100 cursor-not-allowed"
+                placeholder="Your email here"
+                readOnly
+              />
+            </div>
+
+            <label
+              htmlFor="phone"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Phone
+            </label>
+            <div className="relative mb-4">
               <input
                 onChange={handleChange}
-                value={pincode}
+                value={phone}
                 type="text"
-                id="pincode"
-                name="pincode"
-                className="w-32 rounded-lg border border-gray-300 px-4 py-3 text-sm shadow-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                placeholder="ZIP"
+                id="phone"
+                name="phone"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm shadow-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                placeholder="Your number here"
               />
             </div>
-          </div>
-          <div className="text-center">
+
+            <label
+              htmlFor="address"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Address
+            </label>
+            <div className="flex flex-col sm:flex-row gap-4 mb-4">
+              <div className="flex-1">
+                <input
+                  onChange={handleChange}
+                  value={address}
+                  type="text"
+                  id="address"
+                  name="address"
+                  className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm shadow-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  placeholder="Street Address"
+                />
+              </div>
+              <div className="flex-shrink-0">
+                <input
+                  onChange={handleChange}
+                  value={pincode}
+                  type="text"
+                  id="pincode"
+                  name="pincode"
+                  className="w-32 rounded-lg border border-gray-300 px-4 py-3 text-sm shadow-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  placeholder="ZIP"
+                />
+              </div>
+            </div>
+            <div className="text-center">
+              <button
+                onClick={handleUserSubmit}
+                type="submit"
+                className="w-full rounded-lg bg-blue-500 px-4 py-3 text-white font-semibold shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              >
+                Save Changes
+              </button>
+            </div>
+          </section>
+
+          {/* Change Password Section */}
+          <section className="hidden md:block">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              Change Password
+            </h2>
+
+            <label
+              htmlFor="current-password"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Current Password
+            </label>
+            <div className="relative mb-4">
+              <input
+                onChange={handleChange}
+                value={currentPassword}
+                type="password"
+                id="current-password"
+                name="currentPassword"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm shadow-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                placeholder="Your current password"
+              />
+            </div>
+
+            <label
+              htmlFor="new-password"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              New Password
+            </label>
+            <div className="relative mb-4">
+              <input
+                onChange={handleChange}
+                value={newPassword}
+                type="password"
+                id="new-password"
+                name="newPassword"
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm shadow-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                placeholder="Your new password"
+              />
+            </div>
+          </section>
+
+          {/* Submit Button */}
+          <div className="text-center hidden md:block">
             <button
-              onClick={handleUserSubmit}
+              onClick={handlePasswordSubmit}
               type="submit"
               className="w-full rounded-lg bg-blue-500 px-4 py-3 text-white font-semibold shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               Save Changes
             </button>
           </div>
-        </section>
-
-        {/* Change Password Section */}
-        <section>
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-            Change Password
-          </h2>
-
-          <label
-            htmlFor="current-password"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
-            Current Password
-          </label>
-          <div className="relative mb-4">
-            <input
-              onChange={handleChange}
-              value={currentPassword}
-              type="password"
-              id="current-password"
-              name="currentPassword"
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm shadow-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              placeholder="Your current password"
-            />
-          </div>
-
-          <label
-            htmlFor="new-password"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
-            New Password
-          </label>
-          <div className="relative mb-4">
-            <input
-              onChange={handleChange}
-              value={newPassword}
-              type="password"
-              id="new-password"
-              name="newPassword"
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm shadow-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-              placeholder="Your new password"
-            />
-          </div>
-        </section>
-
-        {/* Submit Button */}
-        <div className="text-center">
-          <button
-            onClick={handlePasswordSubmit}
-            type="submit"
-            className="w-full rounded-lg bg-blue-500 px-4 py-3 text-white font-semibold shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >
-            Save Changes
-          </button>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
     </>
   );
 };

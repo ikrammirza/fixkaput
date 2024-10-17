@@ -2,6 +2,10 @@ import Link from "next/link";
 import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa";
 import { TiHome } from "react-icons/ti";
 import { useState } from "react";
+import { BsCartX } from "react-icons/bs";
+import { BsFillBagFill } from "react-icons/bs";
+import { IoMdCloseCircle } from "react-icons/io";
+import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 
 const Bottombar = ({
   cart = {},
@@ -55,7 +59,8 @@ const Bottombar = ({
               className="text-2xl text-gray-500 hover:text-gray-800 transition-colors"
               onClick={toggleCartSidebar}
             >
-              <span className="sr-only">Close</span> &#x2715; {/* Close icon */}
+              <span className="sr-only">Close</span>
+              &#x2715;
             </button>
           </div>
 
@@ -67,8 +72,7 @@ const Bottombar = ({
                 {Object.keys(cart).length === 0 ? (
                   <div className="text-center font-poppins font-bold text-gray-700 py-12">
                     <div className="flex justify-center mb-4">
-                      <span className="text-5xl text-blue-400">&#128722;</span>{" "}
-                      {/* Empty cart icon */}
+                      <span className="text-5xl text-blue-400">&#128722;</span>
                     </div>
                     <h3 className="text-2xl md:text-3xl leading-tight">
                       Your cart is empty
@@ -86,23 +90,23 @@ const Bottombar = ({
                     >
                       <div className="flex-1 font-medium">{cart[k].name}</div>
                       <div className="flex items-center space-x-2">
-                        <button
+                        <AiFillMinusCircle
                           onClick={() =>
                             removeFromCart(k, 1, cart[k].price, cart[k].name)
                           }
-                        >
-                          &#8722; {/* Minus icon */}
-                        </button>
+                          className="cursor-pointer text-white hover:text-gray-300 transition-colors"
+                          size={20}
+                        />
                         <span className="text-lg font-semibold">
                           {cart[k].qty}
                         </span>
-                        <button
+                        <AiFillPlusCircle
                           onClick={() =>
                             addToCart(k, 1, cart[k].price, cart[k].name)
                           }
-                        >
-                          &#43; {/* Plus icon */}
-                        </button>
+                          className="cursor-pointer text-white hover:text-gray-300 transition-colors"
+                          size={20}
+                        />
                       </div>
                     </li>
                   ))
@@ -132,8 +136,9 @@ const Bottombar = ({
                         : "bg-gradient-to-r from-[#0056b3] to-[#003d79] text-white hover:shadow-xl"
                     }`}
                     disabled={Object.keys(cart).length === 0}
+                    onClick={toggleCartSidebar}
                   >
-                    &#128722; {/* Bag icon */}
+                    &#128722;
                     <span className="text-lg font-semibold">Checkout</span>
                   </button>
                 </Link>
@@ -156,7 +161,7 @@ const Bottombar = ({
       </div>
 
       {/* Account */}
-      <Link href="/checkout" className="flex flex-col items-center">
+      <Link href="/myaccountmobile" className="flex flex-col items-center">
         <FaUser className="text-blue-600 text-2xl" />
         <span className="text-xs">Account</span>
       </Link>

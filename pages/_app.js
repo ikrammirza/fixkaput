@@ -10,43 +10,47 @@ function MyApp({ Component, pageProps }) {
   const [cart, setCart] = useState({});
   const [progress, setProgress] = useState(0);
   const [subTotal, setSubTotal] = useState(0);
-  const [user, setuser] = useState({ value: null });
-  const [key, setkey] = useState();
+  const [user, setUser] = useState({ value: null });
   const router = useRouter();
 
   useEffect(() => {
+    // Route change event listeners for the loading bar
     router.events.on("routeChangeStart", () => {
       setProgress(40);
     });
     router.events.on("routeChangeComplete", () => {
       setProgress(100);
     });
+
+    // Load cart from localStorage
     try {
       if (localStorage.getItem("cart")) {
-        setCart(JSON.parse(localStorage.getItem("cart")));
-        saveCart(JSON.parse(localStorage.getItem("cart")));
+        const savedCart = JSON.parse(localStorage.getItem("cart"));
+        setCart(savedCart);
+        saveCart(savedCart);
       }
     } catch (error) {
       console.error(error);
       localStorage.clear();
     }
+
+    // Load user token
     const token = localStorage.getItem("token");
     if (token) {
-      setuser({ value: token });
+      setUser({ value: token });
     }
-    setkey(Math.random());
   }, [router.query]);
 
   const logout = () => {
     localStorage.removeItem("token");
-    setuser({ value: null });
-    setkey(Math.random());
+    setUser({ value: null });
     router.push("/");
   };
+
   const saveCart = (myCart) => {
     localStorage.setItem("cart", JSON.stringify(myCart));
     let subt = 0;
-    let keys = Object.keys(myCart);
+    const keys = Object.keys(myCart);
     for (let i = 0; i < keys.length; i++) {
       subt += myCart[keys[i]].price * myCart[keys[i]].qty;
     }
@@ -54,9 +58,9 @@ function MyApp({ Component, pageProps }) {
   };
 
   const addToCart = (itemCode, qty, price, name) => {
-    let newCart = cart;
-    if (itemCode in cart) {
-      newCart[itemCode].qty = cart[itemCode].qty + qty;
+    const newCart = { ...cart }; // Make a copy of the cart
+    if (itemCode in newCart) {
+      newCart[itemCode].qty += qty;
     } else {
       newCart[itemCode] = { qty: 1, price, name };
     }
@@ -64,12 +68,12 @@ function MyApp({ Component, pageProps }) {
     saveCart(newCart);
   };
 
-  const removeFromCart = (itemCode, qty, price, name) => {
-    let newCart = cart;
-    if (itemCode in cart) {
-      newCart[itemCode].qty = cart[itemCode].qty - qty;
+  const removeFromCart = (itemCode, qty) => {
+    const newCart = { ...cart }; // Make a copy of the cart
+    if (itemCode in newCart) {
+      newCart[itemCode].qty -= qty;
     }
-    if (newCart[itemCode]["qty"] <= 0) {
+    if (newCart[itemCode].qty <= 0) {
       delete newCart[itemCode];
     }
     setCart(newCart);
@@ -80,6 +84,7 @@ function MyApp({ Component, pageProps }) {
     setCart({});
     saveCart({});
   };
+
   return (
     <>
       <LoadingBar
@@ -88,18 +93,16 @@ function MyApp({ Component, pageProps }) {
         waitingTime={400}
         onLoaderFinished={() => setProgress(0)}
       />
-      {key && (
-        <Navbar
-          logout={logout}
-          user={user}
-          key={key}
-          cart={cart}
-          addToCart={addToCart}
-          removeFromCart={removeFromCart}
-          clearCart={clearCart}
-          subTotal={subTotal}
-        />
-      )}
+      {/* Remove the key from Navbar and Bottombar for more stable renders */}
+      <Navbar
+        logout={logout}
+        user={user}
+        cart={cart}
+        addToCart={addToCart}
+        removeFromCart={removeFromCart}
+        clearCart={clearCart}
+        subTotal={subTotal}
+      />
       <Component
         cart={cart}
         addToCart={addToCart}
@@ -109,7 +112,13 @@ function MyApp({ Component, pageProps }) {
         {...pageProps}
       />
       <Footer />
-      <Bottombar />
+      <Bottombar
+        cart={cart}
+        addToCart={addToCart}
+        removeFromCart={removeFromCart}
+        clearCart={clearCart}
+        subTotal={subTotal}
+      />
     </>
   );
 }
