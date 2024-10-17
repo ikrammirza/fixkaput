@@ -40,16 +40,27 @@ const ServicePage = ({ cart, addToCart }) => {
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
+      progress: undefined,
       theme: "colored",
+      color: "blue",
     });
   };
+
 
   return (
     <>
       <ToastContainer
+        toastStyle={{ backgroundColor: "#1e88e5" }}
         position="bottom-center"
         autoClose={1000}
-        hideProgressBar
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
       />
       <div className=" md:mx-20 ">
         {/* Header Section */}
