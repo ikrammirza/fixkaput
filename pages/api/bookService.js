@@ -10,9 +10,25 @@ export default async function handler(req, res) {
         return res.status(400).json({ message: "Missing required fields" });
       }
 
+      // Phone number validation for Indian numbers (adjust regex as needed for other countries)
+      const isValidPhone = (phone) => {
+        const regex = /^(\+91)[6-9]\d{9}$/; // Indian phone number regex
+        return regex.test(phone);
+      };
+
+      if (!isValidPhone(phone)) {
+        return res.status(400).json({ message: "Invalid phone number format" });
+      }
+
       const servicesDetails = Object.values(cart)
         .map((service) => `${service.name} (Quantity: ${service.qty})`)
         .join(", ");
+
+      const userMessage = `Dear ${name},\n\nThank you for choosing FixKaput.\nWe are pleased to inform you that your services have been successfully booked. Below are the details of your booking:\n\nServices Booked: ${servicesDetails}\nTotal Amount: ${amount}\n\nOur technician will reach out to you shortly to confirm the details and schedule your service.\n\nIf you have any questions or require further assistance, please do not hesitate to contact us.\n\nBest regards,\nThe FixKaput Team`;
+
+      // Send message to user
+      console.log("phone:", phone);
+      await sendSMS(phone, userMessage);
 
       // Technician message
       const technicianPhoneNumber = "+919381145944";
@@ -20,12 +36,6 @@ export default async function handler(req, res) {
 
       // Send message to technician
       await sendSMS(technicianPhoneNumber, technicianMessage);
-
-      // User message
-      const userMessage = `Dear ${name},\n\nThank you for choosing FixKaput.\nWe are pleased to inform you that your services have been successfully booked. Below are the details of your booking:\n\nServices Booked: ${servicesDetails}\nTotal Amount: ${amount}\n\nOur technician will reach out to you shortly to confirm the details and schedule your service.\n\nIf you have any questions or require further assistance, please do not hesitate to contact us.\n\nBest regards,\nThe FixKaput Team`;
-
-      // Send message to user
-      await sendSMS(phone, userMessage);
 
       // Respond back with success
       return res.status(200).json({ message: "Booking successful!" });
