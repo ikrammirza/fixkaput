@@ -161,7 +161,7 @@ const Bottombar = ({
       </div>
 
       {/* Account */}
-      <Link href="/myaccountmobile" className="flex flex-col items-center">
+      <Link href="/accountmobile" className="flex flex-col items-center">
         <FaUser className="text-blue-600 text-2xl" />
         <span className="text-xs">Account</span>
       </Link>

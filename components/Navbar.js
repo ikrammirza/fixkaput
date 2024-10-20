@@ -174,7 +174,12 @@ const Navbar = ({
                 >
                   Home
                 </Link>
-
+                <Link
+                  href="/services"
+                  className="text-2xl block py-3 border-b border-gray-200 font-serif text-gray-800 hover:text-blue-600 transition-colors duration-300"
+                >
+                  Services
+                </Link>
                 <Link
                   href="/about"
                   className="text-2xl block py-3 border-b border-gray-200 font-serif text-gray-800 hover:text-blue-600 transition-colors duration-300"

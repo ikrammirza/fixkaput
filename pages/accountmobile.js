@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router"; // For redirection after successful login
 
-const MyAccountMobile = () => {
+const userdetailsmobile = () => {
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
@@ -49,7 +49,7 @@ const MyAccountMobile = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-blue-50">
+    <div className="flex items-center justify-center h-[524px] bg-blue-50">
       <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-sm">
         <h1 className="text-2xl font-semibold text-center text-blue-600">
           {otpSent ? "Enter OTP" : "Login"}
@@ -96,4 +96,4 @@ const MyAccountMobile = () => {
   );
 };
 
-export default MyAccountMobile;
+export default userdetailsmobile;
