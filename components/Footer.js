@@ -9,7 +9,7 @@ const Footer = () => {
 
         <a className=" text-gray-800 hover:text-[#2b6cb0]  ">
           <Image src="/fklogo.png" alt="Logo" width={50} height={50} />
-          <span className="brandName  font-bold text-lg ">fixKaput</span>
+          <span className="brandName  font-bold text-lg ">fixKaputt</span>
         </a>
 
         {/* Navigation Links */}
