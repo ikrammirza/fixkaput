@@ -30,6 +30,6 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
             cd /home/ubuntu/fixkaput
-            yarn install
-            pm2 restart fixkaput
+            yarn install --frozen-lockfile
+            pm2 restart fixkaput || pm2 start npm --name "fixkaput"
           EOF
