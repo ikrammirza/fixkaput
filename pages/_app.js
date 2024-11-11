@@ -1,10 +1,13 @@
 import "../styles/globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import LoadingBar from "react-top-loading-bar";
 import { useRouter } from "next/router";
 import Bottombar from "../components/Bottombar";
+// import { io } from "socket.io-client";
+
+// let socket;
 
 function MyApp({ Component, pageProps }) {
   const [cart, setCart] = useState({});
@@ -12,6 +15,37 @@ function MyApp({ Component, pageProps }) {
   const [subTotal, setSubTotal] = useState(0);
   const [user, setUser] = useState({ value: null });
   const router = useRouter();
+  const socketRef = useRef(null);
+
+  // useEffect(() => {
+  //   // Initialize the WebSocket connection only once
+  //   if (!socketRef.current) {
+  //     // Create a new socket connection
+  //     socketRef.current = io("http://localhost:3000", {
+  //       path: "/api/socket.io",
+  //       transports: ["websocket"], // Specify transports
+  //     });
+
+  //     socketRef.current.on("connect", () => {
+  //       console.log("Connected to WebSocket server!");
+  //     });
+
+  //     socketRef.current.on("connect_error", (error) => {
+  //       console.error("Socket connection error:", error);
+  //     });
+
+  //     // Add any other event listeners as needed
+  //   }
+
+  //   return () => {
+  //     // Cleanup: Disconnect the socket when component unmounts
+  //     if (socketRef.current) {
+  //       socketRef.current.disconnect();
+  //       socketRef.current = null; // Clean up the reference
+  //     }
+  //   };
+  // }, []);
+
 
   useEffect(() => {
     // Route change event listeners for the loading bar
@@ -109,6 +143,7 @@ function MyApp({ Component, pageProps }) {
         removeFromCart={removeFromCart}
         clearCart={clearCart}
         subTotal={subTotal}
+        
         {...pageProps}
       />
       <Footer />
@@ -118,7 +153,6 @@ function MyApp({ Component, pageProps }) {
         removeFromCart={removeFromCart}
         clearCart={clearCart}
         subTotal={subTotal}
-        
       />
     </>
   );

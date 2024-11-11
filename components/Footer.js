@@ -76,6 +76,21 @@ const Footer = () => {
               </li>
             </ul>
           </div>
+          <div className="w-full lg:w-1/4 px-4 mb-6 lg:mb-0">
+            <h2 className="text-xl font-semibold mb-4 text-[#2b6cb0]">
+              For Partners
+            </h2>
+            <ul className="space-y-2">
+              <li>
+                <a
+                  href="/technicianLogin"
+                  className="hover:text-[#2b6cb0] transition duration-300"
+                >
+                  Sign In 
+                </a>
+              </li>
+              </ul>
+              </div>
           <div className="w-full lg:w-1/4 px-4">
             <h2 className="text-xl font-semibold mb-4 text-[#2b6cb0]">
               Follow Us

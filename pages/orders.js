@@ -15,7 +15,7 @@ const Orders = () => {
       const fetchOrders = async () => {
         try {
           // Replace with your API endpoint
-          const response = await fetch('/api/orders', {
+          const response = await fetch('/api/bookings', {
             headers: {
               'Authorization': `Bearer ${localStorage.getItem("token")}`
             }
