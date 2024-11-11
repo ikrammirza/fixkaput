@@ -2,16 +2,22 @@ const mongoose = require("mongoose");
 
 const OrderSchema = new mongoose.Schema(
   {
+    oid: { type: Number, required: true },
     name: { type: String, required: true },
     email: { type: String, required: true },
-    oid: { type: String, required: true },
+    phone: { type: String, required: true },
     address: { type: String, required: true },
-    pincode: { type: String, required: true },
+    cart: { type: Object, required: true },
     amount: { type: Number, required: true },
-    phone: { type: Number, required: true },
-    products: { type: Object, required: true },
-
-    // status: { type: String, default: "pending", required: true },
+    status: { type: String, default: "Pending" },
+    technicianId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Technician",
+      default: null,
+    },
+    // Optional: to log technician notes
+    // When the service was completed
+    paymentStatus: { type: String, default: "Pending" },
   },
   { timestamps: true }
 );

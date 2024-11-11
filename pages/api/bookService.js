@@ -1,43 +1,61 @@
+import connectDb from "../../middleware/mongoose"; // Import the database connection utility
+import Order from "../../models/Order"; // Import the Order model
 import { sendSMS } from "../../utils/smsService";
 
 export default async function handler(req, res) {
+  console.log("API handler called");
   if (req.method === "POST") {
+      console.log("Received Data:", req.body); 
     try {
-      const { oid, name, email, phone, address, cart, amount } = req.body;
+      await connectDb(); // Connect to the database
 
-      // Check for required fields
+      const { oid, name, email, phone, address, cart, amount } = req.body;
+      
+
       if (!name || !phone || !address || !cart) {
         return res.status(400).json({ message: "Missing required fields" });
       }
 
-      // Phone number validation for Indian numbers (adjust regex as needed for other countries)
+      // Validate phone number (Indian format)
       const isValidPhone = (phone) => {
-        const regex = /^(\+91)[6-9]\d{9}$/; // Indian phone number regex
+        const regex = /^(\+91)[6-9]\d{9}$/;
         return regex.test(phone);
       };
-
       if (!isValidPhone(phone)) {
         return res.status(400).json({ message: "Invalid phone number format" });
       }
 
+      // Save the order data to the database
+      const newOrder = new Order({
+        oid,
+        name,
+        email,
+        phone,
+        address,
+        cart,
+        amount,
+        status: "Pending", // Initial status
+      });
+
+      await newOrder.save(); // Save the new order
       const servicesDetails = Object.values(cart)
         .map((service) => `${service.name} (Quantity: ${service.qty})`)
         .join(", ");
 
-      const userMessage = `Dear ${name},\n\nThank you for choosing FixKaput.\nWe are pleased to inform you that your services have been successfully booked. Below are the details of your booking:\n\nServices Booked: ${servicesDetails}\nTotal Amount: ${amount}\n\nOur technician will reach out to you shortly to confirm the details and schedule your service.\n\nIf you have any questions or require further assistance, please do not hesitate to contact us.\n\nBest regards,\nThe FixKaput Team`;
+      const userMessage = `Dear ${name},\n\nThank you for choosing FixKaput...`;
 
       // Send message to user
-      console.log("phone:", phone);
-      await sendSMS(phone, userMessage);
+      //await sendSMS(phone, userMessage);
 
-      // Technician message
+      // Technician message with link to `partnerrequest.js`
+      const technicianMessage = `Dear Technician,\n\nA new service request has been received... View requests: https://yourdomain.com/partnerrequest`;
+
       const technicianPhoneNumber = "+919381145944";
-      const technicianMessage = `Dear Technician,\n\nA new service request has been received from ${name} residing at ${address}.\n The customer's contact number is ${phone}.\n The following services have been booked: ${servicesDetails}.\n\nThank you for your assistance in fulfilling this request for FixKaput.\n\nBest regards,\nThe FixKaput Team`;
+      //await sendSMS(technicianPhoneNumber, technicianMessage);
 
-      // Send message to technician
-      await sendSMS(technicianPhoneNumber, technicianMessage);
+      // Emit WebSocket event
+      
 
-      // Respond back with success
       return res.status(200).json({ message: "Booking successful!" });
     } catch (error) {
       console.error("Booking error:", error);
@@ -50,3 +68,24 @@ export default async function handler(req, res) {
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
+
+
+
+
+
+
+
+// if (res.socket?.server?.io) {
+      //   console.log("Emitting new_booking event"); // Log to confirm event is triggered
+      //   res.socket.server.io.emit("new_booking", {
+      //     oid,
+      //     name,
+      //     phone,
+      //     address,
+      //     services: servicesDetails,
+      //     amount,
+      //     status: "Pending",
+      //   });
+      // } else {
+      //   console.log("WebSocket not initialized on server");
+      // }

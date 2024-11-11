@@ -53,57 +53,12 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
     setDisabled(!allFieldsFilled);
   }, [name, email, phone, address, pincode]);
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-
-  // const fetchData = async () => {
-  //   const token = localStorage.getItem("token");
-  //   if (!token) {
-  //     console.error("No token found");
-  //     return;
-  //   }
-
-  //   const data = { token };
-  //   try {
-  //     const response = await fetch(
-  //       `${process.env.NEXT_PUBLIC_HOST}/api/getuser`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(data),
-  //       }
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! status: ${response.status}`);
-  //     }
-
-  //     const res = await response.json();
-
-  //     if (res.success) {
-  //       setName(res.name);
-  //       setPhone(res.phone);
-  //       setAddress(res.address);
-  //       setPincode(res.pincode);
-  //       setEmail(res.email);
-  //     } else {
-  //       console.error(
-  //         "Failed to fetch user data:",
-  //         res.error || "Unknown error"
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching user data:", error.message);
-  //   }
-  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Form submitted, handleSubmit triggered");
+
     const totalAmount = subTotal + subTotal * 0.1;
     let oid = Math.floor(Math.random() * Date.now());
-
     const orderData = {
       oid,
       name,
@@ -114,8 +69,11 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
       amount: totalAmount,
       cart,
     };
+    console.log("Order Data:", orderData);
     try {
+      console.log("Sending POST request to /api/bookService");
       const response = await axios.post("/api/bookService", orderData);
+      console.log("Response from /api/bookService:", response);
 
       if (response.status === 200) {
         toast.success("Booking successful!", {
@@ -361,20 +319,20 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
                       Subtotal
                     </p>
                     <p className="font-semibold text-gray-900">
-                    ₹{subTotal.toFixed(2)}
+                      ₹{subTotal.toFixed(2)}
                     </p>
                   </div>
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-sm font-medium text-gray-900">Taxes</p>
                     <p className="font-semibold text-gray-900">
-                    ₹{(subTotal * 0.05).toFixed(2)}
+                      ₹{(subTotal * 0.05).toFixed(2)}
                     </p>
                   </div>
                 </div>
                 <div className="mt-6 flex items-center justify-between">
                   <p className="text-sm font-medium text-gray-900">Total</p>
                   <p className="text-2xl font-semibold text-gray-900">
-                  ₹{(subTotal + subTotal*0.05 ).toFixed(2)}
+                    ₹{(subTotal + subTotal * 0.05).toFixed(2)}
                   </p>
                 </div>
               </div>
