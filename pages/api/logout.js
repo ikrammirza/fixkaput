@@ -1,6 +1,6 @@
 // pages/api/logout.js
 
-import { deleteSession } from '@/lib/redis'; // your Redis helper
+import { deleteSession } from '../../lib/redis'; // your Redis helper
 import { parse } from 'cookie';
 
 export default async function handler(req, res) {
