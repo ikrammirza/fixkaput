@@ -13,30 +13,26 @@ jest.mock('../lib/redis.js', () => ({
 // ✅ Mongoose mock
 jest.mock('../middleware/mongoose', () => jest.fn(() => Promise.resolve()));
 
-// ✅ Mock User model
+// ✅ User model mock (FIXED HERE)
 const mockFindOne = jest.fn();
-const mockSave = jest.fn();
 
-jest.mock('../models/User', () => {
-    const mockUserInstance = {
-        phone: '',
-        _id: '',
-        save: mockSave,
-    };
-
-    const mockUserClass = function (data) {
-        mockUserInstance.phone = data.phone;
-        mockUserInstance._id = '456';
-        return mockUserInstance;
-    };
-
-    mockUserClass.findOne = mockFindOne;
-
+const mockUserClass = function (data) {
     return {
-        __esModule: true,
-        default: mockUserClass,
+        _id: '456',
+        phone: data.phone,
+        save: jest.fn().mockResolvedValue({
+            _id: '456',
+            phone: data.phone,
+        }),
     };
-});
+};
+
+mockUserClass.findOne = mockFindOne;
+
+jest.mock('../models/User', () => ({
+    __esModule: true,
+    default: mockUserClass,
+}));
 
 // ✅ Import AFTER mocks
 const handler = require('../pages/api/verify-otp').default;
@@ -75,7 +71,6 @@ describe('POST /api/verify-otp', () => {
 
     it('should create new user if not found in DB', async () => {
         mockFindOne.mockResolvedValue(null);
-        mockSave.mockResolvedValue({ _id: '456', phone: '9999999999' });
 
         const { req, res } = createMocks({
             method: 'POST',
@@ -86,6 +81,7 @@ describe('POST /api/verify-otp', () => {
 
         expect(res._getStatusCode()).toBe(200);
         const data = JSON.parse(res._getData());
+
         expect(data.success).toBe(true);
         expect(data.user.phone).toBe('9999999999');
         expect(redis.del).toHaveBeenCalledWith('otp:9999999999');
@@ -120,7 +116,7 @@ describe('POST /api/verify-otp', () => {
         expect(res._getStatusCode()).toBe(400);
         const data = JSON.parse(res._getData());
         expect(data.success).toBe(false);
-        expect(data.message).toBe("OTP expired or not found. Please resend.");
+        expect(data.message).toBe('OTP expired or not found. Please resend.');
         expect(redis.del).not.toHaveBeenCalled();
     });
 
