@@ -19,11 +19,11 @@ const handler = async (req, res) => {
           .json({ success: false, error: "User not found" });
       }
 
-      const { name, email, address, pincode, phone } = dbuser;
+      const { name, email, phone } = dbuser;
 
       res
         .status(200)
-        .json({ success: true, name, email, address, pincode, phone });
+        .json({ success: true, name, email, phone });
     } catch (error) {
       console.error("Error verifying token or fetching user:", error.message);
       res

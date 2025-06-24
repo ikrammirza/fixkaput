@@ -8,28 +8,36 @@ import classNames from "classnames";
 import { ToastContainer, toast } from "react-toastify";
 
 const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState({ name: '', phone: '' });
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [area, setArea] = useState("");
+  const [line1, setLine1] = useState("");
+  const [city, setCity] = useState("");
   const [pincode, setPincode] = useState("");
   const [disabled, setDisabled] = useState(true);
+  const [isPhoneEditable, setIsPhoneEditable] = useState(true);
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Update the corresponding state variable
     switch (name) {
       case "name":
         setName(value);
         break;
-      case "email":
-        setEmail(value);
-        break;
       case "phone":
         setPhone(value);
         break;
-      case "address":
-        setAddress(value);
+      case "area":
+        setArea(value);
+        break;
+      case "line1":
+        setLine1(value);
+        break;
+      case "city":
+        setCity(value);
         break;
       case "pincode":
         setPincode(value);
@@ -38,37 +46,69 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
         break;
     }
   };
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch('/api/me', {
+          credentials: 'include',
+        });
+
+        const data = await res.json();
+        console.log("User fetch response:", data); // 🔍 Check this
+
+        if (data.success) {
+          setIsLoggedIn(true);
+          setUserData(data.user);
+          setPhone(data.user.phone);     // ✅ Should be a string
+          setName(data.user.name);       // ✅ Should be a string
+          setIsPhoneEditable(false);
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch (err) {
+        console.error('Error fetching user:', err);
+        setIsLoggedIn(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+
 
   // Check if all fields are filled and valid whenever any field changes
   useEffect(() => {
-    const isEmailValid = /\S+@\S+\.\S+/.test(email); // Basic email validation
-    const isPhoneValid = phone.length >= 10; // Basic phone length validation
+    const isPhoneValid = /^\d{10}$/.test(phone); // Basic phone validation
     const allFieldsFilled =
-      name.trim() &&
-      isEmailValid &&
+      (name || '').trim() &&
       isPhoneValid &&
-      address.trim() &&
-      pincode.trim();
-
+      (area || '').trim() &&
+      (line1 || '').trim() &&
+      (city || '').trim() &&
+      (pincode || '').trim();
     setDisabled(!allFieldsFilled);
-  }, [name, email, phone, address, pincode]);
+  }, [name, phone, area, line1, city, pincode]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form submitted, handleSubmit triggered");
 
-    const totalAmount = subTotal + subTotal * 0.1;
+    const totalAmount = subTotal + subTotal * 0.05;
     let oid = Math.floor(Math.random() * Date.now());
     const orderData = {
       oid,
       name,
-      email,
       phone,
-      address,
-      pincode,
+      address: {
+        area,
+        line1,
+        city,
+        pincode
+      },
       amount: totalAmount,
       cart,
     };
+
     console.log("Order Data:", orderData);
     try {
       console.log("Sending POST request to /api/bookService");
@@ -87,7 +127,48 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
           theme: "colored",
           color: "blue",
         });
-      } else {
+        try {
+          // Re-confirm session before updating user
+          const sessionRes = await fetch('/api/me', {
+            credentials: 'include',
+          });
+          const sessionData = await sessionRes.json();
+
+          if (sessionData.success && sessionData.user) {
+            await axios.post("/api/updateuser", {
+              phone,
+              name,
+              address: {
+                area,
+                line1,
+                city,
+                pincode,
+              },
+            }, {
+              withCredentials: true,
+            });
+
+            console.log("User profile updated.");
+          } else {
+            console.warn("Session not valid or user not found during update.");
+          }
+        } catch (saveErr) {
+          console.error("Error verifying session or updating user:", saveErr);
+        }
+        setName('');
+        setArea('');
+        setLine1('');
+        setCity('');
+        setPincode('');
+        if (isPhoneEditable) {
+          setPhone('');
+        }
+
+        // Optional: Clear cart if you want to
+        clearCart();
+      }
+
+      else {
         toast.error("Booking failed. Please try again.", {
           position: "bottom-center",
           autoClose: 1000,
@@ -172,10 +253,9 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
             </div>
           </div>
           <div className=" bg-gray-50 px-6 pt-10 lg:mt-0 lg:px-8 lg:pt-6 rounded-lg shadow-md">
-            <p className="text-3xl font-semibold text-gray-900 mb-6">
-              Booking Details
-            </p>
-
+            {isLoggedIn && (
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">Booking Details</h2>
+            )}
             <form onSubmit={handleSubmit}>
               <div>
                 <label
@@ -211,107 +291,76 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
                     </svg>
                   </div>
                 </div>
-
-                <label
-                  htmlFor="email"
-                  className="mt-4 mb-2 block text-sm font-medium text-gray-700"
-                >
-                  Email
-                </label>
-                <div className="relative mb-4">
-                  <input
-                    onChange={handleChange}
-                    value={email}
-                    type="email"
-                    id="email"
-                    name="email"
-                    className="w-full rounded-lg border border-gray-300 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="Your email here"
-                  />
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center px-3">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
-                      />
-                    </svg>
-                  </div>
-                </div>
-
                 <label
                   htmlFor="phone"
-                  className="mt-4 mb-2 block text-sm font-medium text-gray-700"
+                  className="mt-4 mb-1 block text-sm font-medium text-gray-700"
                 >
-                  Phone
+                  Phone Number
                 </label>
-                <div className="relative mb-4">
+                <div className="flex items-center mb-4 rounded-lg border border-gray-300 bg-white shadow-sm focus-within:ring-1 focus-within:ring-blue-500">
+                  <span className="flex items-center justify-center px-4 py-3 text-sm text-gray-600 bg-gray-100 rounded-l-lg border-r border-gray-300">
+                    +91
+                  </span>
                   <input
                     onChange={handleChange}
                     value={phone}
                     type="text"
                     id="phone"
                     name="phone"
-                    className="w-full rounded-lg border border-gray-300 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="Your number here"
+                    maxLength="10"
+                    className="w-full rounded-r-lg px-4 py-3 text-sm text-gray-800 outline-none focus:ring-0"
+                    placeholder="Enter 10-digit number"
+                    disabled={!isPhoneEditable}
                   />
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center px-3">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z"
-                      />
-                    </svg>
-                  </div>
                 </div>
 
-                <label
-                  htmlFor="address"
-                  className="mt-4 mb-2 block text-sm font-medium text-gray-700"
-                >
-                  Address
-                </label>
-                <div className="flex flex-col sm:flex-row">
-                  <div className="relative sm:w-full mb-4 sm:mb-0 sm:mr-2">
-                    <input
-                      onChange={handleChange}
-                      value={address}
-                      type="text"
-                      id="address"
-                      name="address"
-                      className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                      placeholder="Street Address"
-                      required
-                    />
-                  </div>
-                  <div className="flex-shrink-0 sm:w-32">
-                    <input
-                      onChange={handleChange}
-                      value={pincode}
-                      type="text"
-                      id="pincode"
-                      name="pincode"
-                      className="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
-                      placeholder="ZIP"
-                      required
-                    />
-                  </div>
+                {/* Optional: Phone validation error */}
+                {phone && !/^\d{10}$/.test(phone) && (
+                  <p className="text-red-500 text-xs mt-1">
+                    Please enter a valid 10-digit phone number.
+                  </p>
+                )}
+                <label className="mt-4 mb-2 block text-sm font-medium text-gray-700">Address</label>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    name="area"
+                    value={area}
+                    onChange={handleChange}
+                    placeholder="Area"
+                    className="rounded-lg border border-gray-300 px-4 py-3 text-sm shadow-sm outline-none focus:border-blue-500"
+                    required
+                  />
+                  <input
+                    type="text"
+                    name="line1"
+                    value={line1}
+                    onChange={handleChange}
+                    placeholder="Street / Line 1"
+                    className="rounded-lg border border-gray-300 px-4 py-3 text-sm shadow-sm outline-none focus:border-blue-500"
+                    required
+                  />
+                  <input
+                    type="text"
+                    name="city"
+                    value={city}
+                    onChange={handleChange}
+                    placeholder="City"
+                    className="rounded-lg border border-gray-300 px-4 py-3 text-sm shadow-sm outline-none focus:border-blue-500"
+                    required
+                  />
+                  <input
+                    type="text"
+                    name="pincode"
+                    value={pincode}
+                    onChange={handleChange}
+                    placeholder="Pincode"
+                    className="rounded-lg border border-gray-300 px-4 py-3 text-sm shadow-sm outline-none focus:border-blue-500"
+                    required
+                  />
                 </div>
+
 
                 <div className="mt-6 border-t border-b py-4">
                   <div className="flex items-center justify-between mb-2">
@@ -340,17 +389,21 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
               <div>
                 <button
                   type="submit"
-                  disabled={disabled}
+                  disabled={disabled || !isLoggedIn || subTotal === 0}
                   className={classNames(
                     "mt-8 w-full rounded-lg px-6 py-3 font-medium text-white",
                     {
-                      "bg-blue-300  cursor-not-allowed": disabled,
+                      "bg-blue-300 cursor-not-allowed": disabled || !isLoggedIn || subTotal === 0,
                       "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700":
-                        !disabled,
+                        !disabled && isLoggedIn && subTotal > 0,
                     }
                   )}
                 >
-                  Book Services
+                  {!isLoggedIn
+                    ? "Login to Book"
+                    : subTotal === 0
+                      ? "Select Services to Book"
+                      : "Book Services"}
                 </button>
               </div>
             </form>
@@ -362,3 +415,7 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
 };
 
 export default Checkout;
+
+
+
+

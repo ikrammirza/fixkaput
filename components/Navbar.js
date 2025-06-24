@@ -1,18 +1,101 @@
-import React, { useState, useEffect } from "react";
-
-import { Link as ScrollLink } from "react-scroll";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/legacy/image";
-import { FaShoppingCart } from "react-icons/fa";
-import { IoMdCloseCircle } from "react-icons/io";
-import { AiFillPlusCircle } from "react-icons/ai";
-import { AiFillMinusCircle } from "react-icons/ai";
-import { BsFillBagFill } from "react-icons/bs";
-import { MdAccountCircle } from "react-icons/md";
+import { 
+  ShoppingCart, 
+  X, 
+  Plus, 
+  Minus, 
+  ShoppingBag, 
+  User, 
+  Menu,
+  Phone,
+  MapPin,
+  Clock,
+  Star,
+  ChevronDown,
+  LogOut,
+  Calendar,
+  Bell,
+  Search,
+  Wind,
+  Flame,
+  Wrench,
+  Zap,
+  Recycle,
+  Camera
+} from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BsCartX } from "react-icons/bs";
 import { useRouter } from "next/router";
+
+// Services data for search
+const services = [
+  {
+    id: 'ac-services',
+    name: 'AC Services',
+    title: 'Air Conditioning Services',
+    description: 'Professional AC installation, repair, and maintenance services',
+    keywords: ['ac', 'air conditioning', 'cooling', 'hvac', 'repair', 'installation', 'maintenance'],
+    icon: 'Wind',
+    path: '/services/ac'
+  },
+  {
+    id: 'geyser-services',
+    name: 'Geyser Services',
+    title: 'Water Heater & Geyser Services',
+    description: 'Expert geyser installation, repair, and maintenance services',
+    keywords: ['geyser', 'water heater', 'hot water', 'installation', 'repair', 'maintenance'],
+    icon: 'Flame',
+    path: '/services/geyser'
+  },
+  {
+    id: 'plumbing-services',
+    name: 'Plumbing Services',
+    title: 'Professional Plumbing Solutions',
+    description: 'Complete plumbing services including repairs, installations, and maintenance',
+    keywords: ['plumbing', 'pipes', 'water', 'drainage', 'faucet', 'leak', 'repair', 'installation'],
+    icon: 'Wrench',
+    path: '/services/plumbing'
+  },
+  {
+    id: 'electrician-services',
+    name: 'Electrician Services',
+    title: 'Electrical Services & Solutions',
+    description: 'Licensed electrician services for all your electrical needs',
+    keywords: ['electrician', 'electrical', 'wiring', 'lights', 'power', 'installation', 'repair'],
+    icon: 'Zap',
+    path: '/services/electrician'
+  },
+  {
+    id: 'scrap-services',
+    name: 'Scrap Services',
+    title: 'Scrap Collection & Recycling',
+    description: 'Eco-friendly scrap collection and recycling services',
+    keywords: ['scrap', 'recycling', 'waste', 'collection', 'metal', 'paper', 'disposal'],
+    icon: 'Recycle',
+    path: '/services/scrap'
+  },
+  {
+    id: 'cctv-services',
+    name: 'CCTV Services',
+    title: 'Security Camera & CCTV Solutions',
+    description: 'Professional CCTV installation and security camera services',
+    keywords: ['cctv', 'security', 'camera', 'surveillance', 'monitoring', 'installation', 'security system'],
+    icon: 'Camera',
+    path: '/services/cctv'
+  }
+];
+
+// Icon mapping
+const iconMap = {
+  Wind,
+  Flame,
+  Wrench,
+  Zap,
+  Recycle,
+  Camera
+};
 
 const Navbar = ({
   user,
@@ -26,35 +109,65 @@ const Navbar = ({
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isCartSidebarOpen, setCartSidebarOpen] = useState(false);
-  const [isMediumScreen, setIsMediumScreen] = useState(false);
   const [dropdown, setdropdown] = useState(false);
-  const toggleDropdownn = () => {
-    setdropdown(!dropdown);
-  };
+  const [scrolled, setScrolled] = useState(false);
+  
+  // Search states
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [showDesktopSearch, setShowDesktopSearch] = useState(false);
+  const [filteredServices, setFilteredServices] = useState([]);
+  
+  const router = useRouter();
+  const searchRef = useRef(null);
+  const mobileSearchRef = useRef(null);
+
   useEffect(() => {
-    const handleResize = () => {
-      setIsMediumScreen(window.innerWidth >= 768 && window.innerWidth < 1024);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
     };
-
-    // Initial check
-    handleResize();
-
-    // Listen to window resize events
-    window.addEventListener("resize", handleResize);
-
-    // Clean up event listener
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleDropdown = () => {
-    setDropdownVisible(!isDropdownVisible);
-  };
+  // Search functionality
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setFilteredServices([]);
+      return;
+    }
+    
+    const query = searchQuery.toLowerCase().trim();
+    
+    const filtered = services.filter(service => {
+      // Search in service name
+      if (service.name.toLowerCase().includes(query)) return true;
+      
+      // Search in service title
+      if (service.title.toLowerCase().includes(query)) return true;
+      
+      // Search in keywords
+      return service.keywords.some(keyword => 
+        keyword.toLowerCase().includes(query)
+      );
+    });
+    
+    setFilteredServices(filtered);
+  }, [searchQuery]);
 
-  const closeDropdown = () => {
-    setDropdownVisible(false);
-  };
+  // Close search when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target) &&
+          mobileSearchRef.current && !mobileSearchRef.current.contains(event.target)) {
+        setIsSearchOpen(false);
+        setShowDesktopSearch(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!isMobileMenuOpen);
@@ -65,320 +178,467 @@ const Navbar = ({
   };
 
   const handleLogoutClick = () => {
-    toast.success("You are successfully logged out", {
-      position: "bottom-center",
-      autoClose: 1000,
+    toast.success("Successfully logged out!", {
+      position: "top-right",
+      autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
-      progress: undefined,
       theme: "colored",
     });
     setTimeout(() => {
       logout();
     }, 2000);
   };
-  const router = useRouter();
+
+  // Search handlers
+  const handleDesktopSearchClick = () => {
+    setShowDesktopSearch(true);
+    setIsSearchOpen(true);
+  };
+
+  const handleSearchChange = (value) => {
+    setSearchQuery(value);
+    setIsSearchOpen(true);
+  };
+
+  const clearSearch = () => {
+    setSearchQuery('');
+    setIsSearchOpen(false);
+    setShowDesktopSearch(false);
+  };
+
+  const handleServiceSelect = (service) => {
+    router.push(service.path);
+    clearSearch();
+    setMobileMenuOpen(false);
+  };
+
+  const navLinks = [
+    { href: "/", label: "Home" },
+    { href: "/services", label: "Services" },
+    { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" }
+  ];
+
+  // Search Results Component
+  const SearchResults = ({ services, isVisible, isMobile = false }) => {
+    if (!isVisible || services.length === 0) return null;
+
+    return (
+      <div className={`absolute ${isMobile ? 'top-full' : 'top-full'} left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-lg mt-2 max-h-80 overflow-y-auto z-50`}>
+        <div className="p-2">
+          {services.map((service) => {
+            const IconComponent = iconMap[service.icon];
+            
+            return (
+              <button
+                key={service.id}
+                onClick={() => handleServiceSelect(service)}
+                className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors duration-200 text-left"
+              >
+                <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <IconComponent className="w-5 h-5 text-blue-600" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 truncate">
+                    {service.name}
+                  </p>
+                  <p className="text-xs text-gray-500 truncate">
+                    {service.description}
+                  </p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+        
+        {services.length === 0 && searchQuery && (
+          <div className="p-4 text-center">
+            <p className="text-sm text-gray-500">No services found</p>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
-    <div className="mx-4 md:mx-20  flex flex-wrap flex-col md:flex-row items-center top-0 bg-white pt-4  shadow-md sticky z-10">
-      <div className="flex title-font font-medium items-center text-gray-900 mb-1 md:mb-0">
-        <div className="md:pl-2">
-          <Image src="/fklogo.png" alt="Logo" width={50} height={44} />
-        </div>
-        <div className="brandName font-bold">fixKaput</div>
-        <div className="md:pl-0">
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden ml-7 cursor-pointer focus:outline-none"
-            onClick={toggleMobileMenu}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-10 w-6"
-              fill="none"
-              viewBox="0 0 24 20"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 8h16M4 16h16M4 24h16"
-              />
-            </svg>
-          </button>
+    <>
+      {/* Top Info Bar */}
+      <div className="hidden lg:block bg-gradient-to-r from-blue-900 via-blue-800 to-purple-900 text-white py-2">
+        <div className="max-w-7xl mx-auto px-4 flex justify-between items-center text-sm">
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-2">
+              <Phone className="w-4 h-4" />
+              <span>24/7 Emergency: +91-XXXXX-XXXXX</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <MapPin className="w-4 h-4" />
+              <span>Serving All Major Cities</span>
+            </div>
+          </div>
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-1">
+              <Star className="w-4 h-4 text-yellow-400" />
+              <span>4.8/5 Rating</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Clock className="w-4 h-4" />
+              <span>Same Day Service</span>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Main Navbar */}
+      <nav className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled 
+          ? 'bg-white/95 backdrop-blur-md shadow-xl border-b border-gray-200' 
+          : 'bg-white shadow-lg'
+      }`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20">
+            
+            {/* Logo Section */}
+            <div className="flex items-center space-x-3">
+              <div className="relative">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Image src="/fklogo.png" alt="FixKaput Logo" width={32} height={32} />
+                </div>
+              </div>
+              <div className="flex flex-col">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
+                  FixKaput
+                </h1>
+                <p className="text-xs text-gray-500 font-medium">Professional Services</p>
+              </div>
+            </div>
+
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center space-x-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`relative px-4 py-2 rounded-lg font-semibold transition-all duration-300 group ${
+                    router.pathname === link.href
+                      ? 'text-blue-600 bg-blue-50'
+                      : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                  }`}
+                >
+                  {link.label}
+                  <span className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300 group-hover:w-full ${
+                    router.pathname === link.href ? 'w-full' : ''
+                  }`} />
+                </Link>
+              ))}
+            </div>
+
+            {/* Right Section */}
+            <div className="flex items-center space-x-4">
+              
+              {/* Desktop Search */}
+              <div className="relative" ref={searchRef}>
+                {!showDesktopSearch ? (
+                  <button 
+                    onClick={handleDesktopSearchClick}
+                    className="hidden lg:flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-300"
+                  >
+                    <Search className="w-4 h-4 text-gray-600" />
+                    <span className="text-sm text-gray-600">Search services...</span>
+                  </button>
+                ) : (
+                  <div className="hidden lg:flex items-center space-x-2 px-4 py-2 bg-gray-100 rounded-lg">
+                    <Search className="w-4 h-4 text-gray-600" />
+                    <input
+                      type="text"
+                      placeholder="Search services..."
+                      value={searchQuery}
+                      onChange={(e) => handleSearchChange(e.target.value)}
+                      className="bg-transparent text-sm text-gray-700 placeholder-gray-500 focus:outline-none w-48"
+                      autoFocus
+                    />
+                    {searchQuery && (
+                      <button
+                        onClick={clearSearch}
+                        className="text-gray-400 hover:text-gray-600"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                )}
+                
+                <SearchResults
+                  services={filteredServices}
+                  isVisible={isSearchOpen && showDesktopSearch}
+                />
+              </div>
+
+              {/* Cart Button */}
+              <button
+                onClick={toggleCartSidebar}
+                className="relative p-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+              >
+                <ShoppingCart className="w-5 h-5" />
+                {Object.keys(cart).length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold animate-pulse">
+                    {Object.keys(cart).length}
+                  </span>
+                )}
+              </button>
+
+              {/* User Account */}
+              <div className="relative">
+                {user.value ? (
+                  <div
+                    className="flex items-center space-x-2 cursor-pointer"
+                    onMouseEnter={() => setdropdown(true)}
+                    onMouseLeave={() => setdropdown(false)}
+                  >
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold shadow-lg">
+                      <User className="w-5 h-5" />
+                    </div>
+                    <ChevronDown className="w-4 h-4 text-gray-600 hidden lg:block" />
+                    
+                    {/* Dropdown Menu */}
+                    {dropdown && (
+                      <div
+                        className="absolute right-0 top-12 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-50"
+                        onMouseEnter={() => setdropdown(true)}
+                        onMouseLeave={() => setdropdown(false)}
+                      >
+                        <div className="px-4 py-3 border-b border-gray-100">
+                          <p className="text-sm font-semibold text-gray-900">Welcome back!</p>
+                          <p className="text-xs text-gray-500">Manage your account</p>
+                        </div>
+                        
+                        <Link href="/mybookings" className="flex items-center space-x-3 px-4 py-3 hover:bg-blue-50 transition-colors duration-200">
+                          <Calendar className="w-4 h-4 text-blue-600" />
+                          <span className="text-sm font-medium text-gray-700">My Bookings</span>
+                        </Link>
+                        
+                        <button
+                          onClick={handleLogoutClick}
+                          className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-red-50 transition-colors duration-200 text-left"
+                        >
+                          <LogOut className="w-4 h-4 text-red-600" />
+                          <span className="text-sm font-medium text-red-700">Logout</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Link href="/login">
+                    <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2.5 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                      Login
+                    </button>
+                  </Link>
+                )}
+              </div>
+
+              {/* Mobile Menu Button */}
+              <button
+                onClick={toggleMobileMenu}
+                className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors duration-300"
+              >
+                <Menu className="w-6 h-6 text-gray-700" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="lg:hidden absolute top-full left-0 right-0 bg-white shadow-2xl border-t border-gray-200 z-40">
+            <div className="px-4 py-6 space-y-4">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={toggleMobileMenu}
+                  className={`block px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                    router.pathname === link.href
+                      ? 'text-blue-600 bg-blue-50'
+                      : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              
+              {/* Mobile Search */}
+              <div className="px-4 py-3" ref={mobileSearchRef}>
+                <div className="relative">
+                  <div className="flex items-center space-x-2 px-4 py-3 bg-gray-100 rounded-xl">
+                    <Search className="w-4 h-4 text-gray-600" />
+                    <input 
+                      type="text" 
+                      placeholder="Search services..." 
+                      value={searchQuery}
+                      onChange={(e) => handleSearchChange(e.target.value)}
+                      className="bg-transparent flex-1 text-sm text-gray-700 placeholder-gray-500 focus:outline-none"
+                    />
+                    {searchQuery && (
+                      <button
+                        onClick={clearSearch}
+                        className="text-gray-400 hover:text-gray-600"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                  
+                  <SearchResults
+                    services={filteredServices}
+                    isVisible={isSearchOpen}
+                    isMobile={true}
+                  />
+                </div>
+              </div>
+
+              {/* Mobile Contact Info */}
+              <div className="px-4 py-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl">
+                <div className="flex items-center space-x-2 mb-2">
+                  <Phone className="w-4 h-4 text-blue-600" />
+                  <span className="text-sm font-semibold text-gray-700">24/7 Emergency</span>
+                </div>
+                <p className="text-sm text-gray-600">+91-XXXXX-XXXXX</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </nav>
+
+      {/* Cart Sidebar */}
+      <div className={`fixed inset-0 z-50 ${isCartSidebarOpen ? 'visible' : 'invisible'}`}>
+        {/* Backdrop */}
+        <div 
+          className={`absolute inset-0 bg-black transition-opacity duration-300 ${
+            isCartSidebarOpen ? 'opacity-50' : 'opacity-0'
+          }`}
+          onClick={toggleCartSidebar}
+        />
+        
+        {/* Sidebar */}
+        <div className={`absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl transform transition-transform duration-300 ${
+          isCartSidebarOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}>
+          <div className="flex flex-col h-full">
+            
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+              <div className="flex items-center space-x-3">
+                <ShoppingCart className="w-6 h-6" />
+                <h2 className="text-xl font-bold">Your Cart</h2>
+              </div>
+              <button
+                onClick={toggleCartSidebar}
+                className="p-2 hover:bg-white/20 rounded-lg transition-colors duration-200"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Cart Items */}
+            <div className="flex-1 overflow-y-auto p-6">
+              {Object.keys(cart).length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-full text-center">
+                  <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                    <ShoppingCart className="w-12 h-12 text-gray-400" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Your cart is empty</h3>
+                  <p className="text-gray-600 mb-6">Add some services to get started</p>
+                  <button 
+                    onClick={toggleCartSidebar}
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
+                  >
+                    Browse Services
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {Object.keys(cart).map((k) => (
+                    <div key={k} className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                      <div className="flex items-center justify-between mb-3">
+                        <h4 className="font-semibold text-gray-900">{cart[k].name}</h4>
+                        <span className="text-lg font-bold text-blue-600">₹{(cart[k].price * cart[k].qty).toFixed(2)}</span>
+                      </div>
+                      
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-600">₹{cart[k].price} each</span>
+                        <div className="flex items-center space-x-3">
+                        <button
+  onClick={() => removeFromCart(k, 1)}
+
+  className="p-1 hover:bg-red-100 rounded-lg transition-colors duration-200"
+>
+  <Minus className="w-4 h-4 text-red-600" />
+</button>
+<span className="w-8 text-center font-semibold">{cart[k].qty}</span>
+<button
+  onClick={() => addToCart(k, 1, cart[k].price, cart[k].name)}
+  className="p-1 hover:bg-green-100 rounded-lg transition-colors duration-200"
+>
+  <Plus className="w-4 h-4 text-green-600" />
+</button>
+
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            
+            {Object.keys(cart).length > 0 && (
+              <div className="p-6 bg-gray-50 border-t border-gray-200">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-lg font-semibold text-gray-900">Total:</span>
+                  <span className="text-2xl font-bold text-blue-600">₹{subTotal.toFixed(2)}</span>
+                </div>
+                
+                <div className="space-y-3">
+                  <Link href="/checkout">
+                    <button
+                      onClick={toggleCartSidebar}
+                      className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center space-x-2"
+                    >
+                      <ShoppingBag className="w-5 h-5" />
+                      <span>Proceed to Checkout</span>
+                    </button>
+                  </Link>
+                  
+                  <button
+                    onClick={clearCart}
+                    className="w-full bg-gray-200 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-300 transition-all duration-300"
+                  >
+                    Clear Cart
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Toast Container */}
       <ToastContainer
-        toastStyle={{ backgroundColor: "#1e88e5" }}
-        position="bottom-center"
-        autoClose={1000}
+        position="top-right"
+        autoClose={3000}
         hideProgressBar={false}
-        newestOnTop={false}
+        newestOnTop
         closeOnClick
         rtl={false}
         pauseOnFocusLoss
         draggable
         pauseOnHover
         theme="light"
+        toastClassName="!bg-white !text-gray-900 !shadow-xl !border !border-gray-200"
       />
-      {/* Navigation Links - Desktop */}
-      <nav className="hidden md:flex text-xl md:ml-auto pb-2 md:mr-auto">
-        <Link
-          href="/"
-          className="mr-6 font-poppins font-bold text-2xl pt-7 px-3 hover:border-[#4267b2] text-transparent bg-clip-text bg-gradient-to-r from-[#00C9FF] via-[#2A2A72] to-[#4A00E0] hover:from-[#4A00E0] hover:to-[#00C9FF]"
-        >
-          Home
-        </Link>
-        <Link
-          href="/services"
-          className="mr-6 font-poppins font-bold text-2xl pt-7 px-3 hover:border-[#4267b2] text-transparent bg-clip-text bg-gradient-to-r from-[#00C9FF] via-[#2A2A72] to-[#4A00E0] hover:from-[#4A00E0] hover:to-[#00C9FF]"
-        >
-          Services
-        </Link>
-        <Link
-          href="/about"
-          className="mr-6 font-poppins font-bold text-2xl pt-7 px-3 hover:border-[#4267b2] text-transparent bg-clip-text bg-gradient-to-r from-[#00C9FF] via-[#2A2A72] to-[#4A00E0] hover:from-[#4A00E0] hover:to-[#00C9FF]"
-        >
-          About Us
-        </Link>
-        <Link
-          href="/contact"
-          className="mr-6 font-poppins font-bold text-2xl pt-7 px-3 hover:border-[#4267b2] text-transparent bg-clip-text bg-gradient-to-r from-[#00C9FF] via-[#2A2A72] to-[#4A00E0] hover:from-[#4A00E0] hover:to-[#00C9FF]"
-        >
-          Contact Us
-        </Link>
-      </nav>
-
-      {/* Mobile Menu - Conditional Rendering */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 bg-blue-100 bg-opacity-90 z-50 p-4 transition-transform transform translate-x-0 duration-300 ease-in-out ">
-          <div className="relative bg-blue-50 rounded-lg shadow-lg p-4 h-full ">
-            {/* Close Button */}
-            <button
-              className="absolute top-4 right-4 text-gray-800 text-2xl"
-              onClick={toggleMobileMenu}
-              aria-label="Close menu"
-            >
-              &times;
-            </button>
-
-            <nav className="flex flex-col h-full justify-between ">
-              <div>
-                <Link
-                  href="/"
-                  className="text-2xl block py-3 border-b border-gray-200 font-serif text-gray-800 hover:text-blue-600 transition-colors duration-300"
-                  onClick={toggleMobileMenu}
-                >
-                  Home
-                </Link>
-                <Link
-                  href="/services"
-                  className="text-2xl block py-3 border-b border-gray-200 font-serif text-gray-800 hover:text-blue-600 transition-colors duration-300"
-                >
-                  Services
-                </Link>
-                <Link
-                  href="/about"
-                  className="text-2xl block py-3 border-b border-gray-200 font-serif text-gray-800 hover:text-blue-600 transition-colors duration-300"
-                  onClick={toggleMobileMenu}
-                >
-                  About Us
-                </Link>
-
-                <Link
-                  href="/contact"
-                  className="text-2xl block py-3 border-b border-gray-200 font-serif text-gray-800 hover:text-blue-600 transition-colors duration-300"
-                  onClick={toggleMobileMenu}
-                >
-                  Contact Us
-                </Link>
-              </div>
-            </nav>
-          </div>
-        </div>
-      )}
-      {/*account*/}
-      <div className="flex items-center">
-        {/* Account */}
-        <div className="relative text-[#4267b2] cursor-pointer mx-2">
-          <a
-            onMouseOver={() => setdropdown(true)}
-            onMouseLeave={() => setdropdown(false)}
-          >
-            {dropdown && (
-              <div
-                onMouseOver={() => setdropdown(true)}
-                onMouseLeave={() => setdropdown(false)}
-                className="absolute right-0 top-11 w-48 bg-white border border-gray-200 shadow-lg rounded-lg"
-              >
-                <ul className="text-sm">
-                  <li className="py-2 px-4 hover:bg-blue-100 transition-colors">
-                    <Link
-                      href="/myaccount"
-                      className="block text-lg font-poppins font-bold px-3 py-2 text-transparent bg-clip-text bg-gradient-to-r from-[#00C9FF] via-[#2A2A72] to-[#4A00E0] hover:from-[#4A00E0] hover:to-[#00C9FF]"
-                    >
-                      {" "}
-                      My Account
-                    </Link>
-                  </li>
-                  <li className="py-2 px-4 hover:bg-blue-100 transition-colors">
-                    <Link
-                      href="/orders"
-                      className="block text-lg font-poppins font-bold px-3 py-2 text-transparent bg-clip-text bg-gradient-to-r from-[#00C9FF] via-[#2A2A72] to-[#4A00E0] hover:from-[#4A00E0] hover:to-[#00C9FF] transition-colors"
-                    >
-                      Orders
-                    </Link>
-                  </li>
-                  <div className="py-2 px-4 hover:bg-blue-100 transition-colors">
-                    <li
-                      onClick={handleLogoutClick}
-                      className="block text-lg font-poppins font-bold px-3 py-2 text-transparent bg-clip-text bg-gradient-to-r from-[#00C9FF] via-[#2A2A72] to-[#4A00E0] hover:from-[#4A00E0] hover:to-[#00C9FF] transition-colors"
-                    >
-                      Logout
-                    </li>
-                  </div>
-                </ul>
-              </div>
-            )}
-            <div className="mt-3">
-              {user.value && <MdAccountCircle size={34} />}
-            </div>
-          </a>
-          {!user.value && (
-            <Link href={"/login"}>
-              <button className="hidden md:block bg-[#4267b2] text-white rounded-md px-4 py-2 text-base hover:bg-[#365899] transition-colors">
-                Login
-              </button>
-            </Link>
-          )}
-        </div>
-        {/* Cart Button */}
-        <button
-          className="hidden md:block rounded-full ml-1 mr-2 mt-3"
-          onClick={toggleCartSidebar}
-        >
-          <div className="text-[#4267b2]">
-            <FaShoppingCart size={34} />
-          </div>
-        </button>
-      </div>
-
-      {/* Cart Sidebar */}
-      <div
-        className={`fixed top-0 right-0 w-80 bg-blue-50 h-screen shadow-lg rounded-l-lg transform ${
-          isCartSidebarOpen ? "translate-x-0" : "translate-x-full"
-        } transition-transform duration-300 ease-in-out`}
-      >
-        <div className="flex flex-col h-full">
-          {/* Header */}
-          <div className="p-6 flex items-center justify-between border-b border-gray-300">
-            <h2 className="text-3xl font-poppins font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#00C9FF] via-[#2A2A72] to-[#4A00E0]">
-              Your Cart
-            </h2>
-            <button
-              className="text-2xl text-gray-500 hover:text-gray-800 transition-colors"
-              onClick={toggleCartSidebar}
-            >
-              <IoMdCloseCircle />
-            </button>
-          </div>
-
-          {/* Main Content Area */}
-          <div className="flex flex-col flex-1 overflow-hidden">
-            {/* Scrollable Cart Items */}
-            <div className="flex-1 overflow-y-auto p-4">
-              <ol className="list-none space-y-4">
-                {Object.keys(cart).length === 0 ? (
-                  <div className="text-center font-poppins font-bold text-gray-700 py-12">
-                    <div className="flex justify-center mb-4">
-                      <BsCartX className="text-5xl text-blue-400" />
-                    </div>
-                    <h3 className="text-2xl md:text-3xl leading-tight">
-                      Your cart is empty
-                    </h3>
-                    <p className="mt-2 text-lg text-gray-600">
-                      It looks like you haven’t added any items to your cart
-                      yet. Start shopping to fill it up!
-                    </p>
-                  </div>
-                ) : (
-                  Object.keys(cart).map((k) => (
-                    <li
-                      key={k}
-                      className="flex items-center justify-between p-4 bg-gradient-to-r from-[#007bff] via-[#0056b3] to-[#003d79] rounded-lg shadow-2xl text-white"
-                    >
-                      <div className="flex-1 font-medium">{cart[k].name}</div>
-                      <div className="flex items-center space-x-2">
-                        <AiFillMinusCircle
-                          onClick={() =>
-                            removeFromCart(k, 1, cart[k].price, cart[k].name)
-                          }
-                          className="cursor-pointer text-white hover:text-gray-300 transition-colors"
-                          size={20}
-                        />
-                        <span className="text-lg font-semibold">
-                          {cart[k].qty}
-                        </span>
-                        <AiFillPlusCircle
-                          onClick={() =>
-                            addToCart(k, 1, cart[k].price, cart[k].name)
-                          }
-                          className="cursor-pointer text-white hover:text-gray-300 transition-colors"
-                          size={20}
-                        />
-                      </div>
-                    </li>
-                  ))
-                )}
-              </ol>
-            </div>
-
-            {/* Subtotal and Checkout */}
-            <div className="p-6 border-t border-gray-200 flex-none">
-              <div className="flex items-center justify-between mb-4 px-4 py-2 border-t border-gray-200">
-                <span className="text-lg font-poppins font-bold text-gray-800">
-                  Subtotal :
-                </span>
-                <span className="text-lg font-bold text-blue-500">
-                  ₹{subTotal.toFixed(2)}
-                </span>
-              </div>
-              <div className="flex gap-4">
-                <Link href="/checkout" legacyBehavior>
-                  <button
-                    className={`flex items-center space-x-2 py-2 px-4 rounded-lg transition-shadow duration-300 ease-in-out ${
-                      Object.keys(cart).length === 0
-                        ? "bg-blue-100 cursor-not-allowed"
-                        : "bg-gradient-to-r from-[#0056b3] to-[#003d79] text-white hover:shadow-xl"
-                    }`}
-                    disabled={Object.keys(cart).length === 0}
-                    onClick={toggleCartSidebar}
-                  >
-                    <BsFillBagFill className="text-lg" />
-                    <span className="text-lg font-semibold">Checkout</span>
-                  </button>
-                </Link>
-
-                <button
-                  onClick={clearCart}
-                  className={`flex items-center space-x-2 py-2 px-4 rounded-lg transition-shadow duration-300 ease-in-out ${
-                    Object.keys(cart).length === 0
-                      ? "bg-blue-100 cursor-not-allowed"
-                      : "bg-gradient-to-r from-[#ff4d4d] to-[#cc0000] text-white hover:shadow-xl"
-                  }`}
-                  disabled={Object.keys(cart).length === 0}
-                >
-                  <span className="text-lg font-semibold">Clear Cart</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 

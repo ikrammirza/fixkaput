@@ -31,6 +31,54 @@ const services = [
   },
 ];
 
+// New detailed service data for Install & Uninstall section
+const detailedServices = [
+  {
+    id: 101,
+    name: "Refrigerant Leak Detection and Repair",
+    description: [
+      "Involves inspecting the system.",
+      "Testing components.",
+      "Technicians locate leaks and recharge the system with the correct amount of refrigerant.",
+    ],
+    price: 420,
+    image: "Acservice.jpg",
+  },
+  {
+    id: 102,
+    name: "Thermostat Replacement",
+    description: [
+      "Remove faulty thermostat.",
+      "Install new programmable thermostat.",
+      "Ensure proper wiring and configuration.",
+    ],
+    price: 350,
+    image: "Acservice.jpg",
+  },
+  {
+    id: 103,
+    name: "AC Installation",
+    description: [
+      "Proper mounting and connection.",
+      "System testing and safety checks.",
+      "Quick and professional setup.",
+    ],
+    price: 600,
+    image: "Acservice.jpg",
+  },
+  {
+    id: 104,
+    name: "AC Uninstallation",
+    description: [
+      "Safe disconnection.",
+      "Wall clean-up and finishing.",
+      "Unit transport ready.",
+    ],
+    price: 300,
+    image: "Acservice.jpg",
+  },
+];
+
 const ServicePage = ({ cart, addToCart }) => {
   const handleCart = (item) => {
     toast.success(`${item} added`, {
@@ -48,7 +96,7 @@ const ServicePage = ({ cart, addToCart }) => {
 
   return (
     <>
-     <ToastContainer
+      <ToastContainer
         toastStyle={{ backgroundColor: "#1e88e5" }}
         position="bottom-center"
         autoClose={1000}
@@ -62,17 +110,13 @@ const ServicePage = ({ cart, addToCart }) => {
         theme="light"
       />
       <div className=" md:mx-20 ">
-        {/* Header Section */}
-
         {/* Services Section */}
         <div className="flex flex-col mt-8 md:mt-10 md:flex-row md:space-x-4">
-          {/* Service Links */}
           <div className="flex flex-wrap justify-center mb-10 md:mb-0 w-full md:w-1/3">
             <div className="bg-white shadow-lg rounded-lg p-4 w-full">
-              <h2 className="rounded-xl mb-5  font-bold bg-gradient-to-r from-blue-600 to-blue-900 text-white py-4 text-center text-3xl md:text-4xl">
+              <h2 className="rounded-xl mb-5 font-bold bg-gradient-to-r from-blue-600 to-blue-900 text-white py-4 text-center text-3xl md:text-4xl">
                 AC Service & Repair
               </h2>
-              {/* Box wrapper for services */}
               <div className="flex flex-wrap justify-center">
                 {services.map((service) => (
                   <div
@@ -111,27 +155,15 @@ const ServicePage = ({ cart, addToCart }) => {
               stopOnHover={true}
               transitionTime={500}
             >
-              <div>
-                <img
-                  src="Acservice.jpg"
-                  alt="Slide 1"
-                  className="object-cover w-full h-[400px] md:h-[500px] rounded-lg shadow-md"
-                />
-              </div>
-              <div>
-                <img
-                  src="Acservice.jpg"
-                  alt="Slide 2"
-                  className="object-cover w-full h-[400px] md:h-[500px] rounded-lg shadow-md"
-                />
-              </div>
-              <div>
-                <img
-                  src="Acservice.jpg"
-                  alt="Slide 3"
-                  className="object-cover w-full h-[400px] md:h-[500px] rounded-lg shadow-md"
-                />
-              </div>
+              {[1, 2, 3].map((slide) => (
+                <div key={slide}>
+                  <img
+                    src="Acservice.jpg"
+                    alt={`Slide ${slide}`}
+                    className="object-cover w-full h-[400px] md:h-[500px] rounded-lg shadow-md"
+                  />
+                </div>
+              ))}
             </Carousel>
           </div>
         </div>
@@ -139,41 +171,36 @@ const ServicePage = ({ cart, addToCart }) => {
         {/* Install & Uninstall Section */}
         <section className="py-12 md:mt-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <h2 className="text-4xl font-extrabold text-center text-blue-700  mb-12">
+            <h2 className="text-4xl font-extrabold text-center text-blue-700 mb-12">
               AC Repair & Service
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5">
-              {/* Service Card */}
-              {Array.from({ length: 4 }).map((_, index) => (
+              {detailedServices.map((service) => (
                 <div
-                  key={index}
+                  key={service.id}
                   className="flex flex-col md:flex-row items-center bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
                 >
                   <img
-                    src="Acservice.jpg"
-                    alt="Service"
+                    src={service.image}
+                    alt={service.name}
                     className="block md:hidden w-full md:w-48 h-48 object-cover rounded-md md:rounded-none md:rounded-l-lg mb-0"
                   />
-
                   <div className="p-6 flex-grow">
                     <h3 className="text-xl font-semibold text-blue-600 mb-4">
-                      Refrigerant Leak Detection and Repair
+                      {service.name}
                     </h3>
                     <ul className="list-disc ml-6 mb-6 text-gray-600 space-y-2">
-                      <li>Involves inspecting the system.</li>
-                      <li>Testing components.</li>
-                      <li>
-                        Technicians locate leaks and recharge the system with
-                        the correct amount of refrigerant.
-                      </li>
+                      {service.description.map((point, idx) => (
+                        <li key={idx}>{point}</li>
+                      ))}
                     </ul>
                     <div className="flex items-center md:pl-4 justify-between">
-                      <p className="text-gray-500 text-lg">₹420</p>
+                      <p className="text-gray-500 text-lg">₹{service.price}</p>
                       <button
                         onClick={() => {
-                          addToCart("serviceItem", 1, 400, "Service");
-                          handleCart("Refrigerant Leak Detection and Repair");
+                          addToCart(service.id.toString(), 1, service.price, service.name);
+                          handleCart(service.name);
                         }}
                         className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-5 py-2 rounded-lg transition duration-300"
                       >
@@ -182,9 +209,9 @@ const ServicePage = ({ cart, addToCart }) => {
                     </div>
                   </div>
                   <img
-                    src="Acservice.jpg"
-                    alt="Service"
-                    className="hidden md:block  w-full md:w-48 h-36 object-cover rounded-md md:rounded-none md:rounded-l-lg mb-4 md:mb-0 md:mt-2 md:mr-2"
+                    src={service.image}
+                    alt={service.name}
+                    className="hidden md:block w-full md:w-48 h-36 object-cover rounded-md md:rounded-none md:rounded-l-lg mb-4 md:mb-0 md:mt-2 md:mr-2"
                   />
                 </div>
               ))}

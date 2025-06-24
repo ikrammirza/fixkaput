@@ -1,13 +1,26 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
+const MONGODB_URI = process.env.MONGO_URI;
 
+if (!MONGODB_URI) {
+  throw new Error('❌ MONGO_URI not found in environment variables');
+}
 
-const connectDb=handler=> async (req,res)=>{
-    if(mongoose.connections[0].readyState){
-        return handler(req, res)
-    }
-    await mongoose.connect(process.env.MONGO_URI)
-    return handler(req, res);
-} 
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
+async function connectDb() {
+  if (cached.conn) return cached.conn;
+
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(MONGODB_URI).then((mongoose) => mongoose);
+  }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
+}
 
 export default connectDb;

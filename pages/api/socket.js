@@ -1,59 +1,34 @@
-// import { Server } from "socket.io";
+// lib/socket.js
+import { Server } from "socket.io";
 
-// export default function handler(req, res) {
-//   if (req.method === "GET") {
-//     // This allows you to visit /api/socket directly in the browser to test the route
-//     return res.status(200).send("WebSocket endpoint running");
-//   }
-
-//   if (!res.socket.server.io) {
-//     console.log("Initializing WebSocket server"); // Logs when initializing
-
-//     const io = new Server(res.socket.server, {
-//       path: "/api/socket.io", // Ensure this matches the client's path
-//       cors: {
-//         origin: "*", // Allow all origins for testing; adjust as necessary
-//       },
-//     });
-//     res.socket.server.io = io;
-
-//     io.on("connection", (socket) => {
-//       console.log("Technician connected"); // Confirms connection
-//       socket.on("disconnect", () => {
-//         console.log("Technician disconnected");
-//       });
-//     });
-//   } else {
-//     console.log("WebSocket server already initialized");
-//   }
-//   res.end();
-// }
 let io;
 
-export const config = {
-  api: {
-    bodyParser: false, // Important for socket.io
-  },
-};
-
-export default function handler(req, res) {
+export const initSocket = (server) => {
   if (!io) {
-    const server = res.socket.server;
-
-    // Only create a new Socket.IO server if it hasn't been initialized
     io = new Server(server, {
-      path: "/api/socket.io",
+      path: "/api/socketio",
+      cors: {
+        origin: "*",
+        methods: ["GET", "POST"],
+      },
     });
+    console.log("Socket.io initialized");
 
     io.on("connection", (socket) => {
-      console.log("New WebSocket connection");
+      console.log("Client connected:", socket.id);
 
-      // Handle socket events here
+      socket.on('testEvent', (data) => {
+        console.log('Received test event from server:', data);
+      });
+      socket.on('orderStatusChanged', (data) => {
+        console.log('Order status changed:', data);
+      });
       socket.on("disconnect", () => {
-        console.log("Client disconnected");
+        console.log("Client disconnected:", socket.id);
       });
     });
   }
+  return io;
+};
 
-  res.end();
-}
+export const getSocket = () => io;

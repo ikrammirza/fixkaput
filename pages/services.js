@@ -1,347 +1,513 @@
-import React, { useState } from "react";
+import React from "react";
+import { motion, useInView } from "framer-motion";
+import Link from "next/link";
 import { TbAirConditioning } from "react-icons/tb";
 import { CgSmartHomeBoiler } from "react-icons/cg";
 import { MdOutlineCarpenter, MdPlumbing } from "react-icons/md";
 import { SiScrapbox } from "react-icons/si";
 import { GiCctvCamera } from "react-icons/gi";
-import Link from "next/link";
-import Image from "next/image";
+import { Check, Clock, Map, Phone, Quote } from "lucide-react";
 
-const Services = () => {
-  const services = [
-    {
-      id: 1,
-      name: "AC service & repair",
-      description:
-        "Comprehensive repair and maintenance of air conditioning systems.",
-      image: "/Acservice.jpg", // Replace with your actual image path
-    },
-    {
-      id: 2,
-      name: "Geyser service & repair",
-      description:
-        "Expert servicing and repair solutions for all types of geysers.",
-      image: "/GeyserService.jpg", // Replace with your actual image path
-    },
-    {
-      id: 3,
-      name: "Carpenter service",
-      description:
-        "Professional carpentry services from experienced carpenters.",
-      image: "/CarpenterService.jpg", // Replace with your actual image path
-    },
-    {
-      id: 4,
-      name: "Plumbing service",
-      description:
-        "Reliable and affordable plumbing services for all your needs.",
-      image: "/PlumbingService.jpg", // Replace with your actual image path
-    },
-    {
-      id: 5,
-      name: "Scrap collection service",
-      description: "Efficient scrap collection and recycling services.",
-      image: "/ScrapCollection.jpg", // Replace with your actual image path
-    },
-    {
-      id: 6,
-      name: "CCTV service & repair",
-      description:
-        "Secure your property with our CCTV repair and installation services.",
-      image: "/CCTVService.jpg", // Replace with your actual image path
-    },
-  ];
+const services = [
+  {
+    id: 1,
+    name: "AC Service & Repair",
+    link: "/service1",
+    shortDescription: "Expert AC maintenance and repair services for all brands and models.",
+    longDescription: "Our certified technicians provide comprehensive air conditioning services including installation, maintenance, and repairs. We ensure your AC systems operate at peak efficiency, helping you save on energy costs while maintaining optimal comfort.",
+    image: "https://images.pexels.com/photos/7218013/pexels-photo-7218013.jpeg",
+    icon: TbAirConditioning,
+    benefits: [
+      "Regular maintenance extends AC lifespan",
+      "Energy-efficient repairs save on bills",
+      "24/7 emergency repair services",
+      "Certified technicians for all brands"
+    ]
+  },
+  {
+    id: 2,
+    name: "Geyser Service & Repair",
+    link: "/service2",
+    shortDescription: "Professional geyser solutions for efficient hot water supply.",
+    longDescription: "Our geyser service and repair solutions cover all types of water heaters, ensuring you have reliable hot water when you need it. From routine maintenance to complex repairs, our experts handle everything with precision.",
+    image: "https://images.pexels.com/photos/8985517/pexels-photo-8985517.jpeg",
+    icon: CgSmartHomeBoiler,
+    benefits: [
+      "Expert repairs for all geyser types",
+      "Performance optimization",
+      "Safety inspections included",
+      "Energy-efficient solutions"
+    ]
+  },
+  {
+    id: 3,
+    name: "Carpenter Service",
+    link: "/service3",
+    shortDescription: "Skilled carpentry work for furniture and installations.",
+    longDescription: "Our professional carpentry services cover everything from custom furniture creation to repairs and installations. Our experienced carpenters bring expertise and precision to every project, ensuring high-quality craftsmanship.",
+    image: "https://images.pexels.com/photos/4246196/pexels-photo-4246196.jpeg",
+    icon: MdOutlineCarpenter,
+    benefits: [
+      "Custom furniture design",
+      "Expert wood repairs",
+      "Cabinet installations",
+      "Door and window repairs"
+    ]
+  },
+  {
+    id: 4,
+    name: "Plumbing Service",
+    link: "/service4",
+    shortDescription: "Comprehensive plumbing solutions for all needs.",
+    longDescription: "Our reliable plumbing services address all your water system needs, from minor leaks to major installations. Our licensed plumbers use quality materials and proven techniques to ensure lasting solutions.",
+    image: "https://images.pexels.com/photos/5688215/pexels-photo-5688215.jpeg",
+    icon: MdPlumbing,
+    benefits: [
+      "Fast leak detection and repair",
+      "Pipe installation and replacement",
+      "Fixture upgrades",
+      "Drain cleaning"
+    ]
+  },
+  {
+    id: 5,
+    name: "Scrap Collection",
+    link: "/service5",
+    shortDescription: "Eco-friendly scrap removal and recycling.",
+    longDescription: "Our scrap collection service helps you dispose of unwanted items responsibly while contributing to environmental sustainability. We sort materials for recycling, ensuring proper disposal of all types of scrap.",
+    image: "https://images.pexels.com/photos/8055847/pexels-photo-8055847.jpeg",
+    icon: SiScrapbox,
+    benefits: [
+      "Eco-friendly disposal",
+      "Convenient pickup",
+      "Material recycling",
+      "Competitive pricing"
+    ]
+  },
+  {
+    id: 6,
+    name: "CCTV Service",
+    link: "/service6",
+    shortDescription: "Advanced security solutions and support.",
+    longDescription: "Protect your property with our comprehensive CCTV services. From initial consultation and system design to installation and maintenance, we provide end-to-end security solutions with the latest technology.",
+    image: "https://images.pexels.com/photos/5691622/pexels-photo-5691622.jpeg",
+    icon: GiCctvCamera,
+    benefits: [
+      "Custom security design",
+      "Professional installation",
+      "Remote monitoring",
+      "Regular maintenance"
+    ]
+  }
+];
 
-  const [hoveredIndex, setHoveredIndex] = useState(null);
+const testimonials = [
+  {
+    id: 1,
+    content: "The AC repair service was prompt and professional. My unit is working better than ever, and the technician explained everything clearly.",
+    author: "Sarah Johnson",
+    position: "Homeowner",
+    avatar: "https://randomuser.me/api/portraits/women/11.jpg"
+  },
+  {
+    id: 2,
+    content: "I've used their plumbing services twice now, and both times the work was impeccable. Fair pricing and they cleaned up everything after.",
+    author: "Michael Chen",
+    position: "Apartment Resident",
+    avatar: "https://randomuser.me/api/portraits/men/22.jpg"
+  },
+  {
+    id: 3,
+    content: "The carpenter built custom shelving for my living room and the quality is outstanding. Highly recommend their carpentry services!",
+    author: "Priya Patel",
+    position: "Interior Designer",
+    avatar: "https://randomuser.me/api/portraits/women/33.jpg"
+  }
+];
 
-  const handleMouseEnter = (index) => {
-    setHoveredIndex(index);
-  };
-
-  const handleMouseLeave = () => {
-    setHoveredIndex(null);
-  };
-
-  const icons = [
-    <div
-      style={{
-        backgroundImage: "linear-gradient(to right, #4267b2, #0e1e3d)",
-        padding: 10,
-        borderRadius: 8,
-      }}
-    >
-      <TbAirConditioning color="#C0C0C0" size={100} />
-    </div>,
-    <div
-      style={{
-        backgroundImage: "linear-gradient(to right, #4267b2, #0e1e3d)",
-        padding: 10,
-        borderRadius: 8,
-      }}
-    >
-      <CgSmartHomeBoiler color="#C0C0C0" size={100} />
-    </div>,
-    <div
-      style={{
-        backgroundImage: "linear-gradient(to right, #4267b2, #001F4D)",
-        padding: 10,
-        borderRadius: 8,
-      }}
-    >
-      <MdOutlineCarpenter color="#C0C0C0" size={100} />
-    </div>,
-    <div
-      style={{
-        backgroundImage: "linear-gradient(to right, #4267b2, #001F4D)",
-        padding: 10,
-        borderRadius: 8,
-      }}
-    >
-      <MdPlumbing color="#C0C0C0" size={100} />
-    </div>,
-    <div
-      style={{
-        backgroundImage: "linear-gradient(to right, #4267b2, #001F4D)",
-        padding: 10,
-        borderRadius: 8,
-      }}
-    >
-      <SiScrapbox color="#C0C0C0" size={100} />
-    </div>,
-    <div
-      style={{
-        backgroundImage: "linear-gradient(to right, #4267b2, #001F4D)",
-        padding: 10,
-        borderRadius: 8,
-      }}
-    >
-      <GiCctvCamera color="#C0C0C0" size={100} />
-    </div>,
-  ];
-
+export default function ServicesPage() {
   return (
-    <>
-      <div className="relative bg-gradient-to-r from-blue-600 to-blue-900 rounded-xl shadow-lg mx-4 md:mx-20 mt-5 md:mt-0 overflow-hidden mb-20">
-        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-700 to-indigo-900 "></div>
-        <div className="p-8 md:p-12">
-          <div className="text-center mb-8 md:mb-12">
-            <h2 className="text-4xl md:text-6xl font-extrabold text-white leading-tight">
-              Get home services
-            </h2>
-            <p className="text-lg md:text-xl text-white mt-2">
-              At your doorstep from highly trained professionals, at the best
-              reasonable price!!
-            </p>
+    <div className="min-h-screen bg-gradient-to-b from-white to-slate-50">
+      {/* Hero Section */}
+      <div className="min-h-screen bg-gradient-to-b from-white to-slate-50">
+        {/* Hero Section */}
+        <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-blue-700 to-blue-900 text-white">
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2Zy...')]"></div>
           </div>
-          <div className="w-16 h-px bg-white mx-auto mb-8"></div>
-          <div className="text-center text-white">
-            <p className="text-lg md:text-xl font-medium">
-              We offer a wide range of services including plumbing, electrical
-              work, carpentry, and more.
-            </p>
-            <p className="text-lg md:text-xl font-medium">
-              Contact us today to schedule an appointment!
-            </p>
+
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 relative z-10">
+            <div className="flex flex-col items-center text-center">
+              <motion.h1
+                className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                Our Home Services
+                <span className="block text-blue-200">Expert Help, Anytime</span>
+              </motion.h1>
+
+              <motion.p
+                className="text-lg md:text-xl mb-8 text-blue-100 max-w-2xl"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                Whether it's fixing, installing, or servicing — our professionals are ready to assist you with top-notch quality at your doorstep.
+              </motion.p>
+
+              {/* Services Grid */}
+              <motion.div
+                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 mt-10"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+              >
+                {/* AC Service */}
+                <div className="bg-white/10 hover:scale-105 hover:bg-white/20 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
+                  <img src="/Acservice.jpg" alt="AC Service" className="w-20 h-20 mb-3" />
+                  <p className="text-white font-semibold text-lg">AC Service</p>
+                </div>
+
+                {/* Plumbing */}
+                <div className="bg-white/10 hover:scale-105 hover:bg-white/20 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
+                  <img src="/Acservice.jpg" alt="Plumbing" className="w-20 h-20 mb-3" />
+                  <p className="text-white font-semibold text-lg">Plumbing</p>
+                </div>
+
+                {/* Electrician */}
+                <div className="bg-white/10 hover:scale-105 hover:bg-white/20 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
+                  <img src="/Acservice.jpg" alt="Electrician" className="w-20 h-20 mb-3" />
+                  <p className="text-white font-semibold text-lg">Electrician</p>
+                </div>
+
+                {/* CCTV Installation */}
+                <div className="bg-white/10 hover:scale-105 hover:bg-white/20 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
+                  <img src="/Acservice.jpg" alt="CCTV" className="w-20 h-20 mb-3" />
+                  <p className="text-white font-semibold text-lg">CCTV Installation</p>
+                </div>
+              </motion.div>
+
+              {/* CTA Buttons */}
+              <motion.div
+                className="flex flex-col sm:flex-row gap-4 mt-36"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+              >
+
+              </motion.div>
+
+            </div>
+          </div>
+
+          {/* Bottom SVG Wave */}
+          <div className="absolute bottom-0 left-0 right-0">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full h-auto">
+              <path
+                fill="#ffffff"
+                fillOpacity="1"
+                d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,133.3C960,128,1056,96,1152,85.3C1248,75,1344,85,1392,90.7L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+              ></path>
+            </svg>
           </div>
         </div>
       </div>
-      <div className="md:mt-28 mt-20">
-        <div id="servicesSection" className="text-center subTopic">
-          Services we offer
+
+
+      {/* Services Grid */}
+      <section className="py-20 px-4 max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Our Professional Services
+          </h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            We offer a wide range of home services delivered by skilled professionals to keep your home running smoothly.
+          </p>
+        </motion.div>
+
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          {services.map((service, index) => {
+            const Icon = service.icon;
+            return (
+              <motion.div
+                key={service.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 * index }}
+              >
+                <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full group">
+                  <div className="p-6">
+                    <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mb-5 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                      <Icon size={32} />
+                    </div>
+
+                    <h3 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-all duration-300">
+                      {service.name}
+                    </h3>
+
+                    <p className="text-gray-600">
+                      {service.shortDescription}
+                    </p>
+                    <Link href={service.link}>
+                      <div className="mt-6 flex items-center text-blue-600 font-medium">
+                        <span className="group-hover:mr-2 transition-all duration-300">Learn more</span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 transform group-hover:translate-x-1 transition-all duration-300"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
+      </section>
+
+      {/* Service Details */}
+      <section className="py-16 px-4 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Why Choose Our Services
+          </h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            We deliver exceptional quality with trained professionals and guaranteed satisfaction.
+          </p>
         </div>
-        <div className="text-center rounded-xl border-gray-400 border md:ml-20 md:mr-20 mx-4 mt-7 md:mt-14 md:mb-32 mb-20 text-2xl font-semibold ">
-          <div className="mt-5 flex flex-wrap text-xl md:text-xl lg:text-3xl">
-            {services.map((service, index) => (
+
+        <div className="space-y-32">
+          {services.map((service, index) => {
+            const ref = React.useRef(null);
+            const isInView = useInView(ref, { once: true, margin: "-100px 0px" });
+            const isEven = index % 2 === 0;
+
+            return (
               <div
                 key={service.id}
-                className="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/3 mb-8 md:mb- md:pt-10"
+                ref={ref}
+                className={`flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-12`}
               >
-                <div
-                  className="flex flex-col items-center p-5 md:p-7 group"
-                  onMouseEnter={() => handleMouseEnter(index)}
-                  onMouseLeave={handleMouseLeave}
+                <motion.div
+                  className="lg:w-1/2"
+                  initial={{ opacity: 0, x: isEven ? -50 : 50 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: isEven ? -50 : 50 }}
+                  transition={{ duration: 0.7, ease: "easeOut" }}
                 >
-                  <Link
-                    href={`/service${service.id}`}
-                    className="bg-[#c0c0c0bb] hover:bg-gray-400 rounded-md p-3 md:p-2"
-                  >
-                    <div>{icons[index]}</div>
-                  </Link>
-                  <Link
-                    href={`/service${service.id}`}
-                    className="pt-4 md:pt-4 text-2xl font-semibold text-left relative group-hover:after:content-[''] group-hover:after:block group-hover:after:w-full group-hover:after:h-[1px] group-hover:after:bg-neutral-600 group-hover:after:absolute group-hover:after:left-0 group-hover:after:bottom-0 group-hover:after:transition-width group-hover:after:duration-100"
-                  >
+                  <div className="relative">
+                    <div className={`absolute -inset-4 ${isEven ? 'bg-blue-400/10' : 'bg-teal-400/10'} rounded-3xl blur-xl`}></div>
+                    <div className="relative overflow-hidden rounded-2xl shadow-2xl aspect-[4/3]">
+                      <img
+                        src={service.image}
+                        alt={service.name}
+                        className="w-full h-full object-cover transition-transform duration-700 hover:scale-110"
+                      />
+                    </div>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  className="lg:w-1/2"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                  transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
+                >
+                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
                     {service.name}
+                  </h3>
+
+                  <p className="text-gray-700 mb-6 text-lg">
+                    {service.longDescription}
+                  </p>
+
+                  <div className="mb-8">
+                    <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                      Key Benefits
+                    </h4>
+
+                    <ul className="space-y-3">
+                      {service.benefits.map((benefit, i) => (
+                        <motion.li
+                          key={i}
+                          className="flex items-start"
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                          transition={{ duration: 0.3, delay: 0.4 + (i * 0.1) }}
+                        >
+                          <div className="flex-shrink-0 mt-1">
+                            <Check className="h-5 w-5 text-blue-600" />
+                          </div>
+                          <span className="ml-3 text-gray-600">{benefit}</span>
+                        </motion.li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <Link href={service.link}>
+                    <button
+                      className="px-6 py-3 rounded-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-semibold shadow-md hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    >
+                      Book {service.name}
+                    </button>
                   </Link>
-                </div>
+
+                </motion.div>
               </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-20 bg-gradient-to-b from-slate-50 to-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              What Our Customers Say
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Don't just take our word for it — hear from our satisfied customers.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={testimonial.id}
+                className="bg-white p-8 rounded-2xl shadow-lg relative"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <Quote className="h-12 w-12 text-blue-100 absolute -top-2 -left-2" />
+
+                <p className="text-gray-700 mb-6 relative z-10">
+                  "{testimonial.content}"
+                </p>
+
+                <div className="flex items-center">
+                  <img
+                    src={testimonial.avatar}
+                    alt={testimonial.author}
+                    className="w-12 h-12 rounded-full mr-4 object-cover"
+                  />
+                  <div>
+                    <h4 className="font-medium text-gray-900">{testimonial.author}</h4>
+                    <p className="text-gray-500 text-sm">{testimonial.position}</p>
+                  </div>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="py-12 ">
-        <div className="container mx-auto px-4">
-          {/* AC Service & Repair */}
-          <div className="flex items-center mb-12 flex-row">
-            <div className="flex-1">
-              <Image
-                src="/Acservice.jpg"
-                alt="AC service & repair"
-                width={500}
-                height={300}
-                className="w-full h-auto object-cover rounded-lg shadow-md"
-              />
-            </div>
-            <div className="flex-1 p-6">
-              <h3 className="text-2xl font-semibold text-blue-600 mb-4">
-                AC service & repair
-              </h3>
-              <p className="text-lg text-gray-700">
-                Our AC service and repair team offers comprehensive solutions
-                for all your air conditioning needs. Whether it's routine
-                maintenance, emergency repairs, or a complete system overhaul,
-                our skilled technicians ensure your AC system operates
-                efficiently and effectively. We use the latest tools and
-                techniques to address any issues and guarantee a comfortable
-                indoor climate year-round.
-              </p>
-            </div>
-          </div>
+      {/* Contact CTA */}
+      <section className="py-24 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-3xl overflow-hidden shadow-2xl">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <motion.div
+                className="p-12 lg:p-16"
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                  Ready to get started?
+                  <span className="block mt-2">Book a service today!</span>
+                </h2>
 
-          {/* Geyser Service & Repair */}
-          <div className="flex items-center mb-12 flex-row-reverse">
-            <div className="flex-1">
-              <Image
-                src="/Acservice.jpg"
-                alt="Geyser service & repair"
-                width={500}
-                height={300}
-                className="w-full h-auto object-cover rounded-lg shadow-md"
-              />
-            </div>
-            <div className="flex-1 p-6">
-              <h3 className="text-2xl font-semibold text-blue-600 mb-4">
-                Geyser service & repair
-              </h3>
-              <p className="text-lg text-gray-700">
-                Our geyser service and repair experts provide prompt and
-                reliable solutions for all types of geysers. From fixing leaks
-                and addressing heating issues to performing routine maintenance,
-                we ensure your geyser operates at peak performance. Our goal is
-                to provide you with hot water when you need it, with minimal
-                disruption to your daily routine.
-              </p>
-            </div>
-          </div>
+                <p className="text-blue-100 text-lg mb-8 max-w-lg">
+                  Our professional team is ready to help you with all your home service needs.
+                  Contact us today to schedule an appointment or request a free quote.
+                </p>
 
-          {/* Carpenter Service */}
-          <div className="flex items-center mb-12 flex-row">
-            <div className="flex-1">
-              <Image
-                src="/Acservice.jpg"
-                alt="Carpenter service"
-                width={500}
-                height={300}
-                className="w-full h-auto object-cover rounded-lg shadow-md"
-              />
-            </div>
-            <div className="flex-1 p-6">
-              <h3 className="text-2xl font-semibold text-blue-600 mb-4">
-                Carpenter service
-              </h3>
-              <p className="text-lg text-gray-700">
-                Our professional carpenters offer a wide range of services,
-                including custom woodwork, furniture repair, and installation of
-                cabinets and shelves. With years of experience, we bring
-                precision and craftsmanship to every project. Whether you need
-                repairs or new installations, our team is dedicated to
-                delivering high-quality results tailored to your needs.
-              </p>
-            </div>
-          </div>
+                <div className="space-y-6 mb-10">
+                  <div className="flex items-start">
+                    <Phone className="h-6 w-6 text-blue-200 mr-4 flex-shrink-0 mt-1" />
+                    <div>
+                      <h4 className="font-medium text-white">Call us</h4>
+                      <p className="text-blue-100">+1 (555) 123-4567</p>
+                    </div>
+                  </div>
 
-          {/* Plumbing Service */}
-          <div className="flex items-center mb-12 flex-row-reverse">
-            <div className="flex-1">
-              <Image
-                src="/Acservice.jpg"
-                alt="Plumbing service"
-                width={500}
-                height={300}
-                className="w-full h-auto object-cover rounded-lg shadow-md"
-              />
-            </div>
-            <div className="flex-1 p-6">
-              <h3 className="text-2xl font-semibold text-blue-600 mb-4">
-                Plumbing service
-              </h3>
-              <p className="text-lg text-gray-700">
-                Our plumbing service covers everything from minor leaks to major
-                repairs and installations. We handle all plumbing issues with
-                expertise and efficiency, ensuring that your plumbing system
-                functions smoothly. Our services include pipe repairs, fixture
-                installations, and emergency plumbing solutions, all designed to
-                keep your home in top shape.
-              </p>
-            </div>
-          </div>
+                  <div className="flex items-start">
+                    <Clock className="h-6 w-6 text-blue-200 mr-4 flex-shrink-0 mt-1" />
+                    <div>
+                      <h4 className="font-medium text-white">Working hours</h4>
+                      <p className="text-blue-100">Mon - Sat: 8:00 AM - 8:00 PM</p>
+                    </div>
+                  </div>
 
-          {/* Scrap Collection Service */}
-          <div className="flex items-center mb-12 flex-row">
-            <div className="flex-1">
-              <Image
-                src="/Acservice.jpg"
-                alt="Scrap collection service"
-                width={500}
-                height={300}
-                className="w-full h-auto object-cover rounded-lg shadow-md"
-              />
-            </div>
-            <div className="flex-1 p-6">
-              <h3 className="text-2xl font-semibold text-blue-600 mb-4">
-                Scrap collection service
-              </h3>
-              <p className="text-lg text-gray-700">
-                Our scrap collection service provides an efficient way to
-                dispose of unwanted materials and waste. We handle all types of
-                scrap, including metal, plastic, and electronic waste, and
-                ensure it is recycled or disposed of properly. Our goal is to
-                make scrap removal simple and environmentally friendly, helping
-                you keep your space clean and clutter-free.
-              </p>
-            </div>
-          </div>
+                  <div className="flex items-start">
+                    <Map className="h-6 w-6 text-blue-200 mr-4 flex-shrink-0 mt-1" />
+                    <div>
+                      <h4 className="font-medium text-white">Service area</h4>
+                      <p className="text-blue-100">Metropolitan area and suburbs</p>
+                    </div>
+                  </div>
+                </div>
 
-          {/* CCTV Service & Repair */}
-          <div className="flex items-center mb-12 flex-row-reverse">
-            <div className="flex-1">
-              <Image
-                src="/Acservice.jpg"
-                alt="CCTV service & repair"
-                width={500}
-                height={300}
-                className="w-full h-auto object-cover rounded-lg shadow-md"
-              />
-            </div>
-            <div className="flex-1 p-6">
-              <h3 className="text-2xl font-semibold text-blue-600 mb-4">
-                CCTV service & repair
-              </h3>
-              <p className="text-lg text-gray-700">
-                Our CCTV service and repair team specializes in installing and
-                maintaining surveillance systems to enhance the security of your
-                property. We offer a range of services, including camera
-                installation, system upgrades, and troubleshooting. Our goal is
-                to provide you with reliable and effective surveillance
-                solutions to keep your premises secure.
-              </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button
+                    size="lg"
+                    className="bg-white text-blue-700 hover:bg-blue-50 transition-all duration-300"
+                  >
+                    Book Now
+                  </button>
+                  <button
+                    variant="outline"
+                    size="lg"
+                    className="border-white text-white hover:bg-white/10 transition-all duration-300"
+                  >
+                    Request Quote
+                  </button>
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="relative lg:h-auto"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                <img
+                  src="https://images.pexels.com/photos/7713175/pexels-photo-7713175.jpeg"
+                  alt="Professional home service"
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-blue-900/50 to-transparent"></div>
+              </motion.div>
             </div>
           </div>
         </div>
-      </div>
-    </>
+      </section>
+    </div>
   );
-};
-
-export default Services;
+}

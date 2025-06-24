@@ -1,124 +1,121 @@
-import React from "react";
-import Head from "next/head";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 const Contact = () => {
-  return (
-    <>
-      <Head>
-        <title>Contact - fixkaput.com</title>
-        <meta
-          name="viewport"
-          content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0"
-        />
-      </Head>
-      <div className="bg-blue-50">
-        <section className="text-gray-600 body-font relative">
-          <div className="container px-5 py-10 mx-auto flex flex-col md:flex-row">
-            <div className="md:w-2/3 bg-gray-300 rounded-lg overflow-hidden mb-6 md:mb-0 md:mr-10 relative h-80 md:h-auto">
-              <iframe
-                width="100%"
-                height="100%"
-                className="absolute inset-0"
-                frameBorder="0"
-                title="map"
-                marginHeight="0"
-                marginWidth="0"
-                scrolling="no"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d475.935979212242!2d78.44539370360077!3d17.388361057810112!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb970e6570c281%3A0x25ba2f46e1761032!2sAhmed%20Cafe!5e0!3m2!1sen!2sin!4v1723825400411!5m2!1sen!2sin"
-                style={{
-                  filter: "grayscale(1) contrast(1.2) opacity(0.4)",
-                  border: 0,
-                }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </div>
-            <div className="md:w-1/3 bg-blue-50 flex flex-col md:ml-auto w-full md:py-8  md:mt-0 shadow-lg rounded-lg p-6">
-              <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-                <h2 className="title-font font-semibold text-gray-900 tracking-widest text-xs">
-                  ADDRESS
-                </h2>
-                <p className="mt-1 text-sm text-gray-700">
-                  12-2-174/1, Murad Nagar, Hyderabad, 500028
-                </p>
-              </div>
-              <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-                <h2 className="title-font font-semibold text-gray-900 tracking-widest text-xs">
-                  EMAIL
-                </h2>
-                <a className="text-indigo-500 leading-relaxed text-sm">
-                  mirzaikram129@gmail.com
-                </a>
-              </div>
-              <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-                <h2 className="title-font font-semibold text-gray-900 text-xs">
-                  PHONE
-                </h2>
-                <p className="leading-relaxed text-sm text-gray-700">
-                  9381145944
-                </p>
-              </div>
-              <h2 className="text-gray-900 text-2xl mb-4 mt-10 font-bold title-font">
-                We'd Love to Hear From You!
-              </h2>
-              <p className="leading-relaxed mb-4 text-gray-600">
-                Whether you have a question or just want to say hello, feel free
-                to drop us a message below.
-              </p>
-              <div className="relative mb-4">
-                <label
-                  htmlFor="name"
-                  className="leading-7 text-sm text-gray-600"
-                >
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  className="w-full bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-2 px-4 leading-8 transition-colors duration-200 ease-in-out"
-                />
-              </div>
-              <div className="relative mb-4">
-                <label
-                  htmlFor="email"
-                  className="leading-7 text-sm text-gray-600"
-                >
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  className="w-full bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-2 px-4 leading-8 transition-colors duration-200 ease-in-out"
-                />
-              </div>
-              <div className="relative mb-4">
-                <label
-                  htmlFor="message"
-                  className="leading-7 text-sm text-gray-600"
-                >
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  className="w-full bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-2 px-4 resize-none leading-6 transition-colors duration-200 ease-in-out"
-                ></textarea>
-              </div>
-              <button className="text-white bg-gradient-to-r from-blue-500 to-blue-700 border-0 py-2 px-6 focus:outline-none hover:from-blue-600 hover:to-blue-800 rounded-lg text-lg transition-all duration-200 ease-in-out">
-                Send Message
-              </button>
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [loading, setLoading] = useState(false);
 
-              <p className="text-xs text-gray-500 mt-3">
-                We value your feedback and will get back to you shortly.
-              </p>
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { name, email, message } = form;
+
+    if (!name || !email || !message) {
+      toast.error("Please fill out all fields.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        toast.success("Message sent successfully!");
+        setForm({ name: "", email: "", message: "" });
+      } else {
+        toast.error(data.message || "Failed to send message.");
+      }
+    } catch (err) {
+      toast.error("Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="bg-gradient-to-b from-blue-50 to-white min-h-screen py-16 px-6">
+      <div className="max-w-7xl mx-auto shadow-2xl rounded-3xl overflow-hidden grid grid-cols-1 md:grid-cols-2 bg-white">
+        {/* Contact Info */}
+        <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 text-white p-10 flex flex-col justify-center">
+          <h2 className="text-4xl font-bold mb-6">Get in Touch</h2>
+          <p className="mb-6 text-lg leading-relaxed opacity-90">
+            Have a question or need help with a service? We'd love to hear from you!
+          </p>
+          <div className="space-y-4">
+            <div>
+              <h4 className="font-semibold text-lg">Email</h4>
+              <p className="opacity-80">support@fixkaput.com</p>
+            </div>
+            <div>
+              <h4 className="font-semibold text-lg">Phone</h4>
+              <p className="opacity-80">+91 93811 45944</p>
+            </div>
+            <div>
+              <h4 className="font-semibold text-lg">Address</h4>
+              <p className="opacity-80">Mehdipatnam, Hyderabad, India</p>
             </div>
           </div>
-        </section>
+        </div>
+
+        {/* Contact Form */}
+        <div className="p-10">
+          <h3 className="text-3xl font-bold text-gray-800 mb-6">Send Us a Message</h3>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block mb-1 text-sm font-medium text-gray-700">Full Name</label>
+              <input
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                placeholder="Your Name"
+                className="w-full px-4 py-3 border rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="block mb-1 text-sm font-medium text-gray-700">Email</label>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="you@example.com"
+                className="w-full px-4 py-3 border rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="block mb-1 text-sm font-medium text-gray-700">Message</label>
+              <textarea
+                name="message"
+                rows="5"
+                value={form.message}
+                onChange={handleChange}
+                placeholder="Write your message here..."
+                className="w-full px-4 py-3 border rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none"
+              ></textarea>
+            </div>
+            <div className="text-right">
+              <button
+                type="submit"
+                disabled={loading}
+                className="bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white px-6 py-3 rounded-full font-semibold shadow-lg transition duration-300 ease-in-out disabled:opacity-50"
+              >
+                {loading ? "Sending..." : "Send Message"}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 
