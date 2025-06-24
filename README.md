@@ -1,38 +1,95 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# FixKaput 🛠️
 
-## Getting Started
+[![codecov](https://codecov.io/gh/ikrammirza/fixkaput/branch/main/graph/badge.svg)](https://codecov.io/gh/ikrammirza/fixkaput)
+![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen)
+![Built with](https://img.shields.io/badge/Built_with-Next.js-blue)
+![License](https://img.shields.io/github/license/ikrammirza/fixkaput)
+![Last Commit](https://img.shields.io/github/last-commit/ikrammirza/fixkaput)
 
-First, install all the dependencies : 
-```terminal
-npm install
+---
 
-run the development server:
+## 🧩 Overview
+
+**FixKaput** is a full-stack service-oriented platform that allows users to book home services like:
+
+- ✅ AC servicing
+- ✅ Plumbing
+- ✅ Electrical repair
+- ✅ Carpentry
+- ✅ CCTV installation
+
+It's designed with performance, scalability, and security in mind — using Redis for session management and real-time socket communication.
+
+---
+
+## 🚀 Live Demo
+
+🔗 [Visit the Live Site](https://fixkaput.vercel.app)
+
+---
+
+## 🛠️ Tech Stack
+
+**Frontend**:
+- React (Next.js)
+- Tailwind CSS
+- Client-side validation
+
+**Backend**:
+- Node.js + Next.js API routes
+- MongoDB with Mongoose
+- Redis (OTP/session storage)
+- JWT Auth via HttpOnly cookies
+- WebSockets with `socket.io`
+
+**3rd Party Integrations**:
+- 📩 Twilio (OTP via SMS)
+- 🧪 Jest + Supertest (API Testing)
+- 🔬 Cypress (End-to-End Testing)
+
+---
+
+## ✅ Features
+
+- 📱 OTP-based Login System with Redis-backed sessions
+- 🛒 Cart + Checkout flow for booking services
+- 🛠 Technician & Admin Dashboards
+- 💬 Real-time communication using WebSockets
+- 🧪 100% Jest Test Coverage
+- 🔐 Secure with HttpOnly cookies and rate limits
+- 🌍 Fully responsive UI
+
+---
+
+## 🧪 Testing
+
+### ✅ API Tests
+
+- Jest + Supertest test core APIs like:
+  - `/api/send-otp`
+  - `/api/verify-otp`
+  - `/api/bookService`
+
+### ✅ E2E Tests
+
+- Cypress tests simulate real user flows like:
+  - Validating OTP flows
+  - Booking services
+  - Checkout logic
+
+---
+
+## 🖥️ Run Locally
 
 ```bash
+git clone https://github.com/ikrammirza/fixkaput.git
+cd fixkaput
+
+# Install dependencies
+npm install
+
+# Create .env.local and add:
+# MONGODB_URI, REDIS_URL, TWILIO_SID, etc.
+
+# Run dev server
 npm run dev
-# or
-yarn dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
