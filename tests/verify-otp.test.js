@@ -1,5 +1,6 @@
 jest.setTimeout(15000);
 import { createMocks } from 'node-mocks-http';
+process.env.JWT_SECRET = 'testsecretkey';
 import redis from '../lib/redis.js';
 
 // ✅ Redis mock
