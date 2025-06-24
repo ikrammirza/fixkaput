@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+
+.input {
+  @apply border border-gray-300 p-2 w-full rounded focus:outline-blue-500;
+}
+.btn {
+  @apply bg-gradient-to-r from-blue-600 to-blue-800 text-white py-2 px-4 rounded hover:from-blue-700 hover:to-blue-900;
+}
+
 .text-gradient {
     background: linear-gradient(to right, #3b82f6, #1d4ed8); /* Tailwind blue-500 to blue-700 */
     -webkit-background-clip: text;

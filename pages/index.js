@@ -2,8 +2,34 @@ import Head from "next/head";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Main from "../components/Main";
+import { useEffect } from "react";
+import io from "socket.io-client";
+
+let socket;
 
 export default function Home() {
+  useEffect(() => {
+    socket = io("http://localhost:3000", {
+      path: "/api/socketio",
+    });
+
+    socket.on("connect", () => {
+      console.log("✅ Connected to server:", socket.id);
+    });
+
+    socket.on("testEvent", (data) => {
+      console.log("📩 Received test event:", data);
+    });
+
+    socket.on("orderStatusChanged", (data) => {
+      console.log("🛠️ Order status changed:", data);
+    });
+
+    return () => {
+      socket.disconnect();
+      console.log("❌ Disconnected from server");
+    };
+  }, []);
   return (
     <div>
       <Head>
@@ -15,8 +41,8 @@ export default function Home() {
           href="https://unpkg.com/flickity@2/dist/flickity.min.css"
         ></link>
       </Head>
-
       <Main />
+     
     </div>
   );
 }

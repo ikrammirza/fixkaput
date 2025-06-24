@@ -1,176 +1,153 @@
-import React, { useState } from "react";
+import { useState } from 'react';
+import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import { useRouter } from 'next/router';
+import 'react-toastify/dist/ReactToastify.css';
+import Head from 'next/head';
 
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useRouter } from "next/router";
-import Link from "next/link";
-import axios from "axios";
-import { useEffect } from "react";
-import Head from "next/head";
-const login = () => {
+export default function Login() {
+  const [phone, setPhone] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [resendTimer, setResendTimer] = useState(0);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      router.push("/");
-    }
-  }, []);
-
-  const handleChange = (e) => {
-    if (e.target.name == "email") {
-      setEmail(e.target.value);
-    } else if (e.target.name == "password") {
-      setPassword(e.target.value);
-    }
+  const startResendTimer = () => {
+    setResendTimer(30);
+    const interval = setInterval(() => {
+      setResendTimer((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const data = { email, password };
+  const sendOtp = async () => {
+    if (!/^\d{10}$/.test(phone)) {
+      toast.error("Enter a valid 10-digit phone number");
+      return;
+    }
 
-    let res = await axios.post(
-      `${process.env.NEXT_PUBLIC_HOST}/api/login`,
-      data,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
+    setLoading(true);
+    try {
+      const res = await axios.post('/api/send-otp', { phone });
+      if (res.data.success) {
+        toast.success('OTP sent successfully!');
+        setOtpSent(true);
+        startResendTimer();
+      } else {
+        toast.error(res.data.message || 'Failed to send OTP');
       }
-    );
-
-    setEmail("");
-    setPassword("");
-
-    if (res.data.success) {
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("email", email);
-      toast.success("you are successfully logged in", {
-        position: "bottom-center",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        color: "blue",
-      });
-      setTimeout(() => {
-        router.push(process.env.NEXT_PUBLIC_HOST);
-      }, 1000);
-    } else {
-      toast.error(res.data.error, {
-        position: "bottom-center",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        color: "blue",
-      });
+    } catch (err) {
+      toast.error('Error sending OTP');
+    } finally {
+      setLoading(false);
     }
   };
+
+  const verifyOtp = async () => {
+    if (!otp) {
+      toast.error("Please enter the OTP");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await axios.post('/api/verify-otp', { phone, otp }, { withCredentials: true });
+
+      if (res.data.success) {
+        toast.success('Login successful!');
+
+        router.push('/checkout');
+        // Protected route
+      } else {
+        toast.error(res.data.message || 'Invalid OTP');
+      }
+    } catch (err) {
+      toast.error('OTP verification failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
-    <Head>
-      <title>Login - fixkaput.com</title>
-      <meta
-        name="viewport"
-        content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0"
-      />
-    </Head>
-    <div>
-      <ToastContainer
-        toastStyle={{ backgroundColor: "#1e88e5" }}
-        position="bottom-center"
-        autoClose={1000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-      <section className="bg-gray-300 dark:bg-gray-900">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Sign in to your account
-              </h1>
-              <form
-                onSubmit={handleSubmit}
-                className="space-y-4 md:space-y-6"
-                action="#"
-                method="POST"
+      <Head>
+        <title>Login - fixkaput.com</title>
+      </Head>
+      <ToastContainer />
+      <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 bg-gray-100">
+        <div className="w-full max-w-md bg-white p-6 sm:p-8 rounded-lg shadow space-y-4">
+          <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
+
+          {!otpSent ? (
+            <>
+              <input
+                type="tel"
+                inputMode="numeric"
+                autoComplete="tel"
+                placeholder="Enter your phone number"
+                className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+              <button
+                onClick={sendOtp}
+                disabled={loading}
+                className={`w-full py-3 rounded font-medium transition ${loading
+                    ? 'bg-blue-300 text-white cursor-not-allowed'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                  }`}
               >
-                <div>
-                  <label
-                    for="email"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Your email
-                  </label>
-                  <input
-                    onChange={handleChange}
-                    type="email"
-                    name="email"
-                    id="email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="name@company.com"
-                    required=""
-                  />
-                </div>
-                <div>
-                  <label
-                    for="password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Password
-                  </label>
-                  <input
-                    onChange={handleChange}
-                    type="password"
-                    name="password"
-                    id="password"
-                    placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    required=""
-                  />
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="text-sm font-medium text-blue-500 hover:underline dark:text-blue-500">
-                    <Link href="/forgot">Forgot password?</Link>
-                  </div>
-                </div>
-                <button
-                  type="submit"
-                  className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  Sign in
-                </button>
-                <div className="flex flex-row">
-                  <p className="text-sm font-medium text-gray-500 dark:text-gray-500">
-                    Don’t have an account yet?{" "}
-                  </p>
-                  <div className="text-sm font-medium text-blue-500 hover:underline dark:text-blue-500 pl-2">
-                    <Link href="/signup">Sign up</Link>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
+                {loading ? 'Sending...' : 'Send OTP'}
+              </button>
+            </>
+          ) : (
+            <>
+              <p className="text-center text-gray-600">
+                OTP sent to <span className="font-medium">+91 ******{phone.slice(-4)}</span>
+              </p>
+              <input
+                name="otp"
+                type="text"
+                inputMode="numeric"
+                maxLength={6}
+                autoComplete="one-time-code"
+                aria-label="Enter OTP"
+                className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:ring-2 focus:ring-green-400"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+              />
+              <button
+                onClick={verifyOtp}
+                disabled={loading}
+                className={`w-full py-3 rounded font-medium transition ${loading
+                    ? 'bg-green-300 text-white cursor-not-allowed'
+                    : 'bg-green-600 text-white hover:bg-green-700'
+                  }`}
+              >
+                {loading ? 'Verifying...' : 'Verify OTP'}
+              </button>
+
+              <button
+                onClick={sendOtp}
+                disabled={resendTimer > 0 || loading}
+                className={`w-full py-3 rounded font-medium mt-2 transition ${resendTimer > 0 || loading
+                    ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                    : 'bg-blue-500 text-white hover:bg-blue-600'
+                  }`}
+              >
+                {resendTimer > 0 ? `Resend OTP in ${resendTimer}s` : 'Resend OTP'}
+              </button>
+            </>
+          )}
         </div>
-      </section>
-    </div>
+      </div>
+
     </>
   );
-};
-
-export default login;
+}

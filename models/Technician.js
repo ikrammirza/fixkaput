@@ -1,3 +1,5 @@
+// models/Technician.js
+
 import mongoose from "mongoose";
 
 const TechnicianSchema = new mongoose.Schema({
@@ -21,7 +23,14 @@ const TechnicianSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
+  address: {
+    area: { type: String },
+    line1: { type: String },
+    city: { type: String },
+    pincode: { type: String },
+  }
 });
 
 export default mongoose.models.Technician ||
   mongoose.model("Technician", TechnicianSchema);
+

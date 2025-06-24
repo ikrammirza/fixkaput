@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { nanoid } from "nanoid";
 
+
 const handler = async (req, res) => {
   if (req.method === "POST") {
     const { name, email, password, phone, aadhar } = req.body;

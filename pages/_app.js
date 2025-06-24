@@ -5,9 +5,10 @@ import { useRef, useState, useEffect } from "react";
 import LoadingBar from "react-top-loading-bar";
 import { useRouter } from "next/router";
 import Bottombar from "../components/Bottombar";
-// import { io } from "socket.io-client";
+import FloatingChat from "../components/FloatingChat";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 
-// let socket;
 
 function MyApp({ Component, pageProps }) {
   const [cart, setCart] = useState({});
@@ -16,35 +17,6 @@ function MyApp({ Component, pageProps }) {
   const [user, setUser] = useState({ value: null });
   const router = useRouter();
   const socketRef = useRef(null);
-
-  // useEffect(() => {
-  //   // Initialize the WebSocket connection only once
-  //   if (!socketRef.current) {
-  //     // Create a new socket connection
-  //     socketRef.current = io("http://localhost:3000", {
-  //       path: "/api/socket.io",
-  //       transports: ["websocket"], // Specify transports
-  //     });
-
-  //     socketRef.current.on("connect", () => {
-  //       console.log("Connected to WebSocket server!");
-  //     });
-
-  //     socketRef.current.on("connect_error", (error) => {
-  //       console.error("Socket connection error:", error);
-  //     });
-
-  //     // Add any other event listeners as needed
-  //   }
-
-  //   return () => {
-  //     // Cleanup: Disconnect the socket when component unmounts
-  //     if (socketRef.current) {
-  //       socketRef.current.disconnect();
-  //       socketRef.current = null; // Clean up the reference
-  //     }
-  //   };
-  // }, []);
 
 
   useEffect(() => {
@@ -67,18 +39,36 @@ function MyApp({ Component, pageProps }) {
       console.error(error);
       localStorage.clear();
     }
+    const fetchUser = async () => {
+      try {
+        const res = await fetch("/api/me", {
+          credentials: "include", // Important to send cookies
+        });
+        const data = await res.json();
 
-    // Load user token
-    const token = localStorage.getItem("token");
-    if (token) {
-      setUser({ value: token });
-    }
+        if (data.success) {
+          setUser({ value: data.user }); // ✅ Set actual user data, like { name, phone, _id }
+        } else {
+          setUser({ value: null });
+        }
+      } catch (err) {
+        console.error("Failed to fetch user:", err);
+        setUser({ value: null });
+      }
+    };
+
+    fetchUser();
   }, [router.query]);
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setUser({ value: null });
-    router.push("/");
+  const logout = async () => {
+    try {
+      await axios.post('/api/logout');
+      localStorage.removeItem('phone'); // optional
+      setUser({ value: null });         // reset user
+      router.push('/');
+    } catch (err) {
+      console.error('Logout failed:', err);
+    }
   };
 
   const saveCart = (myCart) => {
@@ -127,7 +117,7 @@ function MyApp({ Component, pageProps }) {
         waitingTime={400}
         onLoaderFinished={() => setProgress(0)}
       />
-      {/* Remove the key from Navbar and Bottombar for more stable renders */}
+      <ToastContainer />
       <Navbar
         logout={logout}
         user={user}
@@ -154,6 +144,7 @@ function MyApp({ Component, pageProps }) {
         clearCart={clearCart}
         subTotal={subTotal}
       />
+      <FloatingChat />
     </>
   );
 }

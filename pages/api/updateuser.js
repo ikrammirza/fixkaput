@@ -1,34 +1,43 @@
-import User from "../../models/User";
-import jwt from "jsonwebtoken";
 import connectDb from "../../middleware/mongoose";
+import User from "../../models/User";
 
-const handler = async (req, res) => {
-  if (req.method === "POST") {
-    try {
-      const { token, address, pincode, phone, name } = req.body;
-      if (!token) {
-        throw new Error("Token not provided");
-      }
+export default async function handler(req, res) {
+  await connectDb();
 
-      const verifiedUser = jwt.verify(token, process.env.JWT_SECRET);
-      const dbuser = await User.findOneAndUpdate(
-        { email: verifiedUser.email },
-        { address, pincode, phone, name },
-        { new: true } // Return the updated document
-      );
-
-      if (!dbuser) {
-        return res.status(404).json({ error: "User not found" });
-      }
-
-      res.status(200).json({ success: true });
-    } catch (error) {
-      console.error("Error verifying token or fetching user:", error);
-      res.status(401).json({ error: "Invalid token or user not found" });
-    }
-  } else {
-    res.status(400).json({ error: "Method not allowed" });
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
-};
 
-export default connectDb(handler);
+  const { phone, name, address } = req.body;
+
+  if (!phone || !name || !address) {
+    return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  const { area, line1, city, pincode } = address;
+
+  try {
+    const user = await User.findOneAndUpdate(
+      { phone }, // Search by phone
+      {
+        $set: {
+          name,
+          "address.area": area,
+          "address.line1": line1,
+          "address.city": city,
+          "address.pincode": pincode,
+        },
+      },
+      {
+        new: true,     // Return the updated document
+        upsert: true,  // Create if not found
+        setDefaultsOnInsert: true, // Use defaults from schema if creating
+      }
+    );
+
+    res.status(200).json({ success: true, user });
+  } catch (err) {
+    console.error("Update/Create failed:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}

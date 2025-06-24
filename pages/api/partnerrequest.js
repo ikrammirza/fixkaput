@@ -1,89 +1,99 @@
+// pages/api/partnerrequest.js
 import connectDb from "../../middleware/mongoose";
 import Order from "../../models/Order";
 import Technician from "../../models/Technician";
+import { getSocket } from "../../lib/socket";
 
-export default async function handler(req, res) {
-  await connectDb(); // Ensure database connection
+export const config = {
+  api: {
+    bodyParser: true,
+  },
+};
+
+async function handler(req, res) {
+  const technicianId =
+    req.headers["technician-id"] || req.headers["technicianId"];
+
+  const technician = await Technician.findOne({ technicianId });
+  if (!technician) {
+    return res
+      .status(401)
+      .json({ message: "Unauthorized: Technician not found" });
+  }
 
   if (req.method === "GET") {
-    // Get technicianId from headers
-    const technicianId = req.headers["technicianId"];
-
-    // Ensure technician is logged in by checking technicianId
-    const technician = await Technician.findOne({ technicianId: technicianId });
-    if (!technician) {
-      return res
-        .status(401)
-        .json({ message: "Unauthorized: Technician not found" });
-    }
-
     try {
-      // Fetch orders with status "Pending" and no technicianId assigned
       const orders = await Order.find({
         $or: [
           { status: "Pending", technicianId: null },
-          { technicianId: technicianId }, // Fetch orders assigned to the technician
+          { technicianId: technician._id },
         ],
       });
 
-      return res.status(200).json(orders); // Return the orders
+      return res.status(200).json(orders);
     } catch (error) {
       console.error("Error fetching orders:", error);
       return res.status(500).json({ message: "Failed to retrieve orders" });
     }
-  } else if (req.method === "PATCH") {
+  }  else if (req.method === "PATCH") {
     const { orderId, action } = req.body;
-    const technicianId = req.headers["technician-id"];
-
-    // Ensure technician is logged in by checking technicianId
-    const technician = await Technician.findOne({ technicianId: technicianId });
-    if (!technician) {
-      return res
-        .status(401)
-        .json({ message: "Unauthorized: Technician not found" });
-    }
-
-    const validActions = ["Accepted", "Rejected"];
-
-    if (!orderId || !validActions.includes(action)) {
+  
+    if (!orderId || !["Accepted", "Rejected"].includes(action)) {
       return res.status(400).json({ message: "Invalid data" });
     }
-
+  
     try {
-      // If the action is "Accepted", assign the technician to the order
+      const technician = await Technician.findOne({ technicianId });
+      if (!technician) {
+        return res.status(401).json({ message: "Unauthorized: Technician not found" });
+      }
+  
+      let updatedOrder;
+  
       if (action === "Accepted") {
-        const updatedOrder = await Order.findByIdAndUpdate(
-          orderId,
+        // Only accept if the order is still Pending
+        updatedOrder = await Order.findOneAndUpdate(
+          { _id: orderId, status: "Pending", technicianId: null },
           {
-            status: action,
-            technicianId: technicianId, // Assign technician to the order
+            status: "Accepted",
+            technicianId: technician._id,
           },
           { new: true }
         );
-        return res.status(200).json({
-          message: `Order status updated to ${action}`,
-          order: updatedOrder,
-        });
-      }
-
-      // Handle order rejection (no technicianId update needed)
-      if (action === "Rejected") {
-        const updatedOrder = await Order.findByIdAndUpdate(
+  
+        if (!updatedOrder) {
+          return res.status(409).json({
+            message: "This order has already been accepted by another technician.",
+          });
+        }
+      } else {
+        // Allow rejecting even if accepted (optional, can limit this)
+        updatedOrder = await Order.findByIdAndUpdate(
           orderId,
-          { status: action },
+          { status: "Rejected" },
           { new: true }
         );
-        return res.status(200).json({
-          message: `Order status updated to ${action}`,
-          order: updatedOrder,
-        });
       }
+  
+      const io = getSocket();
+      if (io) {
+        io.emit("orderStatusChanged", updatedOrder);
+      }
+  
+      return res.status(200).json({
+        message: `Order status updated to ${action}`,
+        order: updatedOrder,
+      });
     } catch (error) {
       console.error("Error updating order:", error);
       return res.status(500).json({ message: "Failed to update order" });
     }
-  } else {
+  }
+  
+   else {
     res.setHeader("Allow", ["GET", "PATCH"]);
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
+
+export default connectDb(handler); 
