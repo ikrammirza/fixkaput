@@ -4,7 +4,6 @@
 [![CI](https://github.com/ikrammirza/fixkaput/actions/workflows/ci.yml/badge.svg)](https://github.com/ikrammirza/fixkaput/actions/workflows/ci.yml)
 ![E2E Tested with Cypress](https://img.shields.io/badge/E2E_Tested-Cypress-9cf?logo=cypress&logoColor=white)
 ![Built with](https://img.shields.io/badge/Built_with-Next.js-blue)
-![License](https://img.shields.io/github/license/ikrammirza/fixkaput)
 ![Last Commit](https://img.shields.io/github/last-commit/ikrammirza/fixkaput)
 
 ---
