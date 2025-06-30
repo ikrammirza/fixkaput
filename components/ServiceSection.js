@@ -1,44 +1,44 @@
 // components/ServicesSection.js
 import React from "react";
 import Link from "next/link";
-import { 
-  Wrench, 
-  Zap, 
-  Droplets, 
-  Wind, 
-  Camera, 
-  Hammer 
+import {
+  Wrench,
+  Zap,
+  Droplets,
+  Wind,
+  Camera,
+  Hammer
 } from "lucide-react";
 
 const services = [
   {
     id: 1,
     name: "AC Service & Repair",
-    description: "Professional air conditioning maintenance and repair services",
+    description: "Expert air conditioning repair, cleaning, and seasonal maintenance services.",
     image: "https://images.pexels.com/photos/6169668/pexels-photo-6169668.jpeg?auto=compress&cs=tinysrgb&w=800",
     icon: <Wind className="w-8 h-8" />,
     category: "HVAC"
   },
   {
-    id: 2,
-    name: "Geyser Service & Repair", 
-    description: "Expert water heater installation and maintenance",
-    image: "https://images.pexels.com/photos/8092/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=800",
+    id: 6,
+    name: "Pest Control",
+    description: "Safe pest control for cockroaches, termites, ants, and other invaders.",
+    image: "https://images.pexels.com/photos/8845013/pexels-photo-8845013.jpeg?auto=compress&cs=tinysrgb&w=800",
     icon: <Droplets className="w-8 h-8" />,
-    category: "PLUMBING"
+    category: "PEST"
   },
   {
-    id: 3,
+    id: 4,
     name: "Carpenter Service",
-    description: "Professional woodwork and furniture solutions",
+    description: "Custom furniture work, repairs, and home woodwork solutions delivered professionally.",
     image: "https://images.pexels.com/photos/5691659/pexels-photo-5691659.jpeg?auto=compress&cs=tinysrgb&w=800",
     icon: <Hammer className="w-8 h-8" />,
     category: "CARPENTRY"
   },
   {
-    id: 4,
+    id: 2,
     name: "Plumbing Service",
-    description: "Complete plumbing solutions for your home",
+    description: "Leak repairs, pipe installations, and complete bathroom plumbing maintenance services.",
     image: "https://images.pexels.com/photos/8092/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=800",
     icon: <Wrench className="w-8 h-8" />,
     category: "PLUMBING"
@@ -46,20 +46,21 @@ const services = [
   {
     id: 5,
     name: "Electrical Service",
-    description: "Safe and reliable electrical installations",
+    description: "Reliable home wiring, fixture installations, repairs, and electrical safety checks.",
     image: "https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&w=800",
     icon: <Zap className="w-8 h-8" />,
     category: "ELECTRICAL"
   },
   {
-    id: 6,
+    id: 3,
     name: "CCTV Service & Repair",
-    description: "Advanced security camera installation and maintenance",
+    description: "Surveillance system setup, maintenance, and troubleshooting for home security.",
     image: "https://images.pexels.com/photos/430208/pexels-photo-430208.jpeg?auto=compress&cs=tinysrgb&w=800",
     icon: <Camera className="w-8 h-8" />,
     category: "SECURITY"
   }
 ];
+
 
 const ServiceSection = () => {
   return (
@@ -93,20 +94,20 @@ const ServiceSection = () => {
                   {service.icon}
                 </div>
               </div>
-              
+
               <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
                 {service.name}
               </h3>
               <p className="text-gray-600 mb-4 leading-relaxed">
                 {service.description}
               </p>
-              
-              <Link 
-  href={`/service${service.id}`} 
-  className="block w-full text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105"
->
-  Book Now
-</Link>
+
+              <Link
+                href={`/service${service.id}`}
+                className="block w-full text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105"
+              >
+                Book Now
+              </Link>
 
 
             </div>

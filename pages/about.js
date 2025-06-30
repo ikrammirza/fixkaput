@@ -79,14 +79,14 @@ const About = () => {
                   <img
                     className="w-full h-60 sm:h-80 object-cover"
                     alt="Mission"
-                    src="/Acservice.jpg"
+                    src="/cctv.jpg"
                   />
                 </div>
                 <div>
                   <img
                     className="w-full h-60 sm:h-80 object-cover"
                     alt="Mission"
-                    src="/Acservice.jpg"
+                    src="/carpenter.jpg"
                   />
                 </div>
               </Slider>
@@ -129,21 +129,21 @@ const About = () => {
                   <img
                     className="w-full h-60 sm:h-80 object-cover"
                     alt="Values"
-                    src="/Acservice.jpg"
+                    src="/plumber.jpg"
                   />
                 </div>
                 <div>
                   <img
                     className="w-full h-60 sm:h-80 object-cover"
                     alt="Values"
-                    src="/Acservice.jpg"
+                    src="/electrician.jpg"
                   />
                 </div>
                 <div>
                   <img
                     className="w-full h-60 sm:h-80 object-cover"
                     alt="Values"
-                    src="/Acservice.jpg"
+                    src="/termite-control.jpg"
                   />
                 </div>
               </Slider>

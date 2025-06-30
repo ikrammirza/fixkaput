@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/legacy/image";
-import { 
-  ShoppingCart, 
-  X, 
-  Plus, 
-  Minus, 
-  ShoppingBag, 
-  User, 
+import {
+  ShoppingCart,
+  X,
+  Plus,
+  Minus,
+  ShoppingBag,
+  User,
   Menu,
   Phone,
   MapPin,
@@ -111,13 +111,13 @@ const Navbar = ({
   const [isCartSidebarOpen, setCartSidebarOpen] = useState(false);
   const [dropdown, setdropdown] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  
+
   // Search states
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showDesktopSearch, setShowDesktopSearch] = useState(false);
   const [filteredServices, setFilteredServices] = useState([]);
-  
+
   const router = useRouter();
   const searchRef = useRef(null);
   const mobileSearchRef = useRef(null);
@@ -136,22 +136,22 @@ const Navbar = ({
       setFilteredServices([]);
       return;
     }
-    
+
     const query = searchQuery.toLowerCase().trim();
-    
+
     const filtered = services.filter(service => {
       // Search in service name
       if (service.name.toLowerCase().includes(query)) return true;
-      
+
       // Search in service title
       if (service.title.toLowerCase().includes(query)) return true;
-      
+
       // Search in keywords
-      return service.keywords.some(keyword => 
+      return service.keywords.some(keyword =>
         keyword.toLowerCase().includes(query)
       );
     });
-    
+
     setFilteredServices(filtered);
   }, [searchQuery]);
 
@@ -159,7 +159,7 @@ const Navbar = ({
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchRef.current && !searchRef.current.contains(event.target) &&
-          mobileSearchRef.current && !mobileSearchRef.current.contains(event.target)) {
+        mobileSearchRef.current && !mobileSearchRef.current.contains(event.target)) {
         setIsSearchOpen(false);
         setShowDesktopSearch(false);
       }
@@ -231,7 +231,7 @@ const Navbar = ({
         <div className="p-2">
           {services.map((service) => {
             const IconComponent = iconMap[service.icon];
-            
+
             return (
               <button
                 key={service.id}
@@ -253,7 +253,7 @@ const Navbar = ({
             );
           })}
         </div>
-        
+
         {services.length === 0 && searchQuery && (
           <div className="p-4 text-center">
             <p className="text-sm text-gray-500">No services found</p>
@@ -271,7 +271,7 @@ const Navbar = ({
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-2">
               <Phone className="w-4 h-4" />
-              <span>24/7 Emergency: +91-XXXXX-XXXXX</span>
+              <span>24/7 Emergency: +91-9381145944</span>
             </div>
             <div className="flex items-center space-x-2">
               <MapPin className="w-4 h-4" />
@@ -292,16 +292,15 @@ const Navbar = ({
       </div>
 
       {/* Main Navbar */}
-      <nav className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled 
-          ? 'bg-white/95 backdrop-blur-md shadow-xl border-b border-gray-200' 
-          : 'bg-white shadow-lg'
-      }`}>
+      <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled
+        ? 'bg-white/95 backdrop-blur-md shadow-xl border-b border-gray-200'
+        : 'bg-white shadow-lg'
+        }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
-            
+
             {/* Logo Section */}
-            <div className="flex items-center space-x-3">
+            <Link href="/" className="flex items-center space-x-3 cursor-pointer">
               <div className="relative">
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
                   <Image src="/fklogo.png" alt="FixKaput Logo" width={32} height={32} />
@@ -313,7 +312,7 @@ const Navbar = ({
                 </h1>
                 <p className="text-xs text-gray-500 font-medium">Professional Services</p>
               </div>
-            </div>
+            </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-1">
@@ -321,27 +320,25 @@ const Navbar = ({
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`relative px-4 py-2 rounded-lg font-semibold transition-all duration-300 group ${
-                    router.pathname === link.href
-                      ? 'text-blue-600 bg-blue-50'
-                      : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
-                  }`}
+                  className={`relative px-4 py-2 rounded-lg font-semibold transition-all duration-300 group ${router.pathname === link.href
+                    ? 'text-blue-600 bg-blue-50'
+                    : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                    }`}
                 >
                   {link.label}
-                  <span className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300 group-hover:w-full ${
-                    router.pathname === link.href ? 'w-full' : ''
-                  }`} />
+                  <span className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300 group-hover:w-full ${router.pathname === link.href ? 'w-full' : ''
+                    }`} />
                 </Link>
               ))}
             </div>
 
             {/* Right Section */}
             <div className="flex items-center space-x-4">
-              
+
               {/* Desktop Search */}
               <div className="relative" ref={searchRef}>
                 {!showDesktopSearch ? (
-                  <button 
+                  <button
                     onClick={handleDesktopSearchClick}
                     className="hidden lg:flex items-center space-x-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-300"
                   >
@@ -369,7 +366,7 @@ const Navbar = ({
                     )}
                   </div>
                 )}
-                
+
                 <SearchResults
                   services={filteredServices}
                   isVisible={isSearchOpen && showDesktopSearch}
@@ -401,7 +398,7 @@ const Navbar = ({
                       <User className="w-5 h-5" />
                     </div>
                     <ChevronDown className="w-4 h-4 text-gray-600 hidden lg:block" />
-                    
+
                     {/* Dropdown Menu */}
                     {dropdown && (
                       <div
@@ -413,12 +410,12 @@ const Navbar = ({
                           <p className="text-sm font-semibold text-gray-900">Welcome back!</p>
                           <p className="text-xs text-gray-500">Manage your account</p>
                         </div>
-                        
+
                         <Link href="/mybookings" className="flex items-center space-x-3 px-4 py-3 hover:bg-blue-50 transition-colors duration-200">
                           <Calendar className="w-4 h-4 text-blue-600" />
                           <span className="text-sm font-medium text-gray-700">My Bookings</span>
                         </Link>
-                        
+
                         <button
                           onClick={handleLogoutClick}
                           className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-red-50 transition-colors duration-200 text-left"
@@ -458,24 +455,23 @@ const Navbar = ({
                   key={link.href}
                   href={link.href}
                   onClick={toggleMobileMenu}
-                  className={`block px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${
-                    router.pathname === link.href
-                      ? 'text-blue-600 bg-blue-50'
-                      : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
-                  }`}
+                  className={`block px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${router.pathname === link.href
+                    ? 'text-blue-600 bg-blue-50'
+                    : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                    }`}
                 >
                   {link.label}
                 </Link>
               ))}
-              
+
               {/* Mobile Search */}
               <div className="px-4 py-3" ref={mobileSearchRef}>
                 <div className="relative">
                   <div className="flex items-center space-x-2 px-4 py-3 bg-gray-100 rounded-xl">
                     <Search className="w-4 h-4 text-gray-600" />
-                    <input 
-                      type="text" 
-                      placeholder="Search services..." 
+                    <input
+                      type="text"
+                      placeholder="Search services..."
                       value={searchQuery}
                       onChange={(e) => handleSearchChange(e.target.value)}
                       className="bg-transparent flex-1 text-sm text-gray-700 placeholder-gray-500 focus:outline-none"
@@ -489,7 +485,7 @@ const Navbar = ({
                       </button>
                     )}
                   </div>
-                  
+
                   <SearchResults
                     services={filteredServices}
                     isVisible={isSearchOpen}
@@ -514,19 +510,17 @@ const Navbar = ({
       {/* Cart Sidebar */}
       <div className={`fixed inset-0 z-50 ${isCartSidebarOpen ? 'visible' : 'invisible'}`}>
         {/* Backdrop */}
-        <div 
-          className={`absolute inset-0 bg-black transition-opacity duration-300 ${
-            isCartSidebarOpen ? 'opacity-50' : 'opacity-0'
-          }`}
+        <div
+          className={`absolute inset-0 bg-black transition-opacity duration-300 ${isCartSidebarOpen ? 'opacity-50' : 'opacity-0'
+            }`}
           onClick={toggleCartSidebar}
         />
-        
+
         {/* Sidebar */}
-        <div className={`absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl transform transition-transform duration-300 ${
-          isCartSidebarOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}>
+        <div className={`absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl transform transition-transform duration-300 ${isCartSidebarOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}>
           <div className="flex flex-col h-full">
-            
+
             {/* Header */}
             <div className="flex items-center justify-between p-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
               <div className="flex items-center space-x-3">
@@ -550,7 +544,7 @@ const Navbar = ({
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">Your cart is empty</h3>
                   <p className="text-gray-600 mb-6">Add some services to get started</p>
-                  <button 
+                  <button
                     onClick={toggleCartSidebar}
                     className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
                   >
@@ -565,24 +559,24 @@ const Navbar = ({
                         <h4 className="font-semibold text-gray-900">{cart[k].name}</h4>
                         <span className="text-lg font-bold text-blue-600">₹{(cart[k].price * cart[k].qty).toFixed(2)}</span>
                       </div>
-                      
+
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-gray-600">₹{cart[k].price} each</span>
                         <div className="flex items-center space-x-3">
-                        <button
-  onClick={() => removeFromCart(k, 1)}
+                          <button
+                            onClick={() => removeFromCart(k, 1)}
 
-  className="p-1 hover:bg-red-100 rounded-lg transition-colors duration-200"
->
-  <Minus className="w-4 h-4 text-red-600" />
-</button>
-<span className="w-8 text-center font-semibold">{cart[k].qty}</span>
-<button
-  onClick={() => addToCart(k, 1, cart[k].price, cart[k].name)}
-  className="p-1 hover:bg-green-100 rounded-lg transition-colors duration-200"
->
-  <Plus className="w-4 h-4 text-green-600" />
-</button>
+                            className="p-1 hover:bg-red-100 rounded-lg transition-colors duration-200"
+                          >
+                            <Minus className="w-4 h-4 text-red-600" />
+                          </button>
+                          <span className="w-8 text-center font-semibold">{cart[k].qty}</span>
+                          <button
+                            onClick={() => addToCart(k, 1, cart[k].price, cart[k].name)}
+                            className="p-1 hover:bg-green-100 rounded-lg transition-colors duration-200"
+                          >
+                            <Plus className="w-4 h-4 text-green-600" />
+                          </button>
 
                         </div>
                       </div>
@@ -592,14 +586,14 @@ const Navbar = ({
               )}
             </div>
 
-            
+
             {Object.keys(cart).length > 0 && (
               <div className="p-6 bg-gray-50 border-t border-gray-200">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-lg font-semibold text-gray-900">Total:</span>
                   <span className="text-2xl font-bold text-blue-600">₹{subTotal.toFixed(2)}</span>
                 </div>
-                
+
                 <div className="space-y-3">
                   <Link href="/checkout">
                     <button
@@ -610,7 +604,7 @@ const Navbar = ({
                       <span>Proceed to Checkout</span>
                     </button>
                   </Link>
-                  
+
                   <button
                     onClick={clearCart}
                     className="w-full bg-gray-200 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-300 transition-all duration-300"
