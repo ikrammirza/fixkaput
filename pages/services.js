@@ -4,7 +4,7 @@ import Link from "next/link";
 import { TbAirConditioning } from "react-icons/tb";
 import { CgSmartHomeBoiler } from "react-icons/cg";
 import { MdOutlineCarpenter, MdPlumbing } from "react-icons/md";
-import { SiScrapbox } from "react-icons/si";
+import { SiBugcrowd } from "react-icons/si";
 import { GiCctvCamera } from "react-icons/gi";
 import { Check, Clock, Map, Phone, Quote } from "lucide-react";
 
@@ -26,11 +26,11 @@ const services = [
   },
   {
     id: 2,
-    name: "Geyser Service & Repair",
-    link: "/service2",
+    name: "Electrical Services",
+    link: "/service5",
     shortDescription: "Professional geyser solutions for efficient hot water supply.",
     longDescription: "Our geyser service and repair solutions cover all types of water heaters, ensuring you have reliable hot water when you need it. From routine maintenance to complex repairs, our experts handle everything with precision.",
-    image: "https://images.pexels.com/photos/8985517/pexels-photo-8985517.jpeg",
+    image: "electrician.jpg",
     icon: CgSmartHomeBoiler,
     benefits: [
       "Expert repairs for all geyser types",
@@ -42,7 +42,7 @@ const services = [
   {
     id: 3,
     name: "Carpenter Service",
-    link: "/service3",
+    link: "/service4",
     shortDescription: "Skilled carpentry work for furniture and installations.",
     longDescription: "Our professional carpentry services cover everything from custom furniture creation to repairs and installations. Our experienced carpenters bring expertise and precision to every project, ensuring high-quality craftsmanship.",
     image: "https://images.pexels.com/photos/4246196/pexels-photo-4246196.jpeg",
@@ -57,7 +57,7 @@ const services = [
   {
     id: 4,
     name: "Plumbing Service",
-    link: "/service4",
+    link: "/service2",
     shortDescription: "Comprehensive plumbing solutions for all needs.",
     longDescription: "Our reliable plumbing services address all your water system needs, from minor leaks to major installations. Our licensed plumbers use quality materials and proven techniques to ensure lasting solutions.",
     image: "https://images.pexels.com/photos/5688215/pexels-photo-5688215.jpeg",
@@ -71,23 +71,23 @@ const services = [
   },
   {
     id: 5,
-    name: "Scrap Collection",
-    link: "/service5",
-    shortDescription: "Eco-friendly scrap removal and recycling.",
-    longDescription: "Our scrap collection service helps you dispose of unwanted items responsibly while contributing to environmental sustainability. We sort materials for recycling, ensuring proper disposal of all types of scrap.",
-    image: "https://images.pexels.com/photos/8055847/pexels-photo-8055847.jpeg",
-    icon: SiScrapbox,
+    name: "Pest Control",
+    link: "/service6",
+    shortDescription: "Safe and effective pest removal for a healthier home.",
+    longDescription: "Our pest control services eliminate common pests like cockroaches, termites, bed bugs, and ants using eco-friendly and odorless treatments. We ensure your living or working spaces remain pest-free with long-lasting protection.",
+    image: "https://images.pexels.com/photos/8845013/pexels-photo-8845013.jpeg",
+    icon: SiBugcrowd,
     benefits: [
-      "Eco-friendly disposal",
-      "Convenient pickup",
-      "Material recycling",
-      "Competitive pricing"
+      "Odorless and child-safe treatments",
+      "Expert pest identification and elimination",
+      "Long-lasting protection",
+      "Affordable pricing"
     ]
   },
   {
     id: 6,
     name: "CCTV Service",
-    link: "/service6",
+    link: "/service3",
     shortDescription: "Advanced security solutions and support.",
     longDescription: "Protect your property with our comprehensive CCTV services. From initial consultation and system design to installation and maintenance, we provide end-to-end security solutions with the latest technology.",
     image: "https://images.pexels.com/photos/5691622/pexels-photo-5691622.jpeg",
@@ -172,19 +172,19 @@ export default function ServicesPage() {
 
                 {/* Plumbing */}
                 <div className="bg-white/10 hover:scale-105 hover:bg-white/20 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
-                  <img src="/Acservice.jpg" alt="Plumbing" className="w-20 h-20 mb-3" />
+                  <img src="/Plumber.jpg" alt="Plumbing" className="w-20 h-20 mb-3" />
                   <p className="text-white font-semibold text-lg">Plumbing</p>
                 </div>
 
                 {/* Electrician */}
                 <div className="bg-white/10 hover:scale-105 hover:bg-white/20 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
-                  <img src="/Acservice.jpg" alt="Electrician" className="w-20 h-20 mb-3" />
+                  <img src="/electrician.jpg" alt="Electrician" className="w-20 h-20 mb-3" />
                   <p className="text-white font-semibold text-lg">Electrician</p>
                 </div>
 
                 {/* CCTV Installation */}
                 <div className="bg-white/10 hover:scale-105 hover:bg-white/20 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
-                  <img src="/Acservice.jpg" alt="CCTV" className="w-20 h-20 mb-3" />
+                  <img src="/cctv.jpg" alt="CCTV" className="w-20 h-20 mb-3" />
                   <p className="text-white font-semibold text-lg">CCTV Installation</p>
                 </div>
               </motion.div>

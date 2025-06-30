@@ -1,7 +1,6 @@
 import React from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Link from "next/link";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
@@ -9,14 +8,12 @@ const services = [
   {
     id: 1,
     name: "AC Repair",
-    description:
-      "Comprehensive repair and maintenance of air conditioning systems.",
+    description: "Comprehensive repair and maintenance of air conditioning systems.",
   },
   {
     id: 2,
     name: "AC Service",
-    description:
-      "Expert servicing and repair solutions for all types of geysers.",
+    description: "Expert servicing and repair solutions for all types of geysers.",
   },
   {
     id: 3,
@@ -26,31 +23,29 @@ const services = [
   {
     id: 4,
     name: "AC Gas Refill",
-    description:
-      "Reliable and affordable plumbing services for all your needs.",
+    description: "Reliable and affordable plumbing services for all your needs.",
   },
 ];
 
-// New detailed service data for Install & Uninstall section
 const detailedServices = [
   {
     id: 101,
-    name: "Refrigerant Leak Detection and Repair",
+    name: "AC Repair",
     description: [
-      "Involves inspecting the system.",
-      "Testing components.",
-      "Technicians locate leaks and recharge the system with the correct amount of refrigerant.",
+      "Comprehensive inspection of the air conditioning system to identify issues.",
+      "Cleaning of air filters, condenser coils, and drainage pipes for optimal performance.",
+      "Ensuring smooth operation and restoring cooling capacity to its best possible level.",
     ],
     price: 420,
     image: "Acservice.jpg",
   },
   {
     id: 102,
-    name: "Thermostat Replacement",
+    name: "AC Service",
     description: [
-      "Remove faulty thermostat.",
-      "Install new programmable thermostat.",
-      "Ensure proper wiring and configuration.",
+      "Thorough cleaning of indoor and outdoor AC units to improve airflow.",
+      "Inspection and washing of air filters, condenser coils, and fins.",
+      "Checking refrigerant levels and overall cooling efficiency.",
     ],
     price: 350,
     image: "Acservice.jpg",
@@ -59,9 +54,9 @@ const detailedServices = [
     id: 103,
     name: "AC Installation",
     description: [
-      "Proper mounting and connection.",
-      "System testing and safety checks.",
-      "Quick and professional setup.",
+      "Secure mounting of indoor and outdoor AC units with proper alignment.",
+      "Accurate connection of electrical wiring, copper piping, and drainage system.",
+      "Vacuuming and pressure testing to ensure leak-free setup.",
     ],
     price: 600,
     image: "Acservice.jpg",
@@ -70,9 +65,9 @@ const detailedServices = [
     id: 104,
     name: "AC Uninstallation",
     description: [
-      "Safe disconnection.",
-      "Wall clean-up and finishing.",
-      "Unit transport ready.",
+      "Safe disconnection of electrical and refrigerant lines from the AC unit.",
+      "Careful removal of indoor and outdoor units without damage to walls or fittings.",
+      "Packaging and preparation of the unit for transport or storage.",
     ],
     price: 300,
     image: "Acservice.jpg",
@@ -90,7 +85,6 @@ const ServicePage = ({ cart, addToCart }) => {
       draggable: true,
       progress: undefined,
       theme: "colored",
-      color: "blue",
     });
   };
 
@@ -109,7 +103,8 @@ const ServicePage = ({ cart, addToCart }) => {
         pauseOnHover
         theme="light"
       />
-      <div className=" md:mx-20 ">
+
+      <div className="md:mx-20 scroll-smooth">
         {/* Services Section */}
         <div className="flex flex-col mt-8 md:mt-10 md:flex-row md:space-x-4">
           <div className="flex flex-wrap justify-center mb-10 md:mb-0 w-full md:w-1/3">
@@ -118,24 +113,21 @@ const ServicePage = ({ cart, addToCart }) => {
                 AC Service & Repair
               </h2>
               <div className="flex flex-wrap justify-center">
-                {services.map((service) => (
-                  <div
-                    key={service.id}
-                    className="flex flex-col items-center w-1/2 p-4"
-                  >
-                    <Link href={`/service/${service.id}`}>
+                {detailedServices.map((service) => (
+                  <div key={service.id} className="flex flex-col items-center w-1/2 p-4">
+                    <a href={`#${service.name.replace(/\s+/g, "-").toLowerCase()}`}>
                       <img
                         src={`/Acservice.jpg`}
                         alt={service.name}
                         className="rounded-lg w-full h-32 object-cover mb-2 hover:scale-105 transition-transform duration-300 shadow-lg"
                       />
-                    </Link>
-                    <Link
-                      href={`/service/${service.id}`}
+                    </a>
+                    <a
+                      href={`#${service.name.replace(/\s+/g, "-").toLowerCase()}`}
                       className="text-lg font-semibold text-center text-blue-600 hover:underline"
                     >
                       {service.name}
-                    </Link>
+                    </a>
                   </div>
                 ))}
               </div>
@@ -145,7 +137,7 @@ const ServicePage = ({ cart, addToCart }) => {
           {/* Carousel Section */}
           <div className="w-full mt-5 md:mt-0 md:w-2/3 flex flex-col">
             <Carousel
-              className="ml-4 mr-4 md:mr-0 "
+              className="ml-4 mr-4 md:mr-0"
               showArrows={true}
               showStatus={false}
               showThumbs={false}
@@ -155,11 +147,11 @@ const ServicePage = ({ cart, addToCart }) => {
               stopOnHover={true}
               transitionTime={500}
             >
-              {[1, 2, 3].map((slide) => (
-                <div key={slide}>
+              {detailedServices.map((service) => (
+                <div key={service.id}>
                   <img
-                    src="Acservice.jpg"
-                    alt={`Slide ${slide}`}
+                    src={service.image}
+                    alt={service.name}
                     className="object-cover w-full h-[400px] md:h-[500px] rounded-lg shadow-md"
                   />
                 </div>
@@ -168,7 +160,7 @@ const ServicePage = ({ cart, addToCart }) => {
           </div>
         </div>
 
-        {/* Install & Uninstall Section */}
+        {/* Detailed Service Section */}
         <section className="py-12 md:mt-20 bg-gray-50">
           <div className="max-w-7xl mx-auto px-6 lg:px-8">
             <h2 className="text-4xl font-extrabold text-center text-blue-700 mb-12">
@@ -179,6 +171,7 @@ const ServicePage = ({ cart, addToCart }) => {
               {detailedServices.map((service) => (
                 <div
                   key={service.id}
+                  id={service.name.replace(/\s+/g, "-").toLowerCase()} // anchor target
                   className="flex flex-col md:flex-row items-center bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
                 >
                   <img
