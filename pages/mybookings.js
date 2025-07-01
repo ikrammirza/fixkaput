@@ -2,25 +2,18 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Head from 'next/head';
+
 const MyBookings = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch bookings using cookie-based session
   useEffect(() => {
     const fetchOrders = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        toast.error('Please log in to view your bookings', {
-          toastId: 'no-token',
-          position: 'top-center',
-          className: 'custom-toast-margin',
-        });
-        setLoading(false);
-        return;
-      }
-
       try {
-        const res = await axios.post('/api/getUserOrders', { token });
+        const res = await axios.get('/api/getUserOrders', {
+          withCredentials: true // Important: sends cookies
+        });
 
         if (res.status === 200 && res.data.orders) {
           setOrders(res.data.orders);
@@ -33,8 +26,8 @@ const MyBookings = () => {
         }
       } catch (err) {
         console.error(err);
-        toast.error('Something went wrong while fetching bookings', {
-          toastId: 'fetch-error',
+        toast.error('You must be logged in to view bookings.', {
+          toastId: 'auth-error',
           position: 'top-center',
           className: 'custom-toast-margin',
         });
@@ -45,6 +38,36 @@ const MyBookings = () => {
 
     fetchOrders();
   }, []);
+
+  // Cancel order
+  const cancelBooking = async (orderId) => {
+    const confirmDelete = window.confirm("Are you sure you want to cancel this booking?");
+    if (!confirmDelete) return;
+
+    try {
+      const res = await axios.delete('/api/deleteOrder', {
+        data: { orderId },
+        withCredentials: true
+      });
+
+      if (res.status === 200) {
+        setOrders((prev) => prev.filter((o) => o._id !== orderId));
+        toast.success('Booking cancelled successfully.', {
+          toastId: 'cancel-success',
+          position: 'top-center',
+        });
+      } else {
+        throw new Error('Deletion failed');
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to cancel the booking.', {
+        toastId: 'cancel-error',
+        position: 'top-center',
+      });
+    }
+  };
+
   return (
     <>
       <Head>
@@ -64,7 +87,7 @@ const MyBookings = () => {
               <div key={order._id} className="bg-white shadow-md rounded-lg p-6 border border-gray-200">
                 <h2 className="text-lg font-semibold text-gray-800 mb-2">Order ID: {order.oid}</h2>
                 <p className="text-sm text-gray-600 mb-1"><strong>Phone:</strong> {order.phone}</p>
-                <p className="text-sm text-gray-600 mb-1"><strong>Address:</strong> {order.address}</p>
+                <p className="text-sm text-gray-600 mb-1"><strong>Address:</strong> {order.address.line1}, {order.address.area}, {order.address.city}, {order.address.pincode}</p>
                 <p className="text-sm text-gray-600 mb-1"><strong>Amount:</strong> ₹{order.amount}</p>
                 <div className="text-sm text-gray-600 mb-1">
                   <strong>Services Booked:</strong>
@@ -81,9 +104,17 @@ const MyBookings = () => {
                   )}
                 </div>
                 <p className="text-sm text-gray-600 mb-1"><strong>Payment:</strong> {order.paymentStatus}</p>
-                <p className="text-sm text-gray-500 mt-2">
-                  <strong>Booked on:</strong> {new Date(order.createdAt).toLocaleString()}
-                </p>
+                <p className="text-sm text-gray-500 mt-2"><strong>Booked on:</strong> {new Date(order.createdAt).toLocaleString()}</p>
+
+                {/* Cancel Button Logic */}
+                {!order.technicianId && (
+                  <button
+                    className="mt-4 bg-red-600 hover:bg-red-700 text-white py-1 px-4 rounded"
+                    onClick={() => cancelBooking(order._id)}
+                  >
+                    Cancel Booking
+                  </button>
+                )}
               </div>
             ))}
           </div>

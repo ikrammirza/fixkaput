@@ -28,7 +28,8 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
-
+import { SiBugcrowd } from "react-icons/si";
+import { GiWoodAxe } from 'react-icons/gi';
 // Services data for search
 const services = [
   {
@@ -37,17 +38,17 @@ const services = [
     title: 'Air Conditioning Services',
     description: 'Professional AC installation, repair, and maintenance services',
     keywords: ['ac', 'air conditioning', 'cooling', 'hvac', 'repair', 'installation', 'maintenance'],
-    icon: 'Wind',
-    path: '/services/ac'
+    icon: Wind,
+    path: '/service1'
   },
   {
-    id: 'geyser-services',
-    name: 'Geyser Services',
-    title: 'Water Heater & Geyser Services',
-    description: 'Expert geyser installation, repair, and maintenance services',
-    keywords: ['geyser', 'water heater', 'hot water', 'installation', 'repair', 'maintenance'],
-    icon: 'Flame',
-    path: '/services/geyser'
+    id: 'pest-control',
+    name: 'Pest Control',
+    title: 'Expert pest identification and elimination',
+    description: 'Safe and effective pest removal for a healthier home.',
+    keywords: ['pest', 'cockroach', 'termite', 'bed bugs', 'bug', 'insects'],
+    icon: SiBugcrowd,
+    path: '/service6'
   },
   {
     id: 'plumbing-services',
@@ -55,8 +56,8 @@ const services = [
     title: 'Professional Plumbing Solutions',
     description: 'Complete plumbing services including repairs, installations, and maintenance',
     keywords: ['plumbing', 'pipes', 'water', 'drainage', 'faucet', 'leak', 'repair', 'installation'],
-    icon: 'Wrench',
-    path: '/services/plumbing'
+    icon: Wrench,
+    path: '/service2'
   },
   {
     id: 'electrician-services',
@@ -64,17 +65,17 @@ const services = [
     title: 'Electrical Services & Solutions',
     description: 'Licensed electrician services for all your electrical needs',
     keywords: ['electrician', 'electrical', 'wiring', 'lights', 'power', 'installation', 'repair'],
-    icon: 'Zap',
-    path: '/services/electrician'
+    icon: Zap,
+    path: '/service5'
   },
   {
-    id: 'scrap-services',
-    name: 'Scrap Services',
-    title: 'Scrap Collection & Recycling',
-    description: 'Eco-friendly scrap collection and recycling services',
-    keywords: ['scrap', 'recycling', 'waste', 'collection', 'metal', 'paper', 'disposal'],
-    icon: 'Recycle',
-    path: '/services/scrap'
+    id: 'carpenter-services',
+    name: 'Carpenter Services',
+    title: 'Carpentry Work',
+    description: 'Custom carpentry and furniture building services',
+    keywords: ['bed', 'sofa', 'carpenter', 'polishing', 'wood', 'table', 'repair'],
+    icon: GiWoodAxe,
+    path: '/service4'
   },
   {
     id: 'cctv-services',
@@ -82,11 +83,10 @@ const services = [
     title: 'Security Camera & CCTV Solutions',
     description: 'Professional CCTV installation and security camera services',
     keywords: ['cctv', 'security', 'camera', 'surveillance', 'monitoring', 'installation', 'security system'],
-    icon: 'Camera',
-    path: '/services/cctv'
+    icon: Camera,
+    path: '/service3'
   }
 ];
-
 // Icon mapping
 const iconMap = {
   Wind,
