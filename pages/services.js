@@ -15,7 +15,7 @@ const services = [
     link: "/service1",
     shortDescription: "Expert AC maintenance and repair services for all brands and models.",
     longDescription: "Our certified technicians provide comprehensive air conditioning services including installation, maintenance, and repairs. We ensure your AC systems operate at peak efficiency, helping you save on energy costs while maintaining optimal comfort.",
-    image: "https://images.pexels.com/photos/7218013/pexels-photo-7218013.jpeg",
+    image: "Acservice.jpg",
     icon: TbAirConditioning,
     benefits: [
       "Regular maintenance extends AC lifespan",
@@ -45,7 +45,7 @@ const services = [
     link: "/service4",
     shortDescription: "Skilled carpentry work for furniture and installations.",
     longDescription: "Our professional carpentry services cover everything from custom furniture creation to repairs and installations. Our experienced carpenters bring expertise and precision to every project, ensuring high-quality craftsmanship.",
-    image: "https://images.pexels.com/photos/4246196/pexels-photo-4246196.jpeg",
+    image: "carpenter.jpg",
     icon: MdOutlineCarpenter,
     benefits: [
       "Custom furniture design",
@@ -60,7 +60,7 @@ const services = [
     link: "/service2",
     shortDescription: "Comprehensive plumbing solutions for all needs.",
     longDescription: "Our reliable plumbing services address all your water system needs, from minor leaks to major installations. Our licensed plumbers use quality materials and proven techniques to ensure lasting solutions.",
-    image: "https://images.pexels.com/photos/5688215/pexels-photo-5688215.jpeg",
+    image: "plumber.jpg",
     icon: MdPlumbing,
     benefits: [
       "Fast leak detection and repair",
@@ -75,7 +75,7 @@ const services = [
     link: "/service6",
     shortDescription: "Safe and effective pest removal for a healthier home.",
     longDescription: "Our pest control services eliminate common pests like cockroaches, termites, bed bugs, and ants using eco-friendly and odorless treatments. We ensure your living or working spaces remain pest-free with long-lasting protection.",
-    image: "https://images.pexels.com/photos/8845013/pexels-photo-8845013.jpeg",
+    image: "general-pest.jpg",
     icon: SiBugcrowd,
     benefits: [
       "Odorless and child-safe treatments",
@@ -90,7 +90,7 @@ const services = [
     link: "/service3",
     shortDescription: "Advanced security solutions and support.",
     longDescription: "Protect your property with our comprehensive CCTV services. From initial consultation and system design to installation and maintenance, we provide end-to-end security solutions with the latest technology.",
-    image: "https://images.pexels.com/photos/5691622/pexels-photo-5691622.jpeg",
+    image: "cctv.jpg",
     icon: GiCctvCamera,
     benefits: [
       "Custom security design",
@@ -158,7 +158,7 @@ export default function ServicesPage() {
               </motion.p>
 
               {/* Services Grid */}
-              <div className="w-full px-4 sm:px-6 lg:px-8">
+              <div className="px-8 sm:px-6 lg:px-8">
                 <motion.div
                   className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 mt-10"
                   initial={{ opacity: 0, y: 20 }}
@@ -454,7 +454,7 @@ export default function ServicesPage() {
                     <Phone className="h-6 w-6 text-blue-200 mr-4 flex-shrink-0 mt-1" />
                     <div>
                       <h4 className="font-medium text-white">Call us</h4>
-                      <p className="text-blue-100">+1 (555) 123-4567</p>
+                      <p className="text-blue-100">+91 9381145944</p>
                     </div>
                   </div>
 
@@ -476,19 +476,13 @@ export default function ServicesPage() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <button
-                    size="lg"
-                    className="bg-white text-blue-700 hover:bg-blue-50 transition-all duration-300"
-                  >
-                    Book Now
-                  </button>
-                  <button
-                    variant="outline"
-                    size="lg"
-                    className="border-white text-white hover:bg-white/10 transition-all duration-300"
-                  >
-                    Request Quote
-                  </button>
+                  <Link href="./contact">
+                    <button
+                      className="px-6 py-3 border border-white text-white font-semibold rounded-lg hover:bg-white hover:text-blue-800 transition-all duration-300 shadow-sm"
+                    >
+                      Request Quote
+                    </button>
+                  </Link >
                 </div>
               </motion.div>
 
