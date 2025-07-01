@@ -76,15 +76,13 @@ const detailedServices = [
 
 const ServicePage = ({ cart, addToCart }) => {
   const handleCart = (item) => {
+    addToCart(item); // Ensure item is actually added to cart
     toast.success(`${item} added`, {
+      toastId: `added-${item}`, // ✅ Makes it non-repeatable per item
       position: "bottom-center",
       autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
       theme: "colored",
+      className: "custom-toast-margin", // Optional: if you want safe-area margin
     });
   };
 

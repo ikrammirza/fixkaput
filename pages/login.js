@@ -28,7 +28,11 @@ export default function Login() {
 
   const sendOtp = async () => {
     if (!/^\d{10}$/.test(phone)) {
-      toast.error("Enter a valid 10-digit phone number");
+      toast.error("Enter a valid 10-digit phone number", {
+        toastId: "invalid-phone",
+        position: "top-center",
+        className: "custom-toast-margin",
+      });
       return;
     }
 
@@ -36,14 +40,26 @@ export default function Login() {
     try {
       const res = await axios.post('/api/send-otp', { phone });
       if (res.data.success) {
-        toast.success('OTP sent successfully!');
+        toast.success('OTP sent successfully!', {
+          toastId: "otp-sent",
+          position: "top-center",
+          className: "custom-toast-margin",
+        });
         setOtpSent(true);
         startResendTimer();
       } else {
-        toast.error(res.data.message || 'Failed to send OTP');
+        toast.error(res.data.message || 'Failed to send OTP', {
+          toastId: "otp-error",
+          position: "top-center",
+          className: "custom-toast-margin",
+        });
       }
     } catch (err) {
-      toast.error('Error sending OTP');
+      toast.error('Error sending OTP', {
+        toastId: "otp-error",
+        position: "top-center",
+        className: "custom-toast-margin",
+      });
     } finally {
       setLoading(false);
     }
@@ -51,7 +67,11 @@ export default function Login() {
 
   const verifyOtp = async () => {
     if (!otp) {
-      toast.error("Please enter the OTP");
+      toast.error("Please enter the OTP", {
+        toastId: "empty-otp",
+        position: "top-center",
+        className: "custom-toast-margin",
+      });
       return;
     }
 
@@ -60,15 +80,25 @@ export default function Login() {
       const res = await axios.post('/api/verify-otp', { phone, otp }, { withCredentials: true });
 
       if (res.data.success) {
-        toast.success('Login successful!');
-
+        toast.success('Login successful!', {
+          toastId: "login-success",
+          position: "top-center",
+          className: "custom-toast-margin",
+        });
         router.push('/checkout');
-        // Protected route
       } else {
-        toast.error(res.data.message || 'Invalid OTP');
+        toast.error(res.data.message || 'Invalid OTP', {
+          toastId: "invalid-otp",
+          position: "top-center",
+          className: "custom-toast-margin",
+        });
       }
     } catch (err) {
-      toast.error('OTP verification failed');
+      toast.error('OTP verification failed', {
+        toastId: "verify-fail",
+        position: "top-center",
+        className: "custom-toast-margin",
+      });
     } finally {
       setLoading(false);
     }
@@ -79,7 +109,20 @@ export default function Login() {
       <Head>
         <title>Login - fixkaput.com</title>
       </Head>
-      <ToastContainer />
+
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        className="custom-toast-margin"
+      />
+
       <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 bg-gray-100">
         <div className="w-full max-w-md bg-white p-6 sm:p-8 rounded-lg shadow space-y-4">
           <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
@@ -99,8 +142,8 @@ export default function Login() {
                 onClick={sendOtp}
                 disabled={loading}
                 className={`w-full py-3 rounded font-medium transition ${loading
-                    ? 'bg-blue-300 text-white cursor-not-allowed'
-                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                  ? 'bg-blue-300 text-white cursor-not-allowed'
+                  : 'bg-blue-600 text-white hover:bg-blue-700'
                   }`}
               >
                 {loading ? 'Sending...' : 'Send OTP'}
@@ -126,8 +169,8 @@ export default function Login() {
                 onClick={verifyOtp}
                 disabled={loading}
                 className={`w-full py-3 rounded font-medium transition ${loading
-                    ? 'bg-green-300 text-white cursor-not-allowed'
-                    : 'bg-green-600 text-white hover:bg-green-700'
+                  ? 'bg-green-300 text-white cursor-not-allowed'
+                  : 'bg-green-600 text-white hover:bg-green-700'
                   }`}
               >
                 {loading ? 'Verifying...' : 'Verify OTP'}
@@ -137,8 +180,8 @@ export default function Login() {
                 onClick={sendOtp}
                 disabled={resendTimer > 0 || loading}
                 className={`w-full py-3 rounded font-medium mt-2 transition ${resendTimer > 0 || loading
-                    ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-                    : 'bg-blue-500 text-white hover:bg-blue-600'
+                  ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                  : 'bg-blue-500 text-white hover:bg-blue-600'
                   }`}
               >
                 {resendTimer > 0 ? `Resend OTP in ${resendTimer}s` : 'Resend OTP'}
@@ -148,6 +191,12 @@ export default function Login() {
         </div>
       </div>
 
+      {/* Add custom styling for toast margin */}
+      <style jsx global>{`
+        .custom-toast-margin {
+          margin-top: calc(env(safe-area-inset-top) + 60px);
+        }
+      `}</style>
     </>
   );
 }

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Head from 'next/head';
-
 const MyBookings = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,9 +9,12 @@ const MyBookings = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       const token = localStorage.getItem('token');
-      console.log("token nihai")
       if (!token) {
-        toast.error('Please log in to view your bookings');
+        toast.error('Please log in to view your bookings', {
+          toastId: 'no-token',
+          position: 'top-center',
+          className: 'custom-toast-margin',
+        });
         setLoading(false);
         return;
       }
@@ -23,12 +25,19 @@ const MyBookings = () => {
         if (res.status === 200 && res.data.orders) {
           setOrders(res.data.orders);
         } else {
-          toast.error('Failed to fetch bookings');
+          toast.error('Failed to fetch bookings', {
+            toastId: 'fetch-fail',
+            position: 'top-center',
+            className: 'custom-toast-margin',
+          });
         }
       } catch (err) {
         console.error(err);
-        console.log("token nihai in getuserorders" )
-        toast.error('Something went wrong while fetching bookings');
+        toast.error('Something went wrong while fetching bookings', {
+          toastId: 'fetch-error',
+          position: 'top-center',
+          className: 'custom-toast-margin',
+        });
       } finally {
         setLoading(false);
       }
@@ -36,7 +45,6 @@ const MyBookings = () => {
 
     fetchOrders();
   }, []);
-
   return (
     <>
       <Head>
@@ -59,19 +67,19 @@ const MyBookings = () => {
                 <p className="text-sm text-gray-600 mb-1"><strong>Address:</strong> {order.address}</p>
                 <p className="text-sm text-gray-600 mb-1"><strong>Amount:</strong> ₹{order.amount}</p>
                 <div className="text-sm text-gray-600 mb-1">
-  <strong>Services Booked:</strong>
-  {order.cart && typeof order.cart === "object" && (
-    <div className="ml-2 mt-1">
-      {Object.values(order.cart).map((item, idx) => (
-        <div key={idx} className="mb-2">
-          <p>🛠️ <strong>{item.name}</strong></p>
-          <p>Qty: {item.qty}</p>
-          <p>Price per unit: ₹{item.price}</p>
-        </div>
-      ))}
-    </div>
-  )}
-</div>
+                  <strong>Services Booked:</strong>
+                  {order.cart && typeof order.cart === "object" && (
+                    <div className="ml-2 mt-1">
+                      {Object.values(order.cart).map((item, idx) => (
+                        <div key={idx} className="mb-2">
+                          <p>🛠️ <strong>{item.name}</strong></p>
+                          <p>Qty: {item.qty}</p>
+                          <p>Price per unit: ₹{item.price}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
                 <p className="text-sm text-gray-600 mb-1"><strong>Payment:</strong> {order.paymentStatus}</p>
                 <p className="text-sm text-gray-500 mt-2">
                   <strong>Booked on:</strong> {new Date(order.createdAt).toLocaleString()}
