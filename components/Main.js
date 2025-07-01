@@ -116,19 +116,21 @@ const Main = () => {
 
         <button
           onClick={prevSlide}
-          className="absolute left-2 top-1/2 -translate-y-1/2 z-30 bg-white/20 backdrop-blur-sm text-white 
-          p-2 rounded-full hover:bg-white/30 transition-all duration-300 
-          md:p-3 md:left-4"
+          className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-30 
+             bg-white/20 backdrop-blur-sm text-white 
+             p-3 rounded-full hover:bg-white/30 transition-all duration-300"
         >
-          <ChevronLeft className="w-6 h-6" />
+          <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
         </button>
+
+        {/* Right Arrow */}
         <button
           onClick={nextSlide}
-          className="absolute left-2 top-1/2 -translate-y-1/2 z-30 bg-white/20 backdrop-blur-sm text-white 
-          p-2 rounded-full hover:bg-white/30 transition-all duration-300 
-          md:p-3 md:left-4"
+          className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-30 
+             bg-white/20 backdrop-blur-sm text-white 
+             p-3 rounded-full hover:bg-white/30 transition-all duration-300"
         >
-          <ChevronRight className="w-6 h-6" />
+          <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
         </button>
 
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex space-x-2">

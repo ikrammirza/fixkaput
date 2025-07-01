@@ -4,7 +4,6 @@ import Footer from "../components/Footer";
 import { useRef, useState, useEffect } from "react";
 import LoadingBar from "react-top-loading-bar";
 import { useRouter } from "next/router";
-import Bottombar from "../components/Bottombar";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 
@@ -136,13 +135,6 @@ function MyApp({ Component, pageProps }) {
         {...pageProps}
       />
       <Footer />
-      <Bottombar
-        cart={cart}
-        addToCart={addToCart}
-        removeFromCart={removeFromCart}
-        clearCart={clearCart}
-        subTotal={subTotal}
-      />
     </>
   );
 }

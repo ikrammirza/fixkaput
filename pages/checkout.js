@@ -95,6 +95,7 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
 
     const totalAmount = subTotal + subTotal * 0.05;
     let oid = Math.floor(Math.random() * Date.now());
+
     const orderData = {
       oid,
       name,
@@ -103,13 +104,14 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
         area,
         line1,
         city,
-        pincode
+        pincode,
       },
       amount: totalAmount,
       cart,
     };
 
     console.log("Order Data:", orderData);
+
     try {
       console.log("Sending POST request to /api/bookService");
       const response = await axios.post("/api/bookService", orderData);
@@ -117,36 +119,28 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
 
       if (response.status === 200) {
         toast.success("Booking successful!", {
-          position: "bottom-center",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+          toastId: "booking-error",
+          position: "top-center",
+          autoClose: 2000,
           theme: "colored",
-          color: "blue",
+          toastClassName: "custom-toast-margin",
         });
+
+        // Optional profile update
         try {
-          // Re-confirm session before updating user
-          const sessionRes = await fetch('/api/me', {
-            credentials: 'include',
-          });
+          const sessionRes = await fetch("/api/me", { credentials: "include" });
           const sessionData = await sessionRes.json();
 
           if (sessionData.success && sessionData.user) {
-            await axios.post("/api/updateuser", {
-              phone,
-              name,
-              address: {
-                area,
-                line1,
-                city,
-                pincode,
+            await axios.post(
+              "/api/updateuser",
+              {
+                phone,
+                name,
+                address: { area, line1, city, pincode },
               },
-            }, {
-              withCredentials: true,
-            });
+              { withCredentials: true }
+            );
 
             console.log("User profile updated.");
           } else {
@@ -155,43 +149,31 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
         } catch (saveErr) {
           console.error("Error verifying session or updating user:", saveErr);
         }
-        setName('');
-        setArea('');
-        setLine1('');
-        setCity('');
-        setPincode('');
-        if (isPhoneEditable) {
-          setPhone('');
-        }
 
-        // Optional: Clear cart if you want to
+        setName("");
+        setArea("");
+        setLine1("");
+        setCity("");
+        setPincode("");
+        if (isPhoneEditable) setPhone("");
+
         clearCart();
-      }
-
-      else {
+      } else {
         toast.error("Booking failed. Please try again.", {
-          position: "bottom-center",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+          toastId: "booking-error",
+          position: "top-center",
+          autoClose: 2000,
           theme: "colored",
-          color: "blue",
+          toastClassName: "custom-toast-margin",
         });
       }
     } catch (error) {
       toast.error("An error occurred. Please try again.", {
-        position: "bottom-center",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+        toastId: "booking-error",
+        position: "top-center",
+        autoClose: 2000,
         theme: "colored",
-        color: "blue",
+        toastClassName: "custom-toast-margin",
       });
       console.error("Error during booking:", error);
     }

@@ -127,7 +127,7 @@ const testimonials = [
 
 export default function ServicesPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-slate-50">
+    <div className="min-h-screen bg-gradient-to-b from-white to-slate-50 overflow-x-hidden">
       {/* Hero Section */}
       <div className="min-h-screen bg-gradient-to-b from-white to-slate-50">
         {/* Hero Section */}
@@ -158,37 +158,38 @@ export default function ServicesPage() {
               </motion.p>
 
               {/* Services Grid */}
-              <motion.div
-                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 mt-10"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-              >
-                {/* AC Service */}
-                <div className="bg-white/10 hover:scale-105 hover:bg-white/20 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
-                  <img src="/Acservice.jpg" alt="AC Service" className="w-20 h-20 mb-3" />
-                  <p className="text-white font-semibold text-lg">AC Service</p>
-                </div>
+              <div className="w-full px-4 sm:px-6 lg:px-8">
+                <motion.div
+                  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 mt-10"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                >
+                  {/* AC Service */}
+                  <div className="bg-white/10 hover:scale-105 hover:bg-white/20 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
+                    <img src="/Acservice.jpg" alt="AC Service" className="w-20 h-20 mb-3" />
+                    <p className="text-white font-semibold text-lg">AC Service</p>
+                  </div>
 
-                {/* Plumbing */}
-                <div className="bg-white/10 hover:scale-105 hover:bg-white/20 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
-                  <img src="/Plumber.jpg" alt="Plumbing" className="w-20 h-20 mb-3" />
-                  <p className="text-white font-semibold text-lg">Plumbing</p>
-                </div>
+                  {/* Plumbing */}
+                  <div className="bg-white/10 hover:scale-105 hover:bg-white/20 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
+                    <img src="/plumber.jpg" alt="Plumbing" className="w-20 h-20 mb-3" />
+                    <p className="text-white font-semibold text-lg">Plumbing</p>
+                  </div>
 
-                {/* Electrician */}
-                <div className="bg-white/10 hover:scale-105 hover:bg-white/20 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
-                  <img src="/electrician.jpg" alt="Electrician" className="w-20 h-20 mb-3" />
-                  <p className="text-white font-semibold text-lg">Electrician</p>
-                </div>
+                  {/* Electrician */}
+                  <div className="bg-white/10 hover:scale-105 hover:bg-white/20 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
+                    <img src="/electrician.jpg" alt="Electrician" className="w-20 h-20 mb-3" />
+                    <p className="text-white font-semibold text-lg">Electrician</p>
+                  </div>
 
-                {/* CCTV Installation */}
-                <div className="bg-white/10 hover:scale-105 hover:bg-white/20 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
-                  <img src="/cctv.jpg" alt="CCTV" className="w-20 h-20 mb-3" />
-                  <p className="text-white font-semibold text-lg">CCTV Installation</p>
-                </div>
-              </motion.div>
-
+                  {/* CCTV Installation */}
+                  <div className="bg-white/10 hover:scale-105 hover:bg-white/20 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
+                    <img src="/cctv.jpg" alt="CCTV" className="w-20 h-20 mb-3" />
+                    <p className="text-white font-semibold text-lg">CCTV Installation</p>
+                  </div>
+                </motion.div>
+              </div>
               {/* CTA Buttons */}
               <motion.div
                 className="flex flex-col sm:flex-row gap-4 mt-36"
@@ -203,7 +204,7 @@ export default function ServicesPage() {
           </div>
 
           {/* Bottom SVG Wave */}
-          <div className="absolute bottom-0 left-0 right-0">
+          <div className="absolute bottom-0 left-0 right-0 overflow-hidden">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" className="w-full h-auto">
               <path
                 fill="#ffffff"
