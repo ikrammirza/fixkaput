@@ -402,7 +402,7 @@ const Navbar = ({
                     {/* Dropdown Menu */}
                     {dropdown && (
                       <div
-                        className="absolute right-0 top-12 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-50"
+                        className="absolute right-0 top-11 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-50"
                         onMouseEnter={() => setdropdown(true)}
                         onMouseLeave={() => setdropdown(false)}
                       >
@@ -535,12 +535,14 @@ const Navbar = ({
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">Your cart is empty</h3>
                   <p className="text-gray-600 mb-6">Add some services to get started</p>
-                  <button
-                    onClick={toggleCartSidebar}
-                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
-                  >
-                    Browse Services
-                  </button>
+                  <Link href="/services">
+                    <button
+                      onClick={toggleCartSidebar}
+                      className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
+                    >
+                      Browse Services
+                    </button>
+                  </Link>
                 </div>
               ) : (
                 <div className="space-y-4">

@@ -115,7 +115,6 @@ function MyApp({ Component, pageProps }) {
         waitingTime={400}
         onLoaderFinished={() => setProgress(0)}
       />
-      <ToastContainer />
       <Navbar
         logout={logout}
         user={user}
