@@ -493,15 +493,6 @@ const Navbar = ({
                   />
                 </div>
               </div>
-
-              {/* Mobile Contact Info */}
-              <div className="px-4 py-3 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl">
-                <div className="flex items-center space-x-2 mb-2">
-                  <Phone className="w-4 h-4 text-blue-600" />
-                  <span className="text-sm font-semibold text-gray-700">24/7 Emergency</span>
-                </div>
-                <p className="text-sm text-gray-600">+91-XXXXX-XXXXX</p>
-              </div>
             </div>
           </div>
         )}
