@@ -9,7 +9,7 @@ export default function OrderList() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [tab, setTab] = useState("all"); // NEW: 'all' or 'pending'
+  const [tab, setTab] = useState("all");
 
   const fetchOrders = async (searchQuery = "", pageNumber = 1, currentTab = "all") => {
     try {
@@ -19,7 +19,7 @@ export default function OrderList() {
           search: searchQuery,
           page: pageNumber,
           limit: 10,
-          filter: currentTab === "pending" ? "pending" : "", // ✅ Correct usage
+          filter: currentTab === "pending" ? "pending" : "",
         },
       });
       setOrders(res.data.orders);
@@ -46,6 +46,26 @@ export default function OrderList() {
       .map(([key, item]) => `${item.name || key} (x${item.qty || 1})`)
       .join(", ");
   };
+  const renderAddress = (address) => {
+    if (
+      !address ||
+      typeof address !== "object" ||
+      Array.isArray(address)
+    ) {
+      return "-";
+    }
+
+    const line1 = typeof address.line1 === "string" ? address.line1 : "";
+    const area = typeof address.area === "string" ? address.area : "";
+    const city = typeof address.city === "string" ? address.city : "";
+    const pincode = typeof address.pincode === "string" || typeof address.pincode === "number"
+      ? address.pincode
+      : "";
+
+    const formatted = [line1, area, city].filter(Boolean).join(", ");
+    return formatted + (pincode ? ` - ${pincode}` : "");
+  };
+
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md mt-8">
@@ -103,10 +123,10 @@ export default function OrderList() {
                     <td className="px-4 py-2">{renderCartItems(order.cart)}</td>
                     <td className="px-4 py-2">
                       {order.technicianId ? (
-                        <div>
+                        <>
                           <div className="font-semibold">{order.technicianId.name}</div>
                           <div className="text-sm text-gray-600">{order.technicianId.phone}</div>
-                        </div>
+                        </>
                       ) : (
                         <span className="text-red-500">Unassigned</span>
                       )}
@@ -114,10 +134,8 @@ export default function OrderList() {
                     <td className="px-4 py-2">{order.paymentStatus || "-"}</td>
                     <td className="px-4 py-2">{order.phone || "-"}</td>
                     <td className="px-4 py-2">
-  {order.address
-    ? `${order.address.line1}, ${order.address.area}, ${order.address.city} - ${order.address.pincode || ""}`
-    : "-"}
-</td>
+                      {renderAddress(order.address)}
+                    </td>
                   </tr>
                 ))
               ) : (

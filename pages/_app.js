@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 
-
 function MyApp({ Component, pageProps }) {
   const [cart, setCart] = useState({});
   const [progress, setProgress] = useState(0);
@@ -16,17 +15,10 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const socketRef = useRef(null);
 
-
   useEffect(() => {
-    // Route change event listeners for the loading bar
-    router.events.on("routeChangeStart", () => {
-      setProgress(40);
-    });
-    router.events.on("routeChangeComplete", () => {
-      setProgress(100);
-    });
+    router.events.on("routeChangeStart", () => setProgress(40));
+    router.events.on("routeChangeComplete", () => setProgress(100));
 
-    // Load cart from localStorage
     try {
       if (localStorage.getItem("cart")) {
         const savedCart = JSON.parse(localStorage.getItem("cart"));
@@ -37,15 +29,13 @@ function MyApp({ Component, pageProps }) {
       console.error(error);
       localStorage.clear();
     }
+
     const fetchUser = async () => {
       try {
-        const res = await fetch("/api/me", {
-          credentials: "include", // Important to send cookies
-        });
+        const res = await fetch("/api/me", { credentials: "include" });
         const data = await res.json();
-
         if (data.success) {
-          setUser({ value: data.user }); // ✅ Set actual user data, like { name, phone, _id }
+          setUser({ value: data.user });
         } else {
           setUser({ value: null });
         }
@@ -60,9 +50,8 @@ function MyApp({ Component, pageProps }) {
 
   const logout = async () => {
     try {
-      await axios.post('/api/logout');
-      localStorage.removeItem('phone'); // optional
-      setUser({ value: null });         // reset user
+      await axios.post('/api/logout', {}, { withCredentials: true }); // Ensure cookies are sent
+      setUser({ value: null });
       router.push('/');
     } catch (err) {
       console.error('Logout failed:', err);
@@ -80,7 +69,7 @@ function MyApp({ Component, pageProps }) {
   };
 
   const addToCart = (itemCode, qty, price, name) => {
-    const newCart = { ...cart }; // Make a copy of the cart
+    const newCart = { ...cart };
     if (itemCode in newCart) {
       newCart[itemCode].qty += qty;
     } else {
@@ -91,7 +80,7 @@ function MyApp({ Component, pageProps }) {
   };
 
   const removeFromCart = (itemCode, qty) => {
-    const newCart = { ...cart }; // Make a copy of the cart
+    const newCart = { ...cart };
     if (itemCode in newCart) {
       newCart[itemCode].qty -= qty;
     }
@@ -107,14 +96,8 @@ function MyApp({ Component, pageProps }) {
     saveCart({});
   };
 
-  return (
+  const getLayout = Component.getLayout || ((page) => (
     <>
-      <LoadingBar
-        color="#4267b2"
-        progress={progress}
-        waitingTime={400}
-        onLoaderFinished={() => setProgress(0)}
-      />
       <Navbar
         logout={logout}
         user={user}
@@ -124,18 +107,33 @@ function MyApp({ Component, pageProps }) {
         clearCart={clearCart}
         subTotal={subTotal}
       />
-      <Component
-        cart={cart}
-        addToCart={addToCart}
-        removeFromCart={removeFromCart}
-        clearCart={clearCart}
-        subTotal={subTotal}
-
-        {...pageProps}
-      />
+      {page}
       <Footer />
+    </>
+  ));
+
+  return (
+    <>
+      <LoadingBar
+        color="#4267b2"
+        progress={progress}
+        waitingTime={400}
+        onLoaderFinished={() => setProgress(0)}
+      />
+      <ToastContainer position="bottom-center" />
+      {getLayout(
+        <Component
+          cart={cart}
+          addToCart={addToCart}
+          removeFromCart={removeFromCart}
+          clearCart={clearCart}
+          subTotal={subTotal}
+          {...pageProps}
+        />
+      )}
     </>
   );
 }
+
 
 export default MyApp;

@@ -10,7 +10,8 @@ const userSchema = new mongoose.Schema({
     line1: { type: String },
     city: { type: String },
     pincode: { type: String },
-  }
+  },
+  isAdmin: { type: Boolean, default: false }
 }, { timestamps: true, collection: 'users' });
 const User = mongoose.models.User || mongoose.model('User', userSchema);
 export default User;

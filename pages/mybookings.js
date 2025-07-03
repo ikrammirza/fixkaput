@@ -65,7 +65,7 @@ const MyBookings = () => {
   return (
     <>
       <Head>
-        <title>My Bookings - fixkaput.com</title>
+        <title>fixKaput | MyBookings</title>
       </Head>
 
       <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white px-4 sm:px-6 lg:px-20 py-16">

@@ -3,89 +3,94 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 
+export default function TechnicianSignup() {
+    const [form, setForm] = useState({
+        name: "",
+        phone: "",
+        aadhar: "",
+    });
 
-const TechnicianSignup = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [aadhar, setAadhar] = useState("");
-  const router = useRouter();
+    const router = useRouter();
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    try {
-      // Send the signup request
-      const response = await axios.post("/api/technicianSignup", {
-        name,
-        email,
-        password,
-        phone,
-        aadhar,
-      });
+    const handleChange = (e) => {
+        setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    };
 
-      // Show success toast and redirect to login page
-      toast.success("Signup successful! Please log in.");
-      router.push("/technicianLogin"); // Redirect to login page
-    } catch (error) {
-      console.error("Signup failed:", error);
-      toast.error("Signup failed. Please try again.");
-    }
-  };
+    const handleSubmit = async () => {
+        const { name, phone, aadhar } = form;
 
-  return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Technician Signup</h1>
-      <form onSubmit={handleSignup} className="flex flex-col gap-4">
-        <input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          className="p-2 border rounded"
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="p-2 border rounded"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="p-2 border rounded"
-        />
-        <input
-          type="tel"
-          placeholder="Phone (+91 format)"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          required
-          className="p-2 border rounded"
-        />
-        <input
-          type="text"
-          placeholder="Aadhar Number (12 digits)"
-          value={aadhar}
-          onChange={(e) => setAadhar(e.target.value)}
-          required
-          className="p-2 border rounded"
-        />
-        <button
-          type="submit"
-          className="px-4 py-2 bg-green-500 text-white rounded"
-        >
-          Sign Up
-        </button>
-      </form>
-    </div>
-  );
+        if (!name || !phone || !aadhar) {
+            toast.error("All fields are required");
+            return;
+        }
+
+        try {
+            await axios.post("/api/technicianSignup", {
+                name,
+                phone,
+                aadhar,
+            });
+
+            toast.success("Technician registered successfully. Please login.");
+            router.push("/technicianLogin"); // ⬅️ redirect to login
+        } catch (err) {
+            toast.error(err.response?.data?.message || "Signup failed");
+        }
+    };
+
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-blue-50 px-4">
+            <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
+                <h2 className="text-2xl font-bold text-blue-700 mb-6 text-center">
+                    Technician Signup
+                </h2>
+
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Full Name"
+                    className="w-full mb-4 px-4 py-2 border rounded-lg"
+                    value={form.name}
+                    onChange={handleChange}
+                />
+
+                <input
+                    type="tel"
+                    name="phone"
+                    placeholder="Phone Number"
+                    className="w-full mb-4 px-4 py-2 border rounded-lg"
+                    value={form.phone}
+                    onChange={handleChange}
+                    maxLength={10}
+                />
+
+                <input
+                    type="text"
+                    name="aadhar"
+                    placeholder="Aadhar Number"
+                    className="w-full mb-6 px-4 py-2 border rounded-lg"
+                    value={form.aadhar}
+                    onChange={handleChange}
+                    maxLength={12}
+                />
+
+                <button
+                    onClick={handleSubmit}
+                    className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
+                >
+                    Register Technician
+                </button>
+
+                <p className="mt-4 text-center text-sm text-gray-600">
+                    Already registered?{" "}
+                    <a href="/technicianLogin" className="text-blue-600 hover:underline">
+                        Login here
+                    </a>
+                </p>
+            </div>
+        </div>
+    );
+}
+TechnicianSignup.getLayout = function PageLayout(page) {
+    return <>{page}</>; // Only render the page, no Navbar or Footer
 };
-
-export default TechnicianSignup;

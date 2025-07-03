@@ -58,19 +58,17 @@ const Footer = () => {
 
           {/* Brand Section */}
           <div className="lg:col-span-1">
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="relative">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-400 rounded-xl flex items-center justify-center shadow-lg">
-                  <Image src="/fklogo.png" alt="FixKaput Logo" width={32} height={32} />
-                </div>
+            <Link href="/" className="flex items-center gap-4 cursor-pointer mb-5">
+              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 shadow-md">
+                <span className="text-white font-bold text-4xl">fK</span>
               </div>
               <div className="flex flex-col">
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-blue-300 bg-clip-text text-transparent">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
                   FixKaput
                 </h1>
-                <p className="text-xs text-gray-300 font-medium">Professional Services</p>
+                <p className="text-xs text-gray-600 font-medium">Professional Services</p>
               </div>
-            </div>
+            </Link>
 
             <p className="text-gray-300 mb-6 leading-relaxed">
               Your trusted partner for professional home services. We connect you with skilled technicians

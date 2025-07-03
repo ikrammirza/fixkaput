@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Carousel } from "react-responsive-carousel";
@@ -90,6 +91,9 @@ const ServicePage = ({ cart, addToCart }) => {
 
   return (
     <>
+      <Head>
+        <title>fixKaput | Carpenter Services</title>
+      </Head>
       <ToastContainer
         toastStyle={{ backgroundColor: "#1e88e5" }}
         position="bottom-center"

@@ -4,13 +4,11 @@ import mongoose from "mongoose";
 
 const TechnicianSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
   phone: {
     type: String,
     required: true,
     unique: true,
-    match: [/^(\+91)[6-9]\d{9}$/, "Please enter a valid Indian phone number"],
+    match: [/^[6-9]\d{9}$/, "Please enter a valid 10-digit Indian phone number"],
   },
   aadhar: {
     type: String,
@@ -23,12 +21,6 @@ const TechnicianSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  address: {
-    area: { type: String },
-    line1: { type: String },
-    city: { type: String },
-    pincode: { type: String },
-  }
 });
 
 export default mongoose.models.Technician ||
