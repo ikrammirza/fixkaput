@@ -20,8 +20,7 @@ const About = () => {
   return (
     <>
       <Head>
-        <title>About Us - fixkaput.com</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>fixKaput | Abouts Us</title>
       </Head>
       <div className="bg-blue-50 min-h-screen">
         {/* Intro Section */}

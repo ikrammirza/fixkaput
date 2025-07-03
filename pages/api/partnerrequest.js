@@ -4,6 +4,8 @@ import connectDb from "../../middleware/mongoose";
 import Order from "../../models/Order";
 import Technician from "../../models/Technician";
 import { getSocket } from "../../lib/socket";
+import redis from "../../lib/redis";
+import * as cookie from "cookie";
 
 export const config = {
   api: { bodyParser: true },
@@ -12,13 +14,33 @@ export const config = {
 async function handler(req, res) {
   await connectDb();
 
-  const technicianIdHeader =
-    req.headers["technician-id"] || req.headers["technicianId"];
-  if (!technicianIdHeader) {
-    return res.status(400).json({ message: "Technician ID missing in headers" });
+  // Parse cookies
+  let cookies = {};
+  try {
+    const rawCookie = String(req.headers?.cookie || "");
+    cookies = cookie.parse(rawCookie);
+  } catch (err) {
+    console.error("❌ Failed to parse cookies:", err);
   }
 
-  const technician = await Technician.findOne({ technicianId: technicianIdHeader });
+  const sessionId = cookies["technicianSessionId"];
+  if (!sessionId) {
+    return res.status(401).json({ message: "Unauthorized: No technician session ID found" });
+  }
+  // Fetch session from Redis
+  const sessionData = await redis.get(`session:${sessionId}`);
+  if (!sessionData) {
+    return res.status(401).json({ message: "Unauthorized: Invalid or expired session" });
+  }
+
+  const session = JSON.parse(sessionData);
+  const technicianId = session.technicianId;
+
+  if (!technicianId) {
+    return res.status(401).json({ message: "Unauthorized: Technician ID missing in session" });
+  }
+
+  const technician = await Technician.findOne({ technicianId });
   if (!technician) {
     return res.status(401).json({ message: "Unauthorized: Technician not found" });
   }
@@ -97,4 +119,3 @@ async function handler(req, res) {
 }
 
 export default handler;
-

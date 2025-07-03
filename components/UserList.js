@@ -15,24 +15,37 @@ export default function UserList() {
       const res = await axios.get("/api/admin/stats/users", {
         params: { search: searchQuery, page: pageNumber, limit: 10 },
       });
+
+      // Debug unexpected address types
+      res.data.users.forEach((u) => {
+        if (u.address && typeof u.address !== "object") {
+          console.warn("Unexpected user address format:", u.address);
+        }
+      });
+
       setUsers(res.data.users);
       setTotalPages(res.data.totalPages);
-      setLoading(false);
     } catch (err) {
       console.error("Error fetching users", err);
+    } finally {
       setLoading(false);
     }
   };
 
-  // Debounced search handler
   const handleSearchChange = debounce((value) => {
-    setPage(1); // reset to page 1 when searching
+    setPage(1);
     setSearch(value);
   }, 500);
 
   useEffect(() => {
     fetchUsers(search, page);
   }, [search, page]);
+
+  const formatAddress = (address) => {
+    if (!address || typeof address !== "object") return "-";
+    const { line1, area, city, pincode } = address;
+    return [line1, area, city, pincode].filter(Boolean).join(", ");
+  };
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md mt-8">
@@ -63,7 +76,7 @@ export default function UserList() {
                   <tr key={user._id} className="border-b">
                     <td className="px-4 py-2">{user.name || "-"}</td>
                     <td className="px-4 py-2">{user.phone}</td>
-                    <td className="px-4 py-2">{user.address || "-"}</td>
+                    <td className="px-4 py-2">{formatAddress(user.address)}</td>
                   </tr>
                 ))
               ) : (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import Image from "next/legacy/image";
+import axios from "axios";
 import {
   ShoppingCart,
   X,
@@ -104,7 +104,6 @@ const Navbar = ({
   removeFromCart,
   clearCart,
   subTotal,
-  logout,
 }) => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -177,20 +176,38 @@ const Navbar = ({
     setCartSidebarOpen(!isCartSidebarOpen);
   };
 
-  const handleLogoutClick = () => {
-    toast.success("Successfully logged out!", {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      theme: "colored",
-    });
-    setTimeout(() => {
-      logout();
-    }, 2000);
+  const handleLogoutClick = async () => {
+    try {
+      const response = await axios.post('/api/logout', {}, {
+        withCredentials: true
+      });
+
+      if (response.data.success) {
+        setUser({ value: null });
+
+        toast.success("Successfully logged out!", {
+          position: "top-right",
+          autoClose: 2000,
+          theme: "colored",
+        });
+
+        setTimeout(() => {
+          router.push('/');
+        }, 2000);
+      } else {
+        toast.error("Logout failed: " + response.data.message);
+      }
+    } catch (err) {
+      console.error('Logout failed:', err);
+      toast.error("Logout failed. Please try again.", {
+        position: "top-right",
+        autoClose: 2000,
+        theme: "colored",
+      });
+    }
   };
+
+
 
   // Search handlers
   const handleDesktopSearchClick = () => {
@@ -300,19 +317,18 @@ const Navbar = ({
           <div className="flex justify-between items-center h-20">
 
             {/* Logo Section */}
-            <Link href="/" className="flex items-center space-x-3 cursor-pointer">
-              <div className="relative">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <Image src="/fklogo.png" alt="FixKaput Logo" width={32} height={32} />
-                </div>
+            <Link href="/" className="flex items-center gap-4 cursor-pointer">
+              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 shadow-md">
+                <span className="text-white font-bold text-4xl">fK</span>
               </div>
               <div className="flex flex-col">
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 bg-clip-text text-transparent">
                   FixKaput
                 </h1>
-                <p className="text-xs text-gray-500 font-medium">Professional Services</p>
+                <p className="text-xs text-gray-600 font-medium">Professional Services</p>
               </div>
             </Link>
+
 
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center space-x-1">

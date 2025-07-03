@@ -182,11 +182,7 @@ const Checkout = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
   return (
     <>
       <Head>
-        <title>Checkout - fixkaput.com</title>
-        <meta
-          name="viewport"
-          content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0"
-        />
+        <title>fixKaput | Checkout</title>
       </Head>
       <div className="min-h-screen rounded-lg border bg-white py-10">
         <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">

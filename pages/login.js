@@ -107,7 +107,7 @@ export default function Login() {
   return (
     <>
       <Head>
-        <title>Login - fixkaput.com</title>
+        <title>fixKaput | Login</title>
       </Head>
 
       <ToastContainer
