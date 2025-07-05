@@ -18,6 +18,34 @@ import {
   Sparkles
 } from "lucide-react";
 
+const [touchStartX, setTouchStartX] = useState(null);
+const [touchEndX, setTouchEndX] = useState(null);
+
+const handleTouchStart = (e) => {
+  setTouchStartX(e.targetTouches[0].clientX);
+};
+
+const handleTouchMove = (e) => {
+  setTouchEndX(e.targetTouches[0].clientX);
+};
+
+const handleTouchEnd = () => {
+  if (!touchStartX || !touchEndX) return;
+
+  const distance = touchStartX - touchEndX;
+
+  if (distance > 50) {
+    // Swiped left
+    nextSlide();
+  } else if (distance < -50) {
+    // Swiped right
+    prevSlide();
+  }
+
+  // Reset
+  setTouchStartX(null);
+  setTouchEndX(null);
+};
 
 const Main = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -72,7 +100,9 @@ const Main = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Hero Carousel Section */}
-      <section className="relative h-[70vh] md:h-[80vh] overflow-hidden">
+      <section className="relative h-[70vh] md:h-[80vh] overflow-hidden" onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}>
         <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent z-10" />
 
         {carouselImages.map((slide, index) => (

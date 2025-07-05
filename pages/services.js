@@ -101,28 +101,27 @@ const services = [
     ]
   }
 ];
-
 const testimonials = [
   {
     id: 1,
-    content: "The AC repair service was prompt and professional. My unit is working better than ever, and the technician explained everything clearly.",
-    author: "Sarah Johnson",
-    position: "Homeowner",
-    avatar: "https://randomuser.me/api/portraits/women/11.jpg"
+    content: "Booked AC repair through FixKaput. The technician arrived on time, fixed the issue quickly, and charged reasonably. Highly recommended!",
+    author: "Riya Sharma",
+    position: "Hyderabad Resident",
+    avatar: "https://randomuser.me/api/portraits/women/65.jpg"
   },
   {
     id: 2,
-    content: "I've used their plumbing services twice now, and both times the work was impeccable. Fair pricing and they cleaned up everything after.",
-    author: "Michael Chen",
-    position: "Apartment Resident",
-    avatar: "https://randomuser.me/api/portraits/men/22.jpg"
+    content: "Used their plumbing service for a major leak. The plumber was polite and cleaned up after work. Will definitely call again!",
+    author: "Arjun Mehta",
+    position: "Homeowner, Pune",
+    avatar: "https://randomuser.me/api/portraits/men/75.jpg"
   },
   {
     id: 3,
-    content: "The carpenter built custom shelving for my living room and the quality is outstanding. Highly recommend their carpentry services!",
-    author: "Priya Patel",
-    position: "Interior Designer",
-    avatar: "https://randomuser.me/api/portraits/women/33.jpg"
+    content: "I booked their carpenter to install shelves in my kitchen. Neat work and quick service. Great experience!",
+    author: "Sneha Iyer",
+    position: "Bangalore Interior Designer",
+    avatar: "https://randomuser.me/api/portraits/women/72.jpg"
   }
 ];
 
@@ -130,7 +129,7 @@ export default function ServicesPage() {
   return (
     <>
       <Head>
-        <title>fixKaput | Partner Requests</title>
+        <title>fixKaput | Services</title>
       </Head>
       <div className="min-h-screen bg-gradient-to-b from-white to-slate-50 overflow-x-hidden">
         {/* Hero Section */}
