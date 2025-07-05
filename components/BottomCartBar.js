@@ -6,25 +6,24 @@ const BottomCartBar = ({ cart, toggleCartSidebar }) => {
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
-        // Ensure client-side rendering only
-        setIsClient(true);
+        setIsClient(true); // Ensure client-side only
     }, []);
 
     if (!isClient || Object.keys(cart).length === 0) return null;
 
     return (
-        <div className="fixed bottom-0 inset-x-0 z-[9999] bg-white border-t border-gray-200 shadow-lg p-3 flex items-center justify-between md:hidden">
-            <span className="text-gray-700 font-semibold text-lg">View Your Cart</span>
-            <button
-                onClick={toggleCartSidebar}
-                className="relative p-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl shadow-md hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
-            >
-                <ShoppingCart className="w-5 h-5" />
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+        <button
+            onClick={toggleCartSidebar}
+            className="fixed bottom-5 right-5 z-[9999] bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-full shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 md:hidden"
+            aria-label="Open Cart"
+        >
+            <div className="relative">
+                <ShoppingCart className="w-6 h-6" />
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold animate-pulse">
                     {Object.keys(cart).length}
                 </span>
-            </button>
-        </div>
+            </div>
+        </button>
     );
 };
 
