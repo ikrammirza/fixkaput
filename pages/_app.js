@@ -6,7 +6,7 @@ import LoadingBar from "react-top-loading-bar";
 import { useRouter } from "next/router";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import BottomCartBar from "../components/BottomcartBar";
+import BottomCartBar from "../components/BottomCartBar";
 import CartSidebar from "../components/CartSidebar"; // ✅ Correct import
 
 function MyApp({ Component, pageProps }) {
