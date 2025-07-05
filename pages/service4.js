@@ -7,30 +7,34 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const services = [
   {
-    id: 1,
+    id: "carp-101",
     name: "Furniture Assembly",
     description: "Expert assembly of wardrobes, beds, and modular furniture.",
+    price: 499,
   },
   {
-    id: 2,
+    id: "carp-102",
     name: "Carpentry Repair",
     description: "Repair of broken doors, windows, and wooden furniture.",
+    price: 399,
   },
   {
-    id: 3,
+    id: "carp-103",
     name: "Custom Woodwork",
     description: "Tailor-made shelves, partitions, and kitchen fittings.",
+    price: 899,
   },
   {
-    id: 4,
+    id: "carp-104",
     name: "Furniture Polishing",
     description: "Polishing and refinishing for a fresh wooden look.",
+    price: 549,
   },
 ];
 
 const detailedServices = [
   {
-    id: 101,
+    id: "carp-101",
     name: "Furniture Assembly",
     description: [
       "Assembling modular furniture like beds, wardrobes, and tables.",
@@ -41,7 +45,7 @@ const detailedServices = [
     image: "carpenter.jpg",
   },
   {
-    id: 102,
+    id: "carp-102",
     name: "Carpentry Repair",
     description: [
       "Fixing loose hinges, broken frames, or damaged panels.",
@@ -52,7 +56,7 @@ const detailedServices = [
     image: "carpenter.jpg",
   },
   {
-    id: 103,
+    id: "carp-103",
     name: "Custom Woodwork",
     description: [
       "Creating customized wooden partitions, racks, and cabinets.",
@@ -63,7 +67,7 @@ const detailedServices = [
     image: "carpenter.jpg",
   },
   {
-    id: 104,
+    id: "carp-104",
     name: "Furniture Polishing",
     description: [
       "Sanding, cleaning, and applying polish/varnish to wood.",

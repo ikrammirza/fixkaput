@@ -7,30 +7,34 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const services = [
   {
-    id: 1,
+    id: "cctv-101",
     name: "CCTV Installation",
     description: "Professional installation of security cameras at homes or offices.",
+    price: 899,
   },
   {
-    id: 2,
+    id: "cctv-102",
     name: "CCTV Repair",
     description: "Repairing faulty CCTV units, cables, and DVR/NVR systems.",
+    price: 599,
   },
   {
-    id: 3,
+    id: "cctv-103",
     name: "CCTV Maintenance",
     description: "Regular health check-ups and servicing of CCTV systems.",
+    price: 499,
   },
   {
-    id: 4,
+    id: "cctv-104",
     name: "CCTV Relocation",
     description: "Uninstalling and reinstalling CCTV systems to new locations.",
+    price: 699,
   },
 ];
 
 const detailedServices = [
   {
-    id: 101,
+    id: "cctv-101",
     name: "CCTV Installation",
     description: [
       "Mounting cameras at strategic points for maximum coverage.",
@@ -41,7 +45,7 @@ const detailedServices = [
     image: "cctv.jpg",
   },
   {
-    id: 102,
+    id: "cctv-102",
     name: "CCTV Repair",
     description: [
       "Fixing signal loss, blurry footage, or disconnected cameras.",
@@ -52,7 +56,7 @@ const detailedServices = [
     image: "cctv.jpg",
   },
   {
-    id: 103,
+    id: "cctv-103",
     name: "CCTV Maintenance",
     description: [
       "Lens cleaning, wire inspection, and DVR/NVR health check.",
@@ -63,7 +67,7 @@ const detailedServices = [
     image: "cctv.jpg",
   },
   {
-    id: 104,
+    id: "cctv-104",
     name: "CCTV Relocation",
     description: [
       "Safe removal of existing CCTV setup from old premises.",
@@ -74,6 +78,7 @@ const detailedServices = [
     image: "cctv.jpg",
   },
 ];
+
 
 const ServicePage = ({ cart, addToCart }) => {
   const handleCart = (item) => {

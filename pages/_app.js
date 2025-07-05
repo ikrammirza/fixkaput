@@ -22,11 +22,26 @@ function MyApp({ Component, pageProps }) {
     try {
       if (localStorage.getItem("cart")) {
         const savedCart = JSON.parse(localStorage.getItem("cart"));
-        setCart(savedCart);
-        saveCart(savedCart);
+
+        // ✅ Clean invalid entries (missing price or name)
+        const cleanedCart = {};
+        for (const key in savedCart) {
+          const item = savedCart[key];
+          if (
+            item &&
+            typeof item.qty === "number" &&
+            typeof item.price === "number" &&
+            typeof item.name === "string"
+          ) {
+            cleanedCart[key] = item;
+          }
+        }
+
+        setCart(cleanedCart);
+        saveCart(cleanedCart);
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error loading cart:", error);
       localStorage.clear();
     }
 
@@ -48,36 +63,49 @@ function MyApp({ Component, pageProps }) {
     fetchUser();
   }, [router.query]);
 
-  const logout = async () => {
-    try {
-      await axios.post('/api/logout', {}, { withCredentials: true }); // Ensure cookies are sent
-      setUser({ value: null });
-      router.push('/');
-    } catch (err) {
-      console.error('Logout failed:', err);
-    }
-  };
+
+
 
   const saveCart = (myCart) => {
     localStorage.setItem("cart", JSON.stringify(myCart));
+
     let subt = 0;
     const keys = Object.keys(myCart);
     for (let i = 0; i < keys.length; i++) {
-      subt += myCart[keys[i]].price * myCart[keys[i]].qty;
+      const item = myCart[keys[i]];
+      if (item && typeof item.price === "number" && typeof item.qty === "number") {
+        subt += item.price * item.qty;
+      }
     }
     setSubTotal(subt);
   };
 
   const addToCart = (itemCode, qty, price, name) => {
-    const newCart = { ...cart };
-    if (itemCode in newCart) {
-      newCart[itemCode].qty += qty;
-    } else {
-      newCart[itemCode] = { qty: 1, price, name };
+    console.log("🛒 addToCart called with:", { itemCode, price, name, qty });
+
+    if (!itemCode || typeof price !== "number" || !name) {
+      console.warn("⚠️ Incomplete item data:", { itemCode, price, name });
+      return;
     }
-    setCart(newCart);
-    saveCart(newCart);
+
+    // ✅ Correctly get latest cart using callback
+    setCart((prevCart) => {
+      const newCart = { ...prevCart };
+
+      if (itemCode in newCart) {
+        newCart[itemCode].qty += qty;
+      } else {
+        newCart[itemCode] = { qty, price, name };
+      }
+
+      saveCart(newCart); // ✅ Save only after correct update
+      return newCart;
+    });
   };
+
+
+
+
 
   const removeFromCart = (itemCode, qty) => {
     const newCart = { ...cart };
@@ -99,7 +127,6 @@ function MyApp({ Component, pageProps }) {
   const getLayout = Component.getLayout || ((page) => (
     <>
       <Navbar
-        logout={logout}
         user={user}
         cart={cart}
         addToCart={addToCart}
