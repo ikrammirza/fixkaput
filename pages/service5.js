@@ -7,30 +7,34 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const services = [
   {
-    id: 1,
+    id: "elec-101",
     name: "Switch & Socket Repair",
     description: "Quick repair of non-functional switches, sockets, and boards.",
+    price: 299,
   },
   {
-    id: 2,
+    id: "elec-102",
     name: "Fan & Light Installation",
     description: "Expert fitting of ceiling fans, tube lights, and LED panels.",
+    price: 399,
   },
   {
-    id: 3,
+    id: "elec-103",
     name: "Wiring & MCB Services",
     description: "New wiring setup, MCB replacement, and circuit troubleshooting.",
+    price: 749,
   },
   {
-    id: 4,
+    id: "elec-104",
     name: "Appliance Fitting",
     description: "Installation of geysers, exhausts, and electrical appliances.",
+    price: 549,
   },
 ];
 
 const detailedServices = [
   {
-    id: 101,
+    id: "elec-101",
     name: "Switch & Socket Repair",
     description: [
       "Fixing burnt-out or loose electrical sockets and switches.",
@@ -41,7 +45,7 @@ const detailedServices = [
     image: "electrician.jpg",
   },
   {
-    id: 102,
+    id: "elec-102",
     name: "Fan & Light Installation",
     description: [
       "Mounting ceiling fans, tube lights, or decorative lighting fixtures.",
@@ -52,7 +56,7 @@ const detailedServices = [
     image: "electrician.jpg",
   },
   {
-    id: 103,
+    id: "elec-103",
     name: "Wiring & MCB Services",
     description: [
       "Complete wiring setup for new rooms or renovations.",
@@ -63,7 +67,7 @@ const detailedServices = [
     image: "electrician.jpg",
   },
   {
-    id: 104,
+    id: "elec-104",
     name: "Appliance Fitting",
     description: [
       "Installation of geysers, kitchen chimneys, and exhaust fans.",
@@ -74,6 +78,7 @@ const detailedServices = [
     image: "electrician.jpg",
   },
 ];
+
 
 const ServicePage = ({ cart, addToCart }) => {
   const handleCart = (item) => {

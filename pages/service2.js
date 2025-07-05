@@ -6,31 +6,15 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const services = [
-  {
-    id: 1,
-    name: "Plumbing Repair",
-    description: "Comprehensive repair and maintenance of plumbing systems.",
-  },
-  {
-    id: 2,
-    name: "Plumbing Maintenance",
-    description: "Expert servicing and maintenance for household plumbing.",
-  },
-  {
-    id: 3,
-    name: "Install & Uninstall",
-    description: "Professional plumbing services from experienced technicians.",
-  },
-  {
-    id: 4,
-    name: "Pipe Leak Fix",
-    description: "Reliable and affordable leak detection and pipe repairs.",
-  },
+  { id: "pl-101", name: "Plumbing Repair", description: "...", price: 400 },
+  { id: "pl-102", name: "Plumbing Maintenance", description: "...", price: 400 },
+  { id: "pl-103", name: "Install & Uninstall", description: "...", price: 400 },
+  { id: "pl-104", name: "Pipe Leak Fix", description: "...", price: 400 },
 ];
 
 const detailedServices = [
   {
-    id: 101,
+    id: "pl-101",
     name: "Tap & Faucet Repair",
     description: [
       "Fixing dripping taps and faulty faucets in kitchens and bathrooms.",
@@ -41,7 +25,7 @@ const detailedServices = [
     image: "plumber.jpg",
   },
   {
-    id: 102,
+    id: "pl-102",
     name: "Drain Blockage Removal",
     description: [
       "Unclogging kitchen sinks, bathroom drains, and toilet lines.",
@@ -52,7 +36,7 @@ const detailedServices = [
     image: "plumber.jpg",
   },
   {
-    id: 103,
+    id: "pl-103",
     name: "Bathroom Fitting Installation",
     description: [
       "Installing wash basins, shower heads, flush tanks, and commodes.",
@@ -63,7 +47,7 @@ const detailedServices = [
     image: "plumber.jpg",
   },
   {
-    id: 104,
+    id: "pl-104",
     name: "Water Tank Cleaning",
     description: [
       "Comprehensive cleaning of overhead and underground tanks.",
@@ -74,6 +58,7 @@ const detailedServices = [
     image: "plumber.jpg",
   },
 ];
+
 
 
 const ServicePage = ({ cart, addToCart }) => {

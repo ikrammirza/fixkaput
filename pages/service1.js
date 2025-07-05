@@ -4,33 +4,15 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-
 const services = [
-  {
-    id: 1,
-    name: "AC Repair",
-    description: "Comprehensive repair and maintenance of air conditioning systems.",
-  },
-  {
-    id: 2,
-    name: "AC Service",
-    description: "Expert servicing and repair solutions for all types of geysers.",
-  },
-  {
-    id: 3,
-    name: "Install & Uninstall",
-    description: "Professional carpentry services from experienced carpenters.",
-  },
-  {
-    id: 4,
-    name: "AC Gas Refill",
-    description: "Reliable and affordable plumbing services for all your needs.",
-  },
+  { id: "pl-101", name: "Plumbing Repair", description: "...", price: 400 },
+  { id: "pl-102", name: "Plumbing Maintenance", description: "...", price: 400 },
+  { id: "pl-103", name: "Install & Uninstall", description: "...", price: 400 },
+  { id: "pl-104", name: "Pipe Leak Fix", description: "...", price: 400 },
 ];
-
 const detailedServices = [
   {
-    id: 101,
+    id: "ac-101",
     name: "AC Repair",
     description: [
       "Comprehensive inspection of the air conditioning system to identify issues.",
@@ -41,7 +23,7 @@ const detailedServices = [
     image: "Acservice.jpg",
   },
   {
-    id: 102,
+    id: "ac-102",
     name: "AC Service",
     description: [
       "Thorough cleaning of indoor and outdoor AC units to improve airflow.",
@@ -52,7 +34,7 @@ const detailedServices = [
     image: "Acservice.jpg",
   },
   {
-    id: 103,
+    id: "ac-103",
     name: "AC Installation",
     description: [
       "Secure mounting of indoor and outdoor AC units with proper alignment.",
@@ -63,7 +45,7 @@ const detailedServices = [
     image: "Acservice.jpg",
   },
   {
-    id: 104,
+    id: "ac-104",
     name: "AC Uninstallation",
     description: [
       "Safe disconnection of electrical and refrigerant lines from the AC unit.",
@@ -75,9 +57,10 @@ const detailedServices = [
   },
 ];
 
+
+
 const ServicePage = ({ cart, addToCart }) => {
   const handleCart = (item) => {
-    addToCart(item); // Ensure item is actually added to cart
     toast.success(`${item} added`, {
       toastId: `added-${item}`, // ✅ Makes it non-repeatable per item
       position: "bottom-center",

@@ -7,30 +7,34 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const services = [
   {
-    id: 1,
+    id: "pest-101",
     name: "Cockroach Control",
     description: "Eliminate cockroach infestations using safe & effective methods.",
+    price: 399,
   },
   {
-    id: 2,
+    id: "pest-102",
     name: "Termite Treatment",
     description: "Protect your home from destructive termites with advanced solutions.",
+    price: 1199,
   },
   {
-    id: 3,
+    id: "pest-103",
     name: "Bed Bug Treatment",
     description: "Complete eradication of bed bugs from beds, sofas, and mattresses.",
+    price: 899,
   },
   {
-    id: 4,
+    id: "pest-104",
     name: "General Pest Control",
     description: "Overall pest management for ants, lizards, spiders, and more.",
+    price: 699,
   },
 ];
 
 const detailedServices = [
   {
-    id: 101,
+    id: "pest-101",
     name: "Cockroach Control",
     description: [
       "Targeted gel and spray treatment in kitchen and bathroom areas.",
@@ -41,7 +45,7 @@ const detailedServices = [
     image: "cockroach-control.jpg",
   },
   {
-    id: 102,
+    id: "pest-102",
     name: "Termite Treatment",
     description: [
       "Anti-termite drilling and chemical injection for wood and walls.",
@@ -52,7 +56,7 @@ const detailedServices = [
     image: "termite-control.jpg",
   },
   {
-    id: 103,
+    id: "pest-103",
     name: "Bed Bug Treatment",
     description: [
       "Advanced spray and heat treatment on mattresses and upholstery.",
@@ -63,7 +67,7 @@ const detailedServices = [
     image: "bed-bugs.jpg",
   },
   {
-    id: 104,
+    id: "pest-104",
     name: "General Pest Control",
     description: [
       "Covers common household pests like ants, spiders, and lizards.",
