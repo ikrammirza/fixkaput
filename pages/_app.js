@@ -6,7 +6,7 @@ import LoadingBar from "react-top-loading-bar";
 import { useRouter } from "next/router";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import BottomCartBar from "../components/BottomcartBar"; // ✅ Mobile cart bar
+import BottomCartBar from "../components/BottomCartBar"; // ✅ Mobile cart bar
 
 function MyApp({ Component, pageProps }) {
   const [cart, setCart] = useState({});
