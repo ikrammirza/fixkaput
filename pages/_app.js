@@ -6,6 +6,7 @@ import LoadingBar from "react-top-loading-bar";
 import { useRouter } from "next/router";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
+import BottomCartBar from "../components/BottomCartBar"; // ✅ Mobile bottom cart component
 
 function MyApp({ Component, pageProps }) {
   const [cart, setCart] = useState({});
@@ -14,6 +15,7 @@ function MyApp({ Component, pageProps }) {
   const [user, setUser] = useState({ value: null });
   const router = useRouter();
   const socketRef = useRef(null);
+  const [isCartSidebarOpen, setIsCartSidebarOpen] = useState(false); // ✅ to toggle sidebar
 
   useEffect(() => {
     router.events.on("routeChangeStart", () => setProgress(40));
@@ -23,7 +25,6 @@ function MyApp({ Component, pageProps }) {
       if (localStorage.getItem("cart")) {
         const savedCart = JSON.parse(localStorage.getItem("cart"));
 
-        // ✅ Clean invalid entries (missing price or name)
         const cleanedCart = {};
         for (const key in savedCart) {
           const item = savedCart[key];
@@ -63,9 +64,6 @@ function MyApp({ Component, pageProps }) {
     fetchUser();
   }, [router.query]);
 
-
-
-
   const saveCart = (myCart) => {
     localStorage.setItem("cart", JSON.stringify(myCart));
 
@@ -81,14 +79,11 @@ function MyApp({ Component, pageProps }) {
   };
 
   const addToCart = (itemCode, qty, price, name) => {
-    console.log("🛒 addToCart called with:", { itemCode, price, name, qty });
-
     if (!itemCode || typeof price !== "number" || !name) {
       console.warn("⚠️ Incomplete item data:", { itemCode, price, name });
       return;
     }
 
-    // ✅ Correctly get latest cart using callback
     setCart((prevCart) => {
       const newCart = { ...prevCart };
 
@@ -98,14 +93,10 @@ function MyApp({ Component, pageProps }) {
         newCart[itemCode] = { qty, price, name };
       }
 
-      saveCart(newCart); // ✅ Save only after correct update
+      saveCart(newCart);
       return newCart;
     });
   };
-
-
-
-
 
   const removeFromCart = (itemCode, qty) => {
     const newCart = { ...cart };
@@ -124,6 +115,10 @@ function MyApp({ Component, pageProps }) {
     saveCart({});
   };
 
+  const toggleCartSidebar = () => {
+    setIsCartSidebarOpen((prev) => !prev);
+  };
+
   const getLayout = Component.getLayout || ((page) => (
     <>
       <Navbar
@@ -133,6 +128,7 @@ function MyApp({ Component, pageProps }) {
         removeFromCart={removeFromCart}
         clearCart={clearCart}
         subTotal={subTotal}
+        toggleCartSidebar={toggleCartSidebar}
       />
       {page}
       <Footer />
@@ -148,6 +144,7 @@ function MyApp({ Component, pageProps }) {
         onLoaderFinished={() => setProgress(0)}
       />
       <ToastContainer position="bottom-center" />
+
       {getLayout(
         <Component
           cart={cart}
@@ -155,12 +152,16 @@ function MyApp({ Component, pageProps }) {
           removeFromCart={removeFromCart}
           clearCart={clearCart}
           subTotal={subTotal}
+          toggleCartSidebar={toggleCartSidebar}
+          isCartSidebarOpen={isCartSidebarOpen}
           {...pageProps}
         />
       )}
+
+      {/* ✅ Render mobile cart bar */}
+      <BottomCartBar cart={cart} toggleCartSidebar={toggleCartSidebar} />
     </>
   );
 }
-
 
 export default MyApp;
