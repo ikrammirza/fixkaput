@@ -19,7 +19,7 @@ const BottomCartBar = ({ cart, toggleCartSidebar }) => {
         >
             <div className="relative">
                 <ShoppingCart className="w-6 h-6" />
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold animate-pulse">
+                <span className="absolute - top-[10px] right-[10px] bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold animate-pulse">
                     {Object.keys(cart).length}
                 </span>
             </div>
