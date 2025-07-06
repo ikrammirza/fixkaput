@@ -3,13 +3,11 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Main from "../components/Main";
 import { useEffect } from "react";
-import io from "socket.io-client";
-
-let socket;
 
 export default function Home() {
   useEffect(() => {
-    socket = io("http://localhost:3000", {
+    // Only import and connect socket on client
+    const socket = require("socket.io-client")("https://fixkaput.vercel.app", {
       path: "/api/socketio",
     });
 
@@ -30,6 +28,7 @@ export default function Home() {
       console.log("❌ Disconnected from server");
     };
   }, []);
+
   return (
     <div>
       <Head>
@@ -39,10 +38,9 @@ export default function Home() {
         <link
           rel="stylesheet"
           href="https://unpkg.com/flickity@2/dist/flickity.min.css"
-        ></link>
+        />
       </Head>
       <Main />
-     
     </div>
   );
 }

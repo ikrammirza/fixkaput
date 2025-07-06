@@ -18,38 +18,39 @@ import {
   Sparkles
 } from "lucide-react";
 
-const [touchStartX, setTouchStartX] = useState(null);
-const [touchEndX, setTouchEndX] = useState(null);
 
-const handleTouchStart = (e) => {
-  setTouchStartX(e.targetTouches[0].clientX);
-};
 
-const handleTouchMove = (e) => {
-  setTouchEndX(e.targetTouches[0].clientX);
-};
-
-const handleTouchEnd = () => {
-  if (!touchStartX || !touchEndX) return;
-
-  const distance = touchStartX - touchEndX;
-
-  if (distance > 50) {
-    // Swiped left
-    nextSlide();
-  } else if (distance < -50) {
-    // Swiped right
-    prevSlide();
-  }
-
-  // Reset
-  setTouchStartX(null);
-  setTouchEndX(null);
-};
 
 const Main = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [touchStartX, setTouchStartX] = useState(null);
+  const [touchEndX, setTouchEndX] = useState(null);
 
+  const handleTouchStart = (e) => {
+    setTouchStartX(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEndX(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX || !touchEndX) return;
+
+    const distance = touchStartX - touchEndX;
+
+    if (distance > 50) {
+      // Swiped left
+      nextSlide();
+    } else if (distance < -50) {
+      // Swiped right
+      prevSlide();
+    }
+
+    // Reset
+    setTouchStartX(null);
+    setTouchEndX(null);
+  };
   const carouselImages = [
     {
       url: "https://images.pexels.com/photos/6169668/pexels-photo-6169668.jpeg?auto=compress&cs=tinysrgb&w=1600",

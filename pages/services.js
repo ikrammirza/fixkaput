@@ -113,14 +113,14 @@ const testimonials = [
     id: 2,
     content: "Used their plumbing service for a major leak. The plumber was polite and cleaned up after work. Will definitely call again!",
     author: "Arjun Mehta",
-    position: "Homeowner, Pune",
+    position: "Homeowner, Hyderabad",
     avatar: "https://randomuser.me/api/portraits/men/75.jpg"
   },
   {
     id: 3,
     content: "I booked their carpenter to install shelves in my kitchen. Neat work and quick service. Great experience!",
-    author: "Sneha Iyer",
-    position: "Bangalore Interior Designer",
+    author: "abdul yaseen",
+    position: "Homeowner, Hyderabad",
     avatar: "https://randomuser.me/api/portraits/women/72.jpg"
   }
 ];
