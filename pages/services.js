@@ -119,7 +119,7 @@ const testimonials = [
   {
     id: 3,
     content: "I booked their carpenter to install shelves in my kitchen. Neat work and quick service. Great experience!",
-    author: "abdul yaseen",
+    author: "Sneha Iyer",
     position: "Homeowner, Hyderabad",
     avatar: "https://randomuser.me/api/portraits/women/72.jpg"
   }
