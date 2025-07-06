@@ -101,29 +101,29 @@ const services = [
     ]
   }
 ];
+
+
 const testimonials = [
   {
     id: 1,
-    content: "Booked AC repair through FixKaput. The technician arrived on time, fixed the issue quickly, and charged reasonably. Highly recommended!",
-    author: "Riya Sharma",
-    position: "Hyderabad Resident",
-    avatar: "https://randomuser.me/api/portraits/women/65.jpg"
+    content: "I booked an AC repair with FixKaput during peak summer. The technician came right on time, cleaned the unit, fixed the cooling issue, and explained everything patiently. Great job!",
+    author: "Pooja Reddy",
+    position: "Resident, Hyderabad"
   },
   {
     id: 2,
-    content: "Used their plumbing service for a major leak. The plumber was polite and cleaned up after work. Will definitely call again!",
-    author: "Arjun Mehta",
-    position: "Homeowner, Hyderabad",
-    avatar: "https://randomuser.me/api/portraits/men/75.jpg"
+    content: "Had CCTV cameras installed through FixKaput for my home. The technician was professional, explained the setup well, and even helped with the mobile app configuration.",
+    author: "Abdul yaseen",
+    position: "Flat Owner, Secunderabad"
   },
   {
     id: 3,
-    content: "I booked their carpenter to install shelves in my kitchen. Neat work and quick service. Great experience!",
+    content: "I had a power outage in one room. The electrician from FixKaput identified a loose wire, fixed it in no time, and ensured everything was safe before leaving.",
     author: "Sneha Iyer",
-    position: "Homeowner, Hyderabad",
-    avatar: "https://randomuser.me/api/portraits/women/72.jpg"
+    position: "Working Professional, Gachibowli"
   }
 ];
+
 
 export default function ServicesPage() {
   return (
@@ -401,30 +401,19 @@ export default function ServicesPage() {
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {testimonials.map((testimonial, index) => (
+              {testimonials.map((t, i) => (
                 <motion.div
-                  key={testimonial.id}
+                  key={t.id}
                   className="bg-white p-8 rounded-2xl shadow-lg relative"
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
                 >
                   <Quote className="h-12 w-12 text-blue-100 absolute -top-2 -left-2" />
-
-                  <p className="text-gray-700 mb-6 relative z-10">
-                    "{testimonial.content}"
-                  </p>
-
-                  <div className="flex items-center">
-                    <img
-                      src={testimonial.avatar}
-                      alt={testimonial.author}
-                      className="w-12 h-12 rounded-full mr-4 object-cover"
-                    />
-                    <div>
-                      <h4 className="font-medium text-gray-900">{testimonial.author}</h4>
-                      <p className="text-gray-500 text-sm">{testimonial.position}</p>
-                    </div>
+                  <p className="text-gray-700 mb-6 relative z-10">"{t.content}"</p>
+                  <div>
+                    <h4 className="font-medium text-gray-900">{t.author}</h4>
+                    <p className="text-gray-500 text-sm">{t.position}</p>
                   </div>
                 </motion.div>
               ))}
