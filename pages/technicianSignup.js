@@ -39,6 +39,7 @@ export default function TechnicianSignup() {
     };
 
     return (
+
         <div className="min-h-screen flex items-center justify-center bg-blue-50 px-4">
             <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
                 <h2 className="text-2xl font-bold text-blue-700 mb-6 text-center">
