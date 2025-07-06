@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import ServiceSection from "./ServiceSection";
+import Image from "next/image";
 import {
   ChevronLeft,
   ChevronRight,
@@ -113,11 +114,16 @@ const Main = () => {
               index < currentSlide ? '-translate-x-full' : 'translate-x-full'
               }`}
           >
-            <img
-              src={slide.url}
-              alt={slide.title}
-              className="w-full h-full object-cover"
-            />
+            <div className="relative w-full h-full">
+              <Image
+                src={slide.url}
+                alt={slide.title}
+                fill
+                className="object-cover"
+                priority={index === 0}
+                sizes="100vw"
+              />
+            </div>
             <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 via-blue-800/60 to-transparent" />
           </div>
         ))}
