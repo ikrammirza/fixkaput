@@ -247,7 +247,7 @@ const Navbar = ({
       <div className={`absolute ${isMobile ? 'top-full' : 'top-full'} left-0 right-0 bg-white border border-gray-200 rounded-xl shadow-lg mt-2 max-h-80 overflow-y-auto z-50`}>
         <div className="p-2">
           {services.map((service) => {
-            const IconComponent = iconMap[service.icon];
+            const IconComponent = service.icon;
 
             return (
               <button

@@ -120,7 +120,7 @@ const Main = () => {
                 alt={slide.title}
                 fill
                 className="object-cover"
-                priority={index === 0}
+                priority={index === 0} // only prioritize the first image
                 sizes="100vw"
               />
             </div>
