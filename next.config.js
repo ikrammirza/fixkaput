@@ -1,12 +1,14 @@
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
+  output: 'standalone', // ✅ Needed for Docker deployment
   images: {
-    domains: ['images.pexels.com'],
+    domains: ['images.pexels.com'], // ✅ For external image loading
   },
-  // If you need to extend Webpack's configuration, do it here
   webpack(config, { isServer }) {
-    // Add custom webpack configurations here only if necessary
-
+    // Customize webpack config only if needed
     return config;
   },
 };
+
+module.exports = nextConfig;
