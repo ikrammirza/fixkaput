@@ -20,13 +20,14 @@ const services = [
     category: "HVAC"
   },
   {
-    id: 6,
-    name: "Pest Control",
-    description: "Safe pest control for cockroaches, termites, ants, and other invaders.",
-    image: "https://images.pexels.com/photos/8845013/pexels-photo-8845013.jpeg?auto=compress&cs=tinysrgb&w=800",
-    icon: <Droplets className="w-8 h-8" />,
-    category: "PEST"
+    id: 3,
+    name: "CCTV Service & Repair",
+    description: "Surveillance system setup, maintenance, and troubleshooting for home security.",
+    image: "https://images.pexels.com/photos/430208/pexels-photo-430208.jpeg?auto=compress&cs=tinysrgb&w=800",
+    icon: <Camera className="w-8 h-8" />,
+    category: "SECURITY"
   },
+
   {
     id: 4,
     name: "Carpenter Service",
@@ -34,6 +35,15 @@ const services = [
     image: "https://images.pexels.com/photos/5691659/pexels-photo-5691659.jpeg?auto=compress&cs=tinysrgb&w=800",
     icon: <Hammer className="w-8 h-8" />,
     category: "CARPENTRY"
+  },
+
+  {
+    id: 5,
+    name: "Electrical Service",
+    description: "Reliable home wiring, fixture installations, repairs, and electrical safety checks.",
+    image: "https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&w=800",
+    icon: <Zap className="w-8 h-8" />,
+    category: "ELECTRICAL"
   },
   {
     id: 2,
@@ -44,21 +54,14 @@ const services = [
     category: "PLUMBING"
   },
   {
-    id: 5,
-    name: "Electrical Service",
-    description: "Reliable home wiring, fixture installations, repairs, and electrical safety checks.",
-    image: "https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&w=800",
-    icon: <Zap className="w-8 h-8" />,
-    category: "ELECTRICAL"
+    id: 6,
+    name: "Pest Control",
+    description: "Safe pest control for cockroaches, termites, ants, and other invaders.",
+    image: "https://images.pexels.com/photos/8845013/pexels-photo-8845013.jpeg?auto=compress&cs=tinysrgb&w=800",
+    icon: <Droplets className="w-8 h-8" />,
+    category: "PEST"
   },
-  {
-    id: 3,
-    name: "CCTV Service & Repair",
-    description: "Surveillance system setup, maintenance, and troubleshooting for home security.",
-    image: "https://images.pexels.com/photos/430208/pexels-photo-430208.jpeg?auto=compress&cs=tinysrgb&w=800",
-    icon: <Camera className="w-8 h-8" />,
-    category: "SECURITY"
-  }
+
 ];
 
 
@@ -108,8 +111,6 @@ const ServiceSection = () => {
               >
                 Book Now
               </Link>
-
-
             </div>
           ))}
         </div>

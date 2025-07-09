@@ -42,7 +42,7 @@ const detailedServices = [
       "Power and internet configuration for real-time monitoring.",
     ],
     price: 899,
-    image: "cctv.jpg",
+    image: "CCTVinstallation.jpeg",
   },
   {
     id: "cctv-102",
@@ -53,7 +53,7 @@ const detailedServices = [
       "Restoring live view and playback functionality.",
     ],
     price: 599,
-    image: "cctv.jpg",
+    image: "CCTVmaintenance.jpeg",
   },
   {
     id: "cctv-103",
@@ -64,7 +64,7 @@ const detailedServices = [
       "Testing camera angles and motion detection sensitivity.",
     ],
     price: 499,
-    image: "cctv.jpg",
+    image: "CCTVrelocation.jpeg",
   },
   {
     id: "cctv-104",
@@ -75,7 +75,7 @@ const detailedServices = [
       "Wiring, testing, and remote access configuration.",
     ],
     price: 699,
-    image: "cctv.jpg",
+    image: "CCTVrepair.jpeg",
   },
 ];
 
@@ -126,7 +126,7 @@ const ServicePage = ({ cart, addToCart }) => {
                   <div key={service.id} className="flex flex-col items-center w-1/2 p-4">
                     <a href={`#${service.name.replace(/\s+/g, "-").toLowerCase()}`}>
                       <img
-                        src={`/cctv.jpg`}
+                        src={service.image}
                         alt={service.name}
                         className="rounded-lg w-full h-32 object-cover mb-2 hover:scale-105 transition-transform duration-300 shadow-lg"
                       />

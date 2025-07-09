@@ -50,7 +50,7 @@ const handler = async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign({ phone, _id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "2d",
+      expiresIn: "7d",
     });
     console.log("🔐 JWT token created");
 

@@ -22,7 +22,7 @@ const detailedServices = [
       "Ensuring smooth water flow and leak-free operation.",
     ],
     price: 300,
-    image: "plumber.jpg",
+    image: "Taprepair.jpg",
   },
   {
     id: "pl-102",
@@ -33,7 +33,7 @@ const detailedServices = [
       "Removing grease, hair, and debris to restore flow.",
     ],
     price: 350,
-    image: "plumber.jpg",
+    image: "Blockageremoval.jpg",
   },
   {
     id: "pl-103",
@@ -44,19 +44,20 @@ const detailedServices = [
       "Testing water pressure and checking for any leaks post-installation.",
     ],
     price: 600,
-    image: "plumber.jpg",
+    image: "Bathroomfittinginstallation.jpg",
   },
   {
     id: "pl-104",
-    name: "Water Tank Cleaning",
+    name: "Geyser Services",
     description: [
-      "Comprehensive cleaning of overhead and underground tanks.",
-      "Scrubbing, sludge removal, and disinfection with safe agents.",
-      "Ensures clean and safe water for household use.",
+      "Thorough inspection and repair of non-functional geysers.",
+      "Includes thermostat check, heating element replacement, and wiring fixes.",
+      "Ensures safe and efficient hot water supply.",
     ],
     price: 450,
-    image: "plumber.jpg",
-  },
+    image: "Geyserrepair.jpeg",
+  }
+
 ];
 
 
@@ -107,7 +108,7 @@ const ServicePage = ({ cart, addToCart }) => {
                   <div key={service.id} className="flex flex-col items-center w-1/2 p-4">
                     <a href={`#${service.name.replace(/\s+/g, "-").toLowerCase()}`}>
                       <img
-                        src={`/plumber.jpg`}
+                        src={service.image}
                         alt={service.name}
                         className="rounded-lg w-full h-32 object-cover mb-2 hover:scale-105 transition-transform duration-300 shadow-lg"
                       />

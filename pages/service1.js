@@ -20,7 +20,7 @@ const detailedServices = [
       "Ensuring smooth operation and restoring cooling capacity to its best possible level.",
     ],
     price: 420,
-    image: "Acservice.jpg",
+    image: "ACrepair.jpg",
   },
   {
     id: "ac-102",
@@ -31,7 +31,7 @@ const detailedServices = [
       "Checking refrigerant levels and overall cooling efficiency.",
     ],
     price: 350,
-    image: "Acservice.jpg",
+    image: "ACservice.jpg",
   },
   {
     id: "ac-103",
@@ -42,7 +42,7 @@ const detailedServices = [
       "Vacuuming and pressure testing to ensure leak-free setup.",
     ],
     price: 600,
-    image: "Acservice.jpg",
+    image: "ACinstallation.jpg",
   },
   {
     id: "ac-104",
@@ -53,7 +53,7 @@ const detailedServices = [
       "Packaging and preparation of the unit for transport or storage.",
     ],
     price: 300,
-    image: "Acservice.jpg",
+    image: "ACuninstallation.jpg",
   },
 ];
 
@@ -102,7 +102,7 @@ const ServicePage = ({ cart, addToCart }) => {
                   <div key={service.id} className="flex flex-col items-center w-1/2 p-4">
                     <a href={`#${service.name.replace(/\s+/g, "-").toLowerCase()}`}>
                       <img
-                        src={`/Acservice.jpg`}
+                        src={service.image}
                         alt={service.name}
                         className="rounded-lg w-full h-32 object-cover mb-2 hover:scale-105 transition-transform duration-300 shadow-lg"
                       />
