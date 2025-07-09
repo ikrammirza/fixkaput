@@ -11,7 +11,7 @@ const handler = async (req, res) => {
     const demand = await Order.aggregate([
       {
         $group: {
-          _id: { area: "$address.area", service: "$cart.serviceItem.name"},
+          _id: { area: "$address.area", service: "$cart.serviceItem.name" },
           count: { $sum: 1 },
         },
       },

@@ -1,7 +1,4 @@
 import service from "../../models/Service"
-
-
-
 import connectDb from "../../middleware/mongoose"
 import Service from "../../models/Service"
 
@@ -27,7 +24,7 @@ const handler = async (req, res) => {
         res.status(400).json({ error: "this method is not allowed" })
     }
 
-   
+
 
 }
 export default connectDb(handler);

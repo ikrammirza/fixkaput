@@ -90,7 +90,7 @@ export default function AdminDashboard() {
       </Head>
 
       <div className="min-h-screen bg-gray-100 flex">
-        {/* Sidebar */}
+        {/* Sidebarr */}
         <aside className={`bg-gradient-to-b from-blue-600 to-blue-900 text-white transition-all duration-300 ease-in-out
           ${sidebarOpen ? "w-64" : "w-16"} hidden sm:flex flex-col`}>
 

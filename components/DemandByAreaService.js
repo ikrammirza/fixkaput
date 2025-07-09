@@ -38,7 +38,7 @@ function DemandByAreaService() {
     <div className="bg-white p-4 sm:p-6 rounded-lg shadow mt-6">
       <h2 className="text-xl font-bold mb-4">Demand by Area & Service</h2>
 
-      {/* Scrollable only on small screens */}
+      {/* Scrollable only on small screenss */}
       <div className="overflow-x-auto sm:overflow-visible">
         <div
           className="min-w-[600px] max-w-full"
