@@ -12,6 +12,7 @@ export const config = {
 };
 
 async function handler(req, res) {
+  console.log("📨 API /api/partnerrequest got called")
   await connectDb();
 
   // Parse cookies

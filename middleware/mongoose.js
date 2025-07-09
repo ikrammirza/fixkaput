@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/fixkaput';
+const MONGODB_URI = process.env.MONGO_URI;
+console.log("💡 MongoDB URI used:", MONGODB_URI);
 
 
 if (!MONGODB_URI) {
@@ -40,3 +41,4 @@ async function connectDb() {
 }
 
 export default connectDb;
+

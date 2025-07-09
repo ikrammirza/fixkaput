@@ -1,4 +1,3 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   output: 'standalone', // ✅ Needed for Docker deployment
@@ -12,3 +11,4 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
+
