@@ -31,7 +31,7 @@ const detailedServices = [
       "Checking refrigerant levels and overall cooling efficiency.",
     ],
     price: 350,
-    image: "Acservice.jpg",
+    image: "ACservice1.jpg",
   },
   {
     id: "ac-103",

@@ -17,7 +17,7 @@ function DemandByAreaService() {
   useEffect(() => {
     async function fetchInsights() {
       try {
-        const res = await axios.get("/api/admin/insights/demandAreaService");
+        const res = await axios.get("/api/admin/insights/demandAreaService", { withCredentials: true });
         setData(
           res.data.demand.map((d) => ({
             name: `${d._id.area} — ${d._id.service}`,
@@ -32,46 +32,23 @@ function DemandByAreaService() {
     fetchInsights();
   }, []);
 
-  const chartWidth = Math.max(data.length * 100, 600);
-
   return (
     <div className="bg-white p-4 sm:p-6 rounded-lg shadow mt-6">
       <h2 className="text-xl font-bold mb-4">Demand by Area & Service</h2>
 
-      {/* Scrollable only on small screenss */}
-      <div className="overflow-x-auto sm:overflow-visible">
-        <div
-          className="min-w-[600px] max-w-full"
-          style={{ width: chartWidth }}
-        >
+      <div className="w-full h-[300px]">
+        <ResponsiveContainer width="100%" height="100%">
           <BarChart
-            width={chartWidth}
-            height={300}
             data={data}
-            className="transition-transform duration-500 ease-in-out"
+            margin={{ top: 10, right: 20, left: 10, bottom: 60 }}
           >
             <XAxis
               dataKey="name"
               interval={0}
-              tick={({ x, y, payload }) => {
-                const lines = payload.value.split(" — ");
-                return (
-                  <g transform={`translate(${x},${y + 10})`}>
-                    {lines.map((line, index) => (
-                      <text
-                        key={index}
-                        x={0}
-                        y={index * 12}
-                        textAnchor="middle"
-                        fill="#666"
-                        fontSize="10"
-                      >
-                        {line}
-                      </text>
-                    ))}
-                  </g>
-                );
-              }}
+              angle={-25}
+              textAnchor="end"
+              height={60}
+              tick={{ fontSize: 10 }}
             />
             <YAxis />
             <Tooltip />
@@ -83,7 +60,7 @@ function DemandByAreaService() {
               animationEasing="ease-in-out"
             />
           </BarChart>
-        </div>
+        </ResponsiveContainer>
       </div>
 
       <div className="mt-4 p-4 bg-gray-50 rounded">
