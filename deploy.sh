@@ -13,6 +13,9 @@ fi
 echo "📥 Fetching latest code from GitHub..."
 git fetch origin main
 
+# 🔍 Check what changed before resetting
+CHANGED=$(git diff HEAD origin/main --name-only)
+
 echo "🧨 Resetting local repo to match GitHub (force overwrite)..."
 git reset --hard origin/main
 
@@ -28,15 +31,13 @@ if [ ! -f .env ]; then
   exit 1
 fi
 
-# 🔍 Check what changed (from previous HEAD to new HEAD after reset)
-CHANGED=$(git diff HEAD@{1} HEAD --name-only)
-
+# 🚫 No file changes
 if [[ -z "$CHANGED" ]]; then
   echo "✅ No changes detected. Skipping Docker restart."
   exit 0
 fi
 
-# 🔍 Check for critical files that require rebuild
+# 🛠 Critical file changes
 if echo "$CHANGED" | grep -qE "package.json|Dockerfile|docker-compose.yml|next.config.js"; then
   echo "♻️ Critical file(s) changed: Rebuilding Docker image..."
   sudo docker-compose down
@@ -47,6 +48,7 @@ if echo "$CHANGED" | grep -qE "package.json|Dockerfile|docker-compose.yml|next.c
     exit 1
   fi
 else
+  # 🔁 Just restart for API/component/page changes
   echo "🔄 Non-critical changes: Restarting containers..."
   if sudo docker-compose down && sudo docker-compose up -d; then
     echo "✅ Docker restarted successfully."

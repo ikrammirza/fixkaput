@@ -90,7 +90,7 @@ const ServicePage = ({ cart, addToCart }) => {
       />
 
       <div className="md:mx-20 scroll-smooth">
-        {/* Services Section */}
+        {/* Services section */}
         <div className="flex flex-col mt-8 md:mt-10 md:flex-row md:space-x-4">
           <div className="flex flex-wrap justify-center mb-10 md:mb-0 w-full md:w-1/3">
             <div className="bg-white shadow-lg rounded-lg p-4 w-full">
