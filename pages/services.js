@@ -16,13 +16,58 @@ const services = [
     link: "/service1",
     shortDescription: "Expert AC maintenance and repair services for all brands and models.",
     longDescription: "Our certified technicians provide comprehensive air conditioning services including installation, maintenance, and repairs. We ensure your AC systems operate at peak efficiency, helping you save on energy costs while maintaining optimal comfort.",
-    image: "Acservice.jpg",
+    image: "ACrepair.jpg",
     icon: TbAirConditioning,
     benefits: [
       "Regular maintenance extends AC lifespan",
       "Energy-efficient repairs save on bills",
       "24/7 emergency repair services",
       "Certified technicians for all brands"
+    ]
+  },
+  {
+    id: 4,
+    name: "Plumbing Service",
+    link: "/service2",
+    shortDescription: "Comprehensive plumbing solutions for all needs.",
+    longDescription: "Our reliable plumbing services address all your water system needs, from minor leaks to major installations. Our licensed plumbers use quality materials and proven techniques to ensure lasting solutions.",
+    image: "Taprepair.jpg",
+    icon: MdPlumbing,
+    benefits: [
+      "Fast leak detection and repair",
+      "Pipe installation and replacement",
+      "Fixture upgrades",
+      "Drain cleaning"
+    ]
+  },
+  {
+    id: 6,
+    name: "CCTV Service",
+    link: "/service3",
+    shortDescription: "Advanced security solutions and support.",
+    longDescription: "Protect your property with our comprehensive CCTV services. From initial consultation and system design to installation and maintenance, we provide end-to-end security solutions with the latest technology.",
+    image: "CCTVinstallation.jpeg",
+    icon: GiCctvCamera,
+    benefits: [
+      "Custom security design",
+      "Professional installation",
+      "Remote monitoring",
+      "Regular maintenance"
+    ]
+  },
+  {
+    id: 3,
+    name: "Carpenter Service",
+    link: "/service4",
+    shortDescription: "Skilled carpentry work for furniture and installations.",
+    longDescription: "Our professional carpentry services cover everything from custom furniture creation to repairs and installations. Our experienced carpenters bring expertise and precision to every project, ensuring high-quality craftsmanship.",
+    image: "Carpenter3.jpg",
+    icon: MdOutlineCarpenter,
+    benefits: [
+      "Custom furniture design",
+      "Expert wood repairs",
+      "Cabinet installations",
+      "Door and window repairs"
     ]
   },
   {
@@ -41,36 +86,6 @@ const services = [
     ]
   },
   {
-    id: 3,
-    name: "Carpenter Service",
-    link: "/service4",
-    shortDescription: "Skilled carpentry work for furniture and installations.",
-    longDescription: "Our professional carpentry services cover everything from custom furniture creation to repairs and installations. Our experienced carpenters bring expertise and precision to every project, ensuring high-quality craftsmanship.",
-    image: "carpenter.jpg",
-    icon: MdOutlineCarpenter,
-    benefits: [
-      "Custom furniture design",
-      "Expert wood repairs",
-      "Cabinet installations",
-      "Door and window repairs"
-    ]
-  },
-  {
-    id: 4,
-    name: "Plumbing Service",
-    link: "/service2",
-    shortDescription: "Comprehensive plumbing solutions for all needs.",
-    longDescription: "Our reliable plumbing services address all your water system needs, from minor leaks to major installations. Our licensed plumbers use quality materials and proven techniques to ensure lasting solutions.",
-    image: "plumber.jpg",
-    icon: MdPlumbing,
-    benefits: [
-      "Fast leak detection and repair",
-      "Pipe installation and replacement",
-      "Fixture upgrades",
-      "Drain cleaning"
-    ]
-  },
-  {
     id: 5,
     name: "Pest Control",
     link: "/service6",
@@ -85,21 +100,7 @@ const services = [
       "Affordable pricing"
     ]
   },
-  {
-    id: 6,
-    name: "CCTV Service",
-    link: "/service3",
-    shortDescription: "Advanced security solutions and support.",
-    longDescription: "Protect your property with our comprehensive CCTV services. From initial consultation and system design to installation and maintenance, we provide end-to-end security solutions with the latest technology.",
-    image: "cctv.jpg",
-    icon: GiCctvCamera,
-    benefits: [
-      "Custom security design",
-      "Professional installation",
-      "Remote monitoring",
-      "Regular maintenance"
-    ]
-  }
+
 ];
 
 
@@ -171,27 +172,36 @@ export default function ServicesPage() {
                   >
                     {/* AC Service */}
                     <div className="bg-white/10 hover:scale-105 hover:bg-white/20 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
-                      <img src="/Acservice.jpg" alt="AC Service" className="w-20 h-20 mb-3" />
+                      <img src="/ACrepair.jpg" alt="AC Service" className="w-20 h-20 mb-3" />
                       <p className="text-white font-semibold text-lg">AC Service</p>
                     </div>
 
                     {/* Plumbing */}
                     <div className="bg-white/10 hover:scale-105 hover:bg-white/20 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
-                      <img src="/plumber.jpg" alt="Plumbing" className="w-20 h-20 mb-3" />
+                      <img src="/Taprepair.jpg" alt="Plumbing" className="w-20 h-20 mb-3" />
                       <p className="text-white font-semibold text-lg">Plumbing</p>
                     </div>
 
-                    {/* Electrician */}
-                    <div className="bg-white/10 hover:scale-105 hover:bg-white/20 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
-                      <img src="/electrician.jpg" alt="Electrician" className="w-20 h-20 mb-3" />
-                      <p className="text-white font-semibold text-lg">Electrician</p>
+                    {/* CCTV Installation */}
+                    <div className="bg-white/10 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
+                      <div className="w-20 h-20 overflow-hidden ">
+                        <img
+                          src="/CCTVrelocation.jpg"
+                          alt="CCTV"
+                          className="w-full h-full object-cover transform scale-125"
+                        />
+                      </div>
+                      <p className="text-white font-semibold text-lg mt-3">CCTV Installation</p>
                     </div>
 
-                    {/* CCTV Installation */}
+
+                    {/* Carpenter*/}
                     <div className="bg-white/10 hover:scale-105 hover:bg-white/20 p-6 rounded-xl flex flex-col items-center transition-all duration-300">
-                      <img src="/cctv.jpg" alt="CCTV" className="w-20 h-20 mb-3" />
-                      <p className="text-white font-semibold text-lg">CCTV Installation</p>
+                      <img src="/Carpenter3.jpg" alt="Electrician" className="w-20 h-20 mb-3" />
+                      <p className="text-white font-semibold text-lg">Carpenter</p>
                     </div>
+
+
                   </motion.div>
                 </div>
                 {/* CTA Buttons */}
@@ -486,7 +496,7 @@ export default function ServicesPage() {
                   transition={{ duration: 0.6, delay: 0.2 }}
                 >
                   <img
-                    src="https://images.pexels.com/photos/7713175/pexels-photo-7713175.jpeg"
+                    src="contactus.jpg"
                     alt="Professional home service"
                     className="h-full w-full object-cover"
                   />

@@ -71,21 +71,21 @@ const About = () => {
                   <img
                     className="w-full h-60 sm:h-80 object-cover"
                     alt="Mission"
-                    src="/Acservice.jpg"
+                    src="/ACinstallation.jpg"
                   />
                 </div>
                 <div>
                   <img
                     className="w-full h-60 sm:h-80 object-cover"
                     alt="Mission"
-                    src="/cctv.jpg"
+                    src="/CCTVinstallation.jpeg"
                   />
                 </div>
                 <div>
                   <img
                     className="w-full h-60 sm:h-80 object-cover"
                     alt="Mission"
-                    src="/carpenter.jpg"
+                    src="/Carpenter3.jpg"
                   />
                 </div>
               </Slider>
@@ -128,21 +128,21 @@ const About = () => {
                   <img
                     className="w-full h-60 sm:h-80 object-cover"
                     alt="Values"
-                    src="/plumber.jpg"
+                    src="/ACrepair.jpg"
                   />
                 </div>
                 <div>
                   <img
                     className="w-full h-60 sm:h-80 object-cover"
                     alt="Values"
-                    src="/electrician.jpg"
+                    src="/wiring.jpg"
                   />
                 </div>
                 <div>
                   <img
                     className="w-full h-60 sm:h-80 object-cover"
                     alt="Values"
-                    src="/termite-control.jpg"
+                    src="/Bathroomfittinginstallation.jpg"
                   />
                 </div>
               </Slider>

@@ -27,16 +27,6 @@ const services = [
     icon: <Camera className="w-8 h-8" />,
     category: "SECURITY"
   },
-
-  {
-    id: 4,
-    name: "Carpenter Service",
-    description: "Custom furniture work, repairs, and home woodwork solutions delivered professionally.",
-    image: "https://images.pexels.com/photos/5691659/pexels-photo-5691659.jpeg?auto=compress&cs=tinysrgb&w=800",
-    icon: <Hammer className="w-8 h-8" />,
-    category: "CARPENTRY"
-  },
-
   {
     id: 5,
     name: "Electrical Service",
@@ -44,6 +34,14 @@ const services = [
     image: "https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&w=800",
     icon: <Zap className="w-8 h-8" />,
     category: "ELECTRICAL"
+  },
+  {
+    id: 4,
+    name: "Carpenter Service",
+    description: "Custom furniture work, repairs, and home woodwork solutions delivered professionally.",
+    image: "https://images.pexels.com/photos/5691659/pexels-photo-5691659.jpeg?auto=compress&cs=tinysrgb&w=800",
+    icon: <Hammer className="w-8 h-8" />,
+    category: "CARPENTRY"
   },
   {
     id: 2,

@@ -64,7 +64,7 @@ const detailedServices = [
       "Testing camera angles and motion detection sensitivity.",
     ],
     price: 499,
-    image: "CCTVrelocation.jpeg",
+    image: "CCTVrelocation.jpg",
   },
   {
     id: "cctv-104",
@@ -125,19 +125,22 @@ const ServicePage = ({ cart, addToCart }) => {
                 {detailedServices.map((service) => (
                   <div key={service.id} className="flex flex-col items-center w-1/2 p-4">
                     <a href={`#${service.name.replace(/\s+/g, "-").toLowerCase()}`}>
-                      <img
-                        src={service.image}
-                        alt={service.name}
-                        className="rounded-lg w-full h-32 object-cover mb-2 hover:scale-105 transition-transform duration-300 shadow-lg"
-                      />
+                      <div className="w-full h-32 overflow-hidden rounded-lg shadow-lg">
+                        <img
+                          src={service.image}
+                          alt={service.name}
+                          className="rounded-lg w-full h-32 object-cover mb-2 hover:scale-105 transition-transform duration-300 shadow-lg"
+                        />
+                      </div>
                     </a>
                     <a
                       href={`#${service.name.replace(/\s+/g, "-").toLowerCase()}`}
-                      className="text-lg font-semibold text-center text-blue-600 hover:underline"
+                      className="text-lg font-semibold text-center text-blue-600 hover:underline mt-2"
                     >
                       {service.name}
                     </a>
                   </div>
+
                 ))}
               </div>
             </div>
@@ -213,7 +216,7 @@ const ServicePage = ({ cart, addToCart }) => {
                   <img
                     src={service.image}
                     alt={service.name}
-                    className="hidden md:block w-full md:w-48 h-36 object-cover rounded-md md:rounded-none md:rounded-l-lg mb-4 md:mb-0 md:mt-2 md:mr-2"
+                    className="hidden md:block w-full md:w-48 h-36 object-cover overflow-hidden rounded-md md:rounded-none md:rounded-l-lg mb-4 md:mb-0 md:mt-2 md:mr-2"
                   />
                 </div>
               ))}

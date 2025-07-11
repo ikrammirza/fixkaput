@@ -42,7 +42,7 @@ const detailedServices = [
       "Using professional tools to avoid damage to surfaces.",
     ],
     price: 499,
-    image: "carpenter.jpg",
+    image: "Carpenter1.jpg",
   },
   {
     id: "carp-102",
@@ -53,7 +53,7 @@ const detailedServices = [
       "Ensuring smooth operation and structural integrity.",
     ],
     price: 399,
-    image: "carpenter.jpg",
+    image: "Carpenter2.jpg",
   },
   {
     id: "carp-103",
@@ -64,7 +64,7 @@ const detailedServices = [
       "Measurements, design finalization, and sturdy build quality.",
     ],
     price: 899,
-    image: "carpenter.jpg",
+    image: "Carpenter3.jpg",
   },
   {
     id: "carp-104",
@@ -75,7 +75,7 @@ const detailedServices = [
       "Reviving dull furniture with professional finish.",
     ],
     price: 549,
-    image: "carpenter.jpg",
+    image: "Carpenter4.jpg",
   },
 ];
 
@@ -125,7 +125,7 @@ const ServicePage = ({ cart, addToCart }) => {
                   <div key={service.id} className="flex flex-col items-center w-1/2 p-4">
                     <a href={`#${service.name.replace(/\s+/g, "-").toLowerCase()}`}>
                       <img
-                        src={`/carpenter.jpg`}
+                        src={service.image}
                         alt={service.name}
                         className="rounded-lg w-full h-32 object-cover mb-2 hover:scale-105 transition-transform duration-300 shadow-lg"
                       />

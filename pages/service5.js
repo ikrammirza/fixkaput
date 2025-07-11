@@ -42,7 +42,7 @@ const detailedServices = [
       "Ensuring safe current flow and insulation check.",
     ],
     price: 299,
-    image: "electrician.jpg",
+    image: "switchandsocket.jpg",
   },
   {
     id: "elec-102",
@@ -53,7 +53,7 @@ const detailedServices = [
       "Balancing and vibration check for fans.",
     ],
     price: 399,
-    image: "electrician.jpg",
+    image: "fan.jpg",
   },
   {
     id: "elec-103",
@@ -64,7 +64,7 @@ const detailedServices = [
       "Load distribution analysis and short circuit protection.",
     ],
     price: 749,
-    image: "electrician.jpg",
+    image: "wiring.jpg",
   },
   {
     id: "elec-104",
@@ -75,7 +75,7 @@ const detailedServices = [
       "Power point setup and plug fitting with safety checks.",
     ],
     price: 549,
-    image: "electrician.jpg",
+    image: "appliance.jpg",
   },
 ];
 
@@ -126,7 +126,7 @@ const ServicePage = ({ cart, addToCart }) => {
                   <div key={service.id} className="flex flex-col items-center w-1/2 p-4">
                     <a href={`#${service.name.replace(/\s+/g, "-").toLowerCase()}`}>
                       <img
-                        src={`/electrician.jpg`}
+                        src={service.image}
                         alt={service.name}
                         className="rounded-lg w-full h-32 object-cover mb-2 hover:scale-105 transition-transform duration-300 shadow-lg"
                       />
