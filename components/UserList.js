@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
-import debounce from "lodash.debounce"; // run: npm install lodash.debounce
+import debounce from "lodash.debounce";
 
 export default function UserList() {
   const [users, setUsers] = useState([]);
@@ -16,13 +16,6 @@ export default function UserList() {
         params: { search: searchQuery, page: pageNumber, limit: 10 },
       });
 
-      // Debug unexpected address types
-      res.data.users.forEach((u) => {
-        if (u.address && typeof u.address !== "object") {
-          console.warn("Unexpected user address format:", u.address);
-        }
-      });
-
       setUsers(res.data.users);
       setTotalPages(res.data.totalPages);
     } catch (err) {
@@ -32,10 +25,10 @@ export default function UserList() {
     }
   };
 
-  const handleSearchChange = debounce((value) => {
+  const handleSearchChange = useMemo(() => debounce((value) => {
     setPage(1);
     setSearch(value);
-  }, 500);
+  }, 500), []);
 
   useEffect(() => {
     fetchUsers(search, page);

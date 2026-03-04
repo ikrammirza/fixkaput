@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
-import debounce from "lodash.debounce"; // run: npm install lodash.debounce
+import debounce from "lodash.debounce";
 
 export default function TechnicianList() {
   const [technicians, setTechnicians] = useState([]);
@@ -24,11 +24,10 @@ export default function TechnicianList() {
     }
   };
 
-  // Debounced search handler
-  const handleSearchChange = debounce((value) => {
-    setPage(1); // reset to page 1 when searching
+  const handleSearchChange = useMemo(() => debounce((value) => {
+    setPage(1);
     setSearch(value);
-  }, 500);
+  }, 500), []);
 
   useEffect(() => {
     fetchTechnicians(search, page);
@@ -74,7 +73,7 @@ export default function TechnicianList() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="3" className="text-center py-4 text-gray-500">
+                  <td colSpan="5" className="text-center py-4 text-gray-500">
                     No technicians found
                   </td>
                 </tr>

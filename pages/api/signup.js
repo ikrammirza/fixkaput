@@ -1,7 +1,13 @@
 import User from "../../models/User";
 import connectDb from "../../middleware/mongoose";
 
-const handler = async (req, res) => {
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  await connectDb();
+
   const { name, email, phone } = req.body;
 
   if (!name || !email || !phone) {
@@ -17,6 +23,4 @@ const handler = async (req, res) => {
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
-};
-
-export default connectDb(handler);
+}

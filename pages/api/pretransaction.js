@@ -80,37 +80,34 @@ export default async function handler(req, res) {
 import Order from "../../models/Order";
 import connectDb from "../../middleware/mongoose";
 
-const handler = async (req, res) => {
-  if (req.method === "POST") {
-    try {
-      const { cart } = req.body;
-      const { pincode } = req.body;
-      console.log("my cart is:", cart);
-      console.log("my pincode is:", pincode);
-
-      let order = new Order({
-        oid: req.body.oid,
-        name: req.body.name,
-        email: req.body.email,
-        phone: req.body.phone,
-        address: req.body.address,
-        pincode: pincode,
-        amount: req.body.amount,
-        products: cart,
-      });
-      console.log("Order saved:", order);
-      await order.save();
-
-      res.status(201).json({ success: true, order });
-    } catch (error) {
-      console.error("Error saving order:", error);
-      res
-        .status(500)
-        .json({ success: false, message: "Order could not be saved", error });
-    }
-  } else {
-    res.status(405).json({ success: false, message: "Method not allowed" });
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ success: false, message: "Method not allowed" });
   }
-};
 
-export default connectDb(handler);
+  await connectDb();
+
+  try {
+    const { cart, pincode, oid, name, email, phone, address, amount } = req.body;
+
+    const order = new Order({
+      oid,
+      name,
+      email,
+      phone,
+      address,
+      amount,
+      cart: cart || {},
+    });
+    await order.save();
+
+    return res.status(201).json({ success: true, order });
+  } catch (error) {
+    console.error("Error saving order:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Order could not be saved",
+      error: error.message,
+    });
+  }
+}

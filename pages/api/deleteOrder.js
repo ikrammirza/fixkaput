@@ -2,7 +2,6 @@ import connectDb from '../../middleware/mongoose';
 import Order from '../../models/Order';
 import redis from '../../lib/redis';
 import jwt from 'jsonwebtoken';
-import cookie from 'cookie';
 import { parse } from 'cookie';
 export const config = {
     api: {

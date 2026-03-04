@@ -11,24 +11,39 @@ export default async function handler(req, res) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
+  // Server-side email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: "Invalid email address" });
+  }
+
+  // Sanitize inputs for HTML email (escape special chars)
+  const sanitize = (str) =>
+    String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#x27;");
+
   try {
-    // Create transport
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
         user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASS, // This is your app password
+        pass: process.env.GMAIL_PASS,
       },
     });
 
     await transporter.sendMail({
-      from: `"${name}" <${email}>`,
+      from: `"FixKaput Contact Form" <${process.env.GMAIL_USER}>`,
+      replyTo: email,
       to: process.env.GMAIL_USER,
       subject: "New Contact Form Submission - FixKaput",
       html: `
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong><br>${message}</p>
+        <p><strong>Name:</strong> ${sanitize(name)}</p>
+        <p><strong>Email:</strong> ${sanitize(email)}</p>
+        <p><strong>Message:</strong><br>${sanitize(message)}</p>
       `,
     });
 

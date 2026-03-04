@@ -12,14 +12,14 @@ export default async function handler(req, res) {
     return res.status(401).json({ success: false, message: 'Not logged in' });
   }
 
-  const userId = await getSession(sessionId); // get user ID from Redis
+  const decoded = await getSession(sessionId);
 
-  if (!userId) {
+  if (!decoded || !decoded._id) {
     return res.status(401).json({ success: false, message: 'Session expired' });
   }
 
   await connectDb();
-  const user = await User.findById(userId);
+  const user = await User.findById(decoded._id);
 
   if (!user) {
     return res.status(401).json({ success: false, message: 'User not found' });

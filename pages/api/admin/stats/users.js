@@ -1,30 +1,32 @@
-// /pages/api/admin/users.js
 import connectDb from "../../../../middleware/mongoose";
 import User from "../../../../models/User";
-
+import requireAdmin from "../../../../middleware/requireAdmin";
 
 const handler = async (req, res) => {
   try {
     await connectDb();
 
     const { page = 1, limit = 10, search = "" } = req.query;
+    const safeSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-    const query = search
+    const query = safeSearch
       ? {
           $or: [
-            { name: { $regex: search, $options: "i" } },
-            { phone: { $regex: search, $options: "i" } }
-          ]
+            { name: { $regex: safeSearch, $options: "i" } },
+            { phone: { $regex: safeSearch, $options: "i" } },
+          ],
         }
       : {};
 
-    const users = await User.find(query)
-      .skip((page - 1) * limit)
-      .limit(Number(limit))
-      .sort({ createdAt: -1 });
+    const [users, total, totalusers] = await Promise.all([
+      User.find(query)
+        .skip((page - 1) * limit)
+        .limit(Number(limit))
+        .sort({ createdAt: -1 }),
+      User.countDocuments(query),
+      User.countDocuments(),
+    ]);
 
-    const total = await User.countDocuments(query);
-    const totalusers = await User.countDocuments();   
     res.status(200).json({
       users,
       total,
@@ -38,4 +40,4 @@ const handler = async (req, res) => {
   }
 };
 
-export default handler;
+export default requireAdmin(handler);

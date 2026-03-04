@@ -19,10 +19,8 @@ import {
   Bell,
   Search,
   Wind,
-  Flame,
   Wrench,
   Zap,
-  Recycle,
   Camera
 } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
@@ -87,15 +85,7 @@ const services = [
     path: '/service3'
   }
 ];
-// Icon mapping
-const iconMap = {
-  Wind,
-  Flame,
-  Wrench,
-  Zap,
-  Recycle,
-  Camera
-};
+// Icon mapping removed (unused)
 
 const Navbar = ({
   user,
@@ -183,8 +173,6 @@ const Navbar = ({
       });
 
       if (response.data.success) {
-        setUser({ value: null });
-
         toast.success("Successfully logged out!", {
           position: "top-right",
           autoClose: 2000,

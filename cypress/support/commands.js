@@ -1,5 +1,5 @@
 Cypress.Commands.add('login', () => {
-    cy.visit('http://localhost:3000/login');
+    cy.visit("/login");
 
     cy.intercept('POST', '/api/send-otp', {
         statusCode: 200,
@@ -40,5 +40,5 @@ Cypress.Commands.add('bookService', (servicePath, bookingDetails) => {
 
     cy.contains('Book Services').click();
 
-    cy.contains('Booking Successfull').should('exist'); // ✅ update if message changes
+    cy.contains(/booking successful/i).should("exist");
 });

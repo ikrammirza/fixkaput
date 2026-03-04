@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import ServiceSection from "./ServiceSection";
 import Image from "next/image";
@@ -19,13 +19,50 @@ import {
   Sparkles
 } from "lucide-react";
 
+const carouselImages = [
+  {
+    url: "https://images.pexels.com/photos/6169668/pexels-photo-6169668.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    title: "Professional AC Services",
+    subtitle: "Cool comfort, year-round"
+  },
+  {
+    url: "https://images.pexels.com/photos/5691659/pexels-photo-5691659.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    title: "Expert Carpentry Work",
+    subtitle: "Crafting your perfect space"
+  },
+  {
+    url: "https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    title: "Electrical Solutions",
+    subtitle: "Power your home safely"
+  },
+  {
+    url: "https://images.pexels.com/photos/430208/pexels-photo-430208.jpeg?auto=compress&cs=tinysrgb&w=1600",
+    title: "Security Systems",
+    subtitle: "Protect what matters most"
+  }
+];
 
-
+const whyChooseUs = [
+  { text: "Same day service, all days of the week" },
+  { text: "5-star customer service experience" },
+  { text: "Transparent pricing with no hidden charges" },
+  { text: "Safety-first approach for customers and technicians" },
+  { text: "90-day service warranty guarantee" },
+  { text: "Certified and experienced technicians" }
+];
 
 const Main = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [touchStartX, setTouchStartX] = useState(null);
   const [touchEndX, setTouchEndX] = useState(null);
+  const timerRef = useRef(null);
+
+  const resetTimer = useCallback(() => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % carouselImages.length);
+    }, 3000);
+  }, []);
 
   const handleTouchStart = (e) => {
     setTouchStartX(e.targetTouches[0].clientX);
@@ -37,66 +74,29 @@ const Main = () => {
 
   const handleTouchEnd = () => {
     if (!touchStartX || !touchEndX) return;
-
     const distance = touchStartX - touchEndX;
-
     if (distance > 50) {
-      // Swiped left
       nextSlide();
     } else if (distance < -50) {
-      // Swiped right
       prevSlide();
     }
-
-    // Reset
     setTouchStartX(null);
     setTouchEndX(null);
   };
-  const carouselImages = [
-    {
-      url: "https://images.pexels.com/photos/6169668/pexels-photo-6169668.jpeg?auto=compress&cs=tinysrgb&w=1600",
-      title: "Professional AC Services",
-      subtitle: "Cool comfort, year-round"
-    },
-    {
-      url: "https://images.pexels.com/photos/5691659/pexels-photo-5691659.jpeg?auto=compress&cs=tinysrgb&w=1600",
-      title: "Expert Carpentry Work",
-      subtitle: "Crafting your perfect space"
-    },
-    {
-      url: "https://images.pexels.com/photos/257736/pexels-photo-257736.jpeg?auto=compress&cs=tinysrgb&w=1600",
-      title: "Electrical Solutions",
-      subtitle: "Power your home safely"
-    },
-    {
-      url: "https://images.pexels.com/photos/430208/pexels-photo-430208.jpeg?auto=compress&cs=tinysrgb&w=1600",
-      title: "Security Systems",
-      subtitle: "Protect what matters most"
-    }
-  ];
-
-  const whyChooseUs = [
-    { icon: <Clock className="w-6 h-6" />, text: "Same day service, all days of the week" },
-    { icon: <Star className="w-6 h-6" />, text: "5-star customer service experience" },
-    { icon: <Shield className="w-6 h-6" />, text: "Transparent pricing with no hidden charges" },
-    { icon: <CheckCircle className="w-6 h-6" />, text: "Safety-first approach for customers and technicians" },
-    { icon: <Sparkles className="w-6 h-6" />, text: "90-day service warranty guarantee" },
-    { icon: <Wrench className="w-6 h-6" />, text: "Certified and experienced technicians" }
-  ];
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % carouselImages.length);
-    }, 3000);
-    return () => clearInterval(timer);
-  }, []);
+    resetTimer();
+    return () => clearInterval(timerRef.current);
+  }, [resetTimer]);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % carouselImages.length);
+    resetTimer();
   };
 
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + carouselImages.length) % carouselImages.length);
+    resetTimer();
   };
 
   return (

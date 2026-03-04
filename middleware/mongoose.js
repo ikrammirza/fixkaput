@@ -1,8 +1,6 @@
 import mongoose from "mongoose";
 
 const MONGODB_URI = process.env.MONGO_URI;
-console.log("💡 MongoDB URI used:", MONGODB_URI);
-
 
 if (!MONGODB_URI) {
   throw new Error("❌ MONGO_URI not found in environment variables");
@@ -21,10 +19,9 @@ async function connectDb() {
     cached.promise = mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      bufferCommands: false, // Prevent Mongoose from buffering queries
-      serverSelectionTimeoutMS: 10000, // Fail fast if cannot connect
+      bufferCommands: false,
+      serverSelectionTimeoutMS: 10000,
     }).then((mongoose) => {
-      console.log("✅ MongoDB connected");
       return mongoose;
     }).catch((err) => {
       console.error("❌ MongoDB connection error:", err.message);
@@ -40,5 +37,12 @@ async function connectDb() {
   }
 }
 
-export default connectDb;
+/** Wraps an API handler to ensure DB connection before execution */
+export const withDb = (handler) => {
+  return async (req, res) => {
+    await connectDb();
+    return handler(req, res);
+  };
+};
 
+export default connectDb;

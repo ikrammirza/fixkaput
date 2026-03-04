@@ -98,7 +98,7 @@ const MyBookings = () => {
                   <p className="flex items-start gap-2">
                     <HiOutlineLocationMarker className="text-green-600 mt-1" />
                     <span>
-                      <strong>Address:</strong> {order.address.line1}, {order.address.area}, {order.address.city}, {order.address.pincode}
+                      <strong>Address:</strong> {order.address?.line1}, {order.address?.area}, {order.address?.city}, {order.address?.pincode}
                     </span>
                   </p>
 
@@ -120,11 +120,11 @@ const MyBookings = () => {
                   <p>
                     <strong>Status:</strong>{' '}
                     <span
-                      className={`inline-block px-2 py-0.5 rounded text-xs font-semibold uppercase tracking-wide ${order.status === 'completed'
+                      className={`inline-block px-2 py-0.5 rounded text-xs font-semibold uppercase tracking-wide ${order.status === 'Completed'
                         ? 'bg-green-100 text-green-700'
-                        : order.status === 'assigned'
+                        : order.status === 'Accepted'
                           ? 'bg-blue-100 text-blue-700'
-                          : order.status === 'cancelled'
+                          : order.status === 'Cancelled'
                             ? 'bg-red-100 text-red-700'
                             : 'bg-yellow-100 text-yellow-800'
                         }`}

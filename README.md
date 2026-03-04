@@ -77,6 +77,25 @@ It's designed with performance, scalability, and security in mind — using Redi
   - Booking services
   - Checkout logic
 
+```bash
+# Run E2E tests (app must be running on http://localhost:3000)
+npm run test:e2e
+
+# Or against staging: CYPRESS_BASE_URL=https://fixkaput.vercel.app npm run test:e2e
+```
+
+---
+
+## 🐳 Docker
+
+```bash
+# Production (uses MONGO_URI, REDIS_URL from .env)
+docker-compose up -d
+
+# Local dev with MongoDB + Redis
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+```
+
 ---
 
 ## 🖥️ Run Locally
@@ -89,7 +108,9 @@ cd fixkaput
 npm install
 
 # Create .env.local and add:
-# MONGODB_URI, REDIS_URL, TWILIO_SID, etc.
+# MONGODB_URI (or MONGO_URI), REDIS_URL, TWILIO_SID, JWT_SECRET, etc.
+# Optional: TECHNICIAN_NOTIFY_PHONE (SMS notification target)
+# Optional: SOCKET_CORS_ORIGINS (comma-separated, e.g. https://fixkaput.vercel.app,http://localhost:3000)
 
 # Run dev server
 npm run dev

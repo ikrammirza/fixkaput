@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "cross-env TEST_ENV=true jest --coverage"
+    "test": "cross-env TEST_ENV=true jest --coverage",
+    "test:e2e": "cypress run",
+    "test:e2e:open": "cypress open"
   },
   "dependencies": {
     "@emotion/cache": "^11.13.1",

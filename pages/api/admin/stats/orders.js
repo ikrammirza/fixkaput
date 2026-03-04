@@ -1,5 +1,6 @@
 import connectDb from "../../../../middleware/mongoose";
 import Order from "../../../../models/Order";
+import requireAdmin from "../../../../middleware/requireAdmin";
 
 const handler = async (req, res) => {
   try {
@@ -8,46 +9,44 @@ const handler = async (req, res) => {
     const { page = 1, limit = 10, search = "", filter = "" } = req.query;
     const skip = (page - 1) * limit;
 
-    // First, fetch matching technician IDs if search is provided
+    // Escape regex special chars to prevent ReDoS
+    const safeSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
     let technicianIds = [];
-    if (search) {
+    if (safeSearch) {
       const Technician = (await import("../../../../models/Technician")).default;
       const matchedTechnicians = await Technician.find({
         $or: [
-          { name: { $regex: search, $options: "i" } },
-          { phone: { $regex: search, $options: "i" } },
+          { name: { $regex: safeSearch, $options: "i" } },
+          { phone: { $regex: safeSearch, $options: "i" } },
         ],
       }).select("_id");
       technicianIds = matchedTechnicians.map((t) => t._id);
     }
 
-    // Base search query
-    let query = search
+    let query = safeSearch
       ? {
           $or: [
-            { name: { $regex: search, $options: "i" } },
-            { phone: { $regex: search, $options: "i" } },
+            { name: { $regex: safeSearch, $options: "i" } },
+            { phone: { $regex: safeSearch, $options: "i" } },
             ...(technicianIds.length > 0 ? [{ technicianId: { $in: technicianIds } }] : []),
           ],
         }
       : {};
 
-    // Apply filter for pending orders
     if (filter === "pending") {
-      query = {
-        ...query,
-        technicianId: null,
-      };
+      query = { ...query, technicianId: null };
     }
 
-    const orders = await Order.find(query)
-      .populate("technicianId", "name phone")
-      .skip(skip)
-      .limit(Number(limit))
-      .sort({ createdAt: -1 });
-
-    const total = await Order.countDocuments(query);
-    const totalorders = await Order.countDocuments();
+    const [orders, total, totalorders] = await Promise.all([
+      Order.find(query)
+        .populate("technicianId", "name phone")
+        .skip(skip)
+        .limit(Number(limit))
+        .sort({ createdAt: -1 }),
+      Order.countDocuments(query),
+      Order.countDocuments(),
+    ]);
 
     res.status(200).json({
       orders,
@@ -62,5 +61,4 @@ const handler = async (req, res) => {
   }
 };
 
-export default handler;
-
+export default requireAdmin(handler);

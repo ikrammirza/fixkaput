@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import debounce from "lodash.debounce";
 
@@ -31,10 +31,10 @@ export default function OrderList() {
     }
   };
 
-  const handleSearchChange = debounce((value) => {
+  const handleSearchChange = useMemo(() => debounce((value) => {
     setPage(1);
     setSearch(value);
-  }, 500);
+  }, 500), []);
 
   useEffect(() => {
     fetchOrders(search, page, tab);

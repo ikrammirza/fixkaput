@@ -1,8 +1,14 @@
 #!/bin/bash
 
-cd ~/fixkaput || { echo "❌ Directory ~/fixkaput not found"; exit 1; }
+# Configurable: DEPLOY_ROOT, BRANCH, DOCKER_CMD (e.g. DOCKER_CMD="sudo docker-compose")
+DEPLOY_ROOT="${DEPLOY_ROOT:-$HOME/fixkaput}"
+BRANCH="${DEPLOY_BRANCH:-main}"
+DOCKER_CMD="${DOCKER_CMD:-docker-compose}"
+
+cd "$DEPLOY_ROOT" || { echo "❌ Directory $DEPLOY_ROOT not found"; exit 1; }
 
 echo "📅 $(date) - Starting deployment process..."
+echo "📂 Deploy root: $DEPLOY_ROOT | Branch: $BRANCH"
 
 # 📦 Backup .env if it exists
 if [ -f .env ]; then
@@ -11,13 +17,13 @@ if [ -f .env ]; then
 fi
 
 echo "📥 Fetching latest code from GitHub..."
-git fetch origin main
+git fetch origin "$BRANCH"
 
 # 🔍 Check what changed before resetting
-CHANGED=$(git diff HEAD origin/main --name-only)
+CHANGED=$(git diff HEAD origin/"$BRANCH" --name-only)
 
 echo "🧨 Resetting local repo to match GitHub (force overwrite)..."
-git reset --hard origin/main
+git reset --hard origin/"$BRANCH"
 
 # ♻️ Restore .env after reset
 if [ -f /tmp/fixkaput.env.bak ]; then
@@ -37,11 +43,11 @@ if [[ -z "$CHANGED" ]]; then
   exit 0
 fi
 
-# 🛠 Critical file changes
-if echo "$CHANGED" | grep -qE "package.json|Dockerfile|docker-compose.yml|next.config.js"; then
+# 🛠 Critical file changes (require full rebuild)
+if echo "$CHANGED" | grep -qE "package(-lock)?\.json|Dockerfile|docker-compose\.yml|next\.config\.(js|mjs)|middleware\.(js|ts)"; then
   echo "♻️ Critical file(s) changed: Rebuilding Docker image..."
-  sudo docker-compose down
-  if sudo docker-compose build --no-cache && sudo docker-compose up -d; then
+  $DOCKER_CMD down
+  if $DOCKER_CMD build --no-cache && $DOCKER_CMD up -d; then
     echo "✅ Docker rebuild and restart successful."
   else
     echo "❌ Docker build or up failed. Check logs."
@@ -50,7 +56,7 @@ if echo "$CHANGED" | grep -qE "package.json|Dockerfile|docker-compose.yml|next.c
 else
   # 🔁 Just restart for API/component/page changes
   echo "🔄 Non-critical changes: Restarting containers..."
-  if sudo docker-compose down && sudo docker-compose up -d; then
+  if $DOCKER_CMD down && $DOCKER_CMD up -d; then
     echo "✅ Docker restarted successfully."
   else
     echo "❌ Docker restart failed. Check logs."

@@ -1,7 +1,7 @@
 describe('FixKaput Login Flow', () => {
     it('should send OTP and login successfully with mock OTP', () => {
         // 1. Visit the login page
-        cy.visit('http://localhost:3000/login');
+        cy.visit("/login");
 
         // 2. Intercept send-otp API call
         cy.intercept('POST', '/api/send-otp', {

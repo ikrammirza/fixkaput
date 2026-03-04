@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
   phone: { type: String, required: true, unique: true },
@@ -13,5 +13,7 @@ const userSchema = new mongoose.Schema({
   },
   isAdmin: { type: Boolean, default: false }
 }, { timestamps: true, collection: 'users' });
+
+
 const User = mongoose.models.User || mongoose.model('User', userSchema);
 export default User;

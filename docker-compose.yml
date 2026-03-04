@@ -1,9 +1,14 @@
 version: '3.8'
+
+# Production: use with .env (MONGO_URI, REDIS_URL pointing to cloud services)
+# Local dev: use docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
 services:
   fixkaput:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     env_file:
       - .env
-    restart: always
+    restart: unless-stopped
