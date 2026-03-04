@@ -280,7 +280,7 @@ const Navbar = ({
             </div>
             <div className="flex items-center space-x-2">
               <MapPin className="w-4 h-4" />
-              <span>Serving All Major Cities</span>
+              <span>Serving Hyderabad</span>
             </div>
           </div>
           <div className="flex items-center space-x-4">
