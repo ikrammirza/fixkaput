@@ -23,8 +23,6 @@ const TechnicianSchema = new mongoose.Schema({
   },
 });
 
-TechnicianSchema.index({ phone: 1 });
-TechnicianSchema.index({ technicianId: 1 });
 
 export default mongoose.models.Technician ||
   mongoose.model("Technician", TechnicianSchema);

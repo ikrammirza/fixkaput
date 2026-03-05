@@ -12,11 +12,16 @@ export default async function handler(req, res) {
     return res.status(401).json({ success: false, message: 'Not logged in' });
   }
 
+  console.log('📝 ME API: Session ID from cookie:', sessionId);
+
   const decoded = await getSession(sessionId);
 
   if (!decoded || !decoded._id) {
+    console.warn('🚫 ME API: Session decoding failed or no _id:', decoded);
     return res.status(401).json({ success: false, message: 'Session expired' });
   }
+
+  console.log('📝 ME API: Decoded user ID from session:', decoded._id);
 
   await connectDb();
   const user = await User.findById(decoded._id);
@@ -25,5 +30,6 @@ export default async function handler(req, res) {
     return res.status(401).json({ success: false, message: 'User not found' });
   }
 
+  console.log('📝 ME API: User found in DB (ID, isAdmin):', user._id, user.isAdmin);
   return res.status(200).json({ success: true, user }); // this includes isAdmin
 }
