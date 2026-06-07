@@ -122,19 +122,6 @@ export default function Login() {
         <title>fixKaput | Login</title>
       </Head>
 
-      <ToastContainer
-        position="top-center"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        className="custom-toast-margin"
-      />
-
       <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 bg-gray-100">
         <div className="w-full max-w-md bg-white p-6 sm:p-8 rounded-lg shadow space-y-4">
 
