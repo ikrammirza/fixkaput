@@ -106,7 +106,7 @@ export default function AdminDashboard() {
           axios.get("/api/admin/stats/revenue", { withCredentials: true }),
         ]);
         setStats({
-          orders: ordersRes.data.totalorders,
+          orders: ordersRes.data.total,
           technicians: techsRes.data.totaltechnicians,
           users: usersRes.data.totalusers,
           revenue: revenueRes.data.totalRevenue,
@@ -262,10 +262,10 @@ export default function AdminDashboard() {
           {/* Bottom user pill */}
           {sidebarOpen && (
             <div style={styles.userPill}>
-              <div style={styles.userAvatar}>A</div>
+              <div style={styles.userAvatar}>MI</div>
               <div>
                 <div style={{ color: "#e2e8f0", fontSize: 12, fontWeight: 600 }}>Admin</div>
-                <div style={{ color: "#475569", fontSize: 10, fontFamily: "'DM Mono', monospace" }}>SUPER USER</div>
+                <div style={{ color: "#475569", fontSize: 10, fontFamily: "'DM Mono', monospace" }}>MIRZA IKRAM</div>
               </div>
             </div>
           )}
@@ -354,34 +354,57 @@ export default function AdminDashboard() {
                           </div>
                         </div>
                       ) : (
-                        <div style={{ minWidth: `${Math.max(chartData.length * 110, 500)}px`, height: 300 }}>
-                          <BarChart
-                            width={Math.max(chartData.length * 110, 500)}
-                            height={300}
-                            data={chartData}
-                            margin={{ top: 10, right: 20, left: 0, bottom: 60 }}
-                          >
-                            <defs>
-                              {COLORS.map((c, i) => (
-                                <linearGradient key={i} id={`grad${i}`} x1="0" y1="0" x2="0" y2="1">
-                                  <stop offset="0%" stopColor={c} stopOpacity={0.9} />
-                                  <stop offset="100%" stopColor={c} stopOpacity={0.3} />
-                                </linearGradient>
-                              ))}
-                            </defs>
-                            <XAxis dataKey="name" interval={0} angle={-30} textAnchor="end" height={70}
-                              tick={{ fill: "#64748b", fontSize: 11, fontFamily: "'DM Mono', monospace" }}
-                              axisLine={{ stroke: "rgba(255,255,255,0.06)" }}
-                              tickLine={false}
-                            />
-                            <YAxis tick={{ fill: "#64748b", fontSize: 11 }} axisLine={false} tickLine={false} />
-                            <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(56,189,248,0.05)" }} />
-                            <Bar dataKey="value" radius={[6, 6, 0, 0]} barSize={42}>
-                              {chartData.map((_, i) => (
-                                <Cell key={i} fill={`url(#grad${i % COLORS.length})`} />
-                              ))}
-                            </Bar>
-                          </BarChart>
+                        <div style={{ width: "100%", overflowX: "auto" }}>
+                          <div style={{ minWidth: `${Math.max(chartData.length * 90, 480)}px`, height: 360 }}>
+                            <BarChart
+                              width={Math.max(chartData.length * 90, 480)}
+                              height={360}
+                              data={chartData}
+                              margin={{ top: 16, right: 24, left: 0, bottom: 90 }}
+                            >
+                              <defs>
+                                {COLORS.map((c, i) => (
+                                  <linearGradient key={i} id={`grad${i}`} x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stopColor={c} stopOpacity={0.9} />
+                                    <stop offset="100%" stopColor={c} stopOpacity={0.25} />
+                                  </linearGradient>
+                                ))}
+                              </defs>
+                              <XAxis
+                                dataKey="name"
+                                interval={0}
+                                height={90}
+                                axisLine={{ stroke: "rgba(255,255,255,0.06)" }}
+                                tickLine={false}
+                                tick={({ x, y, payload }) => (
+                                  <g transform={`translate(${x},${y})`}>
+                                    <text
+                                      x={0} y={0} dy={12}
+                                      textAnchor="end"
+                                      transform="rotate(-35)"
+                                      fill="#64748b"
+                                      fontSize={11}
+                                      fontFamily="'DM Mono', monospace"
+                                    >
+                                      {payload.value.length > 14 ? payload.value.slice(0, 14) + "…" : payload.value}
+                                    </text>
+                                  </g>
+                                )}
+                              />
+                              <YAxis
+                                tick={{ fill: "#64748b", fontSize: 11 }}
+                                axisLine={false}
+                                tickLine={false}
+                                width={32}
+                              />
+                              <Tooltip content={<CustomTooltip />} cursor={{ fill: "rgba(56,189,248,0.05)" }} />
+                              <Bar dataKey="value" radius={[6, 6, 0, 0]} barSize={38} maxBarSize={52}>
+                                {chartData.map((_, i) => (
+                                  <Cell key={i} fill={`url(#grad${i % COLORS.length})`} />
+                                ))}
+                              </Bar>
+                            </BarChart> 
+                          </div>
                         </div>
                       )}
                     </div>

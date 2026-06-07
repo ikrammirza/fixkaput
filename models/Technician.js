@@ -24,5 +24,6 @@ const TechnicianSchema = new mongoose.Schema({
 });
 
 
+
 export default mongoose.models.Technician ||
   mongoose.model("Technician", TechnicianSchema);

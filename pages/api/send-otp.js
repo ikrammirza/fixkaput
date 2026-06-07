@@ -1,40 +1,65 @@
-import connectDb from "../../middleware/mongoose";
 import redis from "../../lib/redis";
-import axios from "axios";
+import twilio from "twilio";
 
 const handler = async (req, res) => {
   if (req.method !== "POST") {
-    return res.status(405).json({ success: false, message: "Invalid method" });
+    return res.status(405).json({
+      success: false,
+      message: "Invalid method",
+    });
   }
 
-  await connectDb();
+  if (!req.body) {
+    return res.status(400).json({
+      success: false,
+      message: "Request body missing",
+    });
+  }
 
   const { phone } = req.body;
 
   if (!/^\d{10}$/.test(phone)) {
-    return res.status(400).json({ success: false, message: "Invalid phone number" });
+    return res.status(400).json({
+      success: false,
+      message: "Invalid phone number",
+    });
   }
 
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  // Twilio Client
+  const client = twilio(
+    process.env.TWILIO_ACCOUNT_SID,
+    process.env.TWILIO_AUTH_TOKEN
+  );
+
+  // Crypto-secure OTP generation
+  const { randomInt } = await import("crypto");
+  const otp = randomInt(100000, 999999).toString();
+
   const otpKey = `otp:${phone}`;
   const limitKey = `otp_limit:${phone}`;
   const lockKey = `lock:otp:${phone}`;
+
   const otpExpiry = 300; // 5 minutes
   const rateLimit = 5;
 
+  // Prevent rapid clicks
+  const lock = await redis.set(lockKey, "1", "NX", "EX", 5);
+
+  if (!lock) {
+    return res.status(429).json({
+      success: false,
+      message: "Please wait a few seconds before requesting another OTP.",
+    });
+  }
+
   try {
-    // Redis Lock: Prevent multiple fast clicks
-    const lock = await redis.set(lockKey, "1", "NX", "EX", 5); // 5 seconds lock
-    if (!lock) {
-      return res.status(429).json({
-        success: false,
-        message: "Too many OTP requests. Please wait a few seconds.",
-      });
+    // Rate limit
+    const count = await redis.incr(limitKey);
+
+    if (count === 1) {
+      await redis.expire(limitKey, 60);
     }
 
-    // Rate limiting (max 5 OTPs per minute)
-    const count = await redis.incr(limitKey);
-    if (count === 1) await redis.expire(limitKey, 60);
     if (count > rateLimit) {
       return res.status(429).json({
         success: false,
@@ -42,37 +67,43 @@ const handler = async (req, res) => {
       });
     }
 
-    // Store OTP in Redis
+    // Store OTP
     await redis.setex(otpKey, otpExpiry, otp);
 
-    // Send via Fast2SMS
-    const message = `Your FixKaput OTP is ${otp}. It is valid for 5 minutes.`;
+    // Clear previous failed attempts
+    await redis.del(`otp_attempts:${phone}`);
+    console.log(
+  "TWILIO_MESSAGING_SERVICE_SID:",
+  process.env.TWILIO_MESSAGING_SERVICE_SID
+);
+    // Send SMS via Twilio
+    const message = await client.messages.create({
+      body: `Your FixKaput OTP is ${otp}. Valid for 5 minutes. Do not share this code with anyone.`,
+      to: `+91${phone}`,
+      from: process.env.TWILIO_PHONE_NUMBER,
+    });
 
-    const response = await axios.get(
-      "https://www.fast2sms.com/dev/bulkV2",
-      {
-        params: {
-          authorization: process.env.FAST2SMS_API_KEY,
-          variables_values: otp,
-          route: "otp",
-          numbers: phone,
-        },
-        headers: {
-          "cache-control": "no-cache",
-        },
-      }
-    );
+    console.log("Twilio Message SID:", message.sid);
 
-    if (response.data && response.data.return === true) {
-      return res.status(200).json({ success: true, message: "OTP sent successfully" });
-    } else {
-      console.error("Fast2SMS Error:", response.data);
-      return res.status(500).json({ success: false, message: "Failed to send OTP" });
-    }
+    return res.status(200).json({
+      success: true,
+      message: "OTP sent successfully",
+    });
 
   } catch (error) {
-    console.error("OTP Error:", error);
-    return res.status(500).json({ success: false, message: "Failed to send OTP" });
+    console.error("OTP Send Error:", error);
+
+    // Remove OTP if SMS failed
+    await redis.del(otpKey);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to send OTP. Please try again.",
+    });
+
+  } finally {
+    // Release lock
+    await redis.del(lockKey);
   }
 };
 

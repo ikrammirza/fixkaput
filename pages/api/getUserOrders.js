@@ -35,7 +35,7 @@ export default async function handler(req, res) {
     }
 
     // 2. Retrieve JWT token from Redis using sessionId
-    const token = await redis.get(sessionId);
+    const token = await redis.get(`session:${sessionId}`);
 
     if (!token) {
       return res.status(401).json({ error: 'Invalid or expired session. Please log in again.' });

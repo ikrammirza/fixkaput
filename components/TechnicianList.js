@@ -68,7 +68,7 @@ export default function TechnicianList() {
 
   useEffect(() => { fetchTechnicians(search, page); }, [search, page]);
 
-  const cols = ["Technician", "Phone", "Aadhar No.", "Orders", "Address"];
+  const cols = ["Technician", "Phone", "Aadhar No.", "Orders"];
 
   return (
     <>
@@ -145,9 +145,7 @@ export default function TechnicianList() {
                       <td style={s.td}>
                         <OrderCountBadge count={tech.acceptedOrderCount} />
                       </td>
-                      <td style={s.td}>
-                        <span style={{ color: "#64748b", fontSize: 12, lineHeight: 1.5 }}>{tech.address || "—"}</span>
-                      </td>
+                      
                     </tr>
                   )) : (
                     <tr>

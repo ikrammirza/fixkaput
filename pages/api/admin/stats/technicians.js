@@ -36,7 +36,9 @@ const handler = async (req, res) => {
       {
         $match: {
           technicianId: { $in: technicianIds },
-          status: "Accepted",
+          status: {
+  $in: ["Completed", "Confirmed"]
+},
         },
       },
       {
